@@ -3,7 +3,7 @@
 ## Installation
 
 ```bash
-composer require laravel-ses-template-driver
+composer require sunaoka/laravel-ses-template-driver
 ```
 
 Next, set the `driver` option in your `config/mail.php` configuration file to `ses.template` and verify that your `config/services.php` configuration file contains the following options:
@@ -44,13 +44,13 @@ use Sunaoka\LaravelSesTemplateDriver\Mail\SesTemplate;
 class Foo
 {
     public function sendmail()
-    { 
+    {
         $templateName = 'MyTemplate';
         $templateData = [
             'name'           => 'Alejandro',
             'favoriteanimal' => 'alligator',
         ];
-    
+
         \Mail::to('alejandro.rosalez@example.com')
             ->cc('cc@example.com')
             ->bcc('bcc@example.com')
