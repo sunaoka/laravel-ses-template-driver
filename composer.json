@@ -1,0 +1,31 @@
+{
+    "name": "sunaoka/laravel-ses-template-driver",
+    "description": "Amazon SES template mail driver for Laravel.",
+    "keywords": ["laravel", "aws", "ses", "mail", "driver"],
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "sunaoka",
+            "email": "sunaoka@pocari.org"
+        }
+    ],
+    "require": {
+        "php": "^7.1.3",
+        "aws/aws-sdk-php": "^3.36.25"
+    },
+    "autoload": {
+        "psr-4": {
+            "Sunaoka\\LaravelSesTemplateDriver\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Sunaoka\\LaravelSesTemplateDriver\\SesTemplateTransportServiceProvider"
+            ],
+            "aliases": {
+            }
+        }
+    }
+}
