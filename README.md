@@ -41,18 +41,21 @@ If you need to include [additional options](https://docs.aws.amazon.com/aws-sdk-
 ```php
 use Sunaoka\LaravelSesTemplateDriver\Mail\SesTemplate;
 
-public function sendmail()
-{ 
-    $templateName = 'MyTemplate';
-    $templateData = [
-        'name'           => 'Alejandro',
-        'favoriteanimal' => 'alligator',
-    ];
-
-    \Mail::to('alejandro.rosalez@example.com')
-        ->cc('cc@example.com')
-        ->bcc('bcc@example.com')
-        ->send(new SesTemplate($templateName, $templateData));
+class Foo
+{
+    public function sendmail()
+    { 
+        $templateName = 'MyTemplate';
+        $templateData = [
+            'name'           => 'Alejandro',
+            'favoriteanimal' => 'alligator',
+        ];
+    
+        \Mail::to('alejandro.rosalez@example.com')
+            ->cc('cc@example.com')
+            ->bcc('bcc@example.com')
+            ->send(new SesTemplate($templateName, $templateData));
+    }
 }
 ```
 
