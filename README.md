@@ -1,5 +1,9 @@
 # Amazon SES template mail driver for Laravel 5
 
+[![Build Status](https://travis-ci.org/sunaoka/laravel-ses-template-driver.svg?branch=develop)](https://travis-ci.org/sunaoka/laravel-ses-template-driver)
+[![Latest Stable Version](https://poser.pugx.org/sunaoka/laravel-ses-template-driver/v/stable)](https://packagist.org/packages/sunaoka/laravel-ses-template-driver)
+[![License](https://poser.pugx.org/sunaoka/laravel-ses-template-driver/license)](https://packagist.org/packages/sunaoka/laravel-ses-template-driver)
+
 ## Installation
 
 ```bash
