@@ -55,7 +55,7 @@ class SesTemplateTransport extends Transport
             $destination['BccAddresses'] = array_keys($message->getBcc());
         }
 
-        $from = $message->getFrom();
+        $from = $message->getSender() ?: $message->getFrom();
         $mailAddress = key($from);
         $source = sprintf('%s <%s>', mb_encode_mimeheader($from[$mailAddress]), $mailAddress);
 
