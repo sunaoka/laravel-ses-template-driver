@@ -6,7 +6,6 @@ use Aws\Ses\SesClient;
 use Illuminate\Foundation\Application;
 use Illuminate\Mail\TransportManager;
 use Illuminate\Support\Collection;
-use PHPUnit\Framework\TestCase;
 use Sunaoka\LaravelSesTemplateDriver\SesTemplateTransportServiceProvider;
 use Sunaoka\LaravelSesTemplateDriver\Transport\SesTemplateTransport;
 

@@ -5,7 +5,6 @@ namespace Sunaoka\LaravelSesTemplateDriver\Tests;
 use Aws\Ses\SesClient;
 use Illuminate\Support\Str;
 use PHPUnit\Framework\MockObject\MockBuilder;
-use PHPUnit\Framework\TestCase;
 use Sunaoka\LaravelSesTemplateDriver\Transport\SesTemplateTransport;
 use Swift_Message;
 
