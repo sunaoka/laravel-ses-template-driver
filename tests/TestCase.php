@@ -7,19 +7,35 @@ use PHPUnit\Framework\TestCase as BaseTestCase;
 class TestCase extends BaseTestCase
 {
     /**
-     * @param $className
-     * @param $name
+     * @param mixed  $class
+     * @param string $name
      *
      * @return \ReflectionProperty
      * @throws \ReflectionException
      */
-    protected function getProperty($className, $name)
+    protected function getRestrictedProperty($class, $name)
     {
-        $class = new \ReflectionClass($className);
+        $reflectionClass = new \ReflectionClass($class);
 
-        $property = $class->getProperty($name);
+        $property = $reflectionClass->getProperty($name);
         $property->setAccessible(true);
 
-        return $property->getValue($className);
+        return $property->getValue($class);
+    }
+
+    /**
+     * @param  mixed  $class
+     * @param  string $name
+     * @param  array  $args
+     *
+     * @return mixed
+     * @throws \ReflectionException
+     */
+    protected function callRestrictedMethod($class, $name, array $args = [])
+    {
+        $reflectionMethod = new \ReflectionMethod($class, $name);
+        $reflectionMethod->setAccessible(true);
+
+        return $reflectionMethod->invokeArgs($class, $args);
     }
 }

@@ -16,7 +16,7 @@ class SesTemplateTest extends TestCase
 
         $this->assertEquals('TestTemplate', $mailable->subject);
 
-        $html = $this->getProperty($mailable, 'html');
+        $html = $this->getRestrictedProperty($mailable, 'html');
 
         $this->assertEquals(json_encode(['foo' => 'bar']), $html);
     }
