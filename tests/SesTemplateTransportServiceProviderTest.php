@@ -4,7 +4,6 @@ namespace Sunaoka\LaravelSesTemplateDriver\Tests;
 
 use Aws\Ses\SesClient;
 use Illuminate\Container\Container;
-use Illuminate\Foundation\Application;
 use Illuminate\Mail\MailServiceProvider;
 use Illuminate\Mail\TransportManager;
 use Illuminate\Support\Collection;
@@ -18,7 +17,6 @@ class SesTemplateTransportServiceProviderTest extends TestCase
      */
     public function testRegister()
     {
-        /** @var Application $app */
         $app = new Container();
         $app['config'] = new Collection([
             'mail.driver'  => 'ses.template',
@@ -37,7 +35,6 @@ class SesTemplateTransportServiceProviderTest extends TestCase
 
     public function testRegisterDriver()
     {
-        /** @var Application $app */
         $app = new Container();
         $app['config'] = new Collection([
             'mail.driver'  => 'ses.template',
