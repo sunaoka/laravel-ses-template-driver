@@ -23,20 +23,24 @@ class SesTemplateTest extends TestCase
 
     public function testBuildWithFrom()
     {
-        $mailable = new SesTemplate('TestTemplate', ['foo' => 'bar'], [
+        $options = [
             'from' => [
                 'address' => 'example@example.com',
                 'name'    => 'example name',
-            ]]);
+            ],
+        ];
+        $mailable = new SesTemplate('TestTemplate', ['foo' => 'bar'], $options);
         $mailable->build();
 
-        $this->assertEquals([['address' => 'example@example.com', 'name' => 'example name']], $mailable->from);
+        $this->assertEquals([$options['from']], $mailable->from);
 
-        $mailable = new SesTemplate('TestTemplate', ['foo' => 'bar'], [
+        $options = [
             'from' => [
                 'xxxxxxx' => 'example@example.com',
                 'name'    => 'example name',
-            ]]);
+            ],
+        ];
+        $mailable = new SesTemplate('TestTemplate', ['foo' => 'bar'], $options);
         $mailable->build();
 
         $this->assertEquals([], $mailable->from);
@@ -44,12 +48,22 @@ class SesTemplateTest extends TestCase
 
     public function testBuildWithFromOnlyAddress()
     {
-        $mailable = new SesTemplate('TestTemplate', ['foo' => 'bar'], ['from' => ['address' => 'example@example.com']]);
+        $options = [
+            'from' => [
+                'address' => 'example@example.com',
+            ],
+        ];
+        $mailable = new SesTemplate('TestTemplate', ['foo' => 'bar'], $options);
         $mailable->build();
 
-        $this->assertEquals([['address' => 'example@example.com', 'name' => null]], $mailable->from);
+        $this->assertEquals([$options['from'] + ['name' => null]], $mailable->from);
 
-        $mailable = new SesTemplate('TestTemplate', ['foo' => 'bar'], ['from' => ['xxxxxxx' => 'example@example.com']]);
+        $options = [
+            'from' => [
+                'xxxxxxx' => 'example@example.com',
+            ],
+        ];
+        $mailable = new SesTemplate('TestTemplate', ['foo' => 'bar'], $options);
         $mailable->build();
 
         $this->assertEquals([], $mailable->from);
@@ -57,20 +71,24 @@ class SesTemplateTest extends TestCase
 
     public function testBuildWithReplyTo()
     {
-        $mailable = new SesTemplate('TestTemplate', ['foo' => 'bar'], [
+        $options = [
             'reply_to' => [
                 'address' => 'example@example.com',
                 'name'    => 'example name',
-            ]]);
+            ],
+        ];
+        $mailable = new SesTemplate('TestTemplate', ['foo' => 'bar'], $options);
         $mailable->build();
 
-        $this->assertEquals([['address' => 'example@example.com', 'name' => 'example name']], $mailable->replyTo);
+        $this->assertEquals([$options['reply_to']], $mailable->replyTo);
 
-        $mailable = new SesTemplate('TestTemplate', ['foo' => 'bar'], [
+        $options = [
             'reply_to' => [
                 'xxxxxxx' => 'example@example.com',
                 'name'    => 'example name',
-            ]]);
+            ],
+        ];
+        $mailable = new SesTemplate('TestTemplate', ['foo' => 'bar'], $options);
         $mailable->build();
 
         $this->assertEquals([], $mailable->replyTo);
@@ -78,13 +96,22 @@ class SesTemplateTest extends TestCase
 
     public function testBuildWithReplyToOnlyAddress()
     {
-        $mailable = new SesTemplate('TestTemplate', ['foo' => 'bar'], ['reply_to' => ['address' => 'example@example.com']]);
+        $options = [
+            'reply_to' => [
+                'address' => 'example@example.com',
+            ],
+        ];
+        $mailable = new SesTemplate('TestTemplate', ['foo' => 'bar'], $options);
         $mailable->build();
 
-        $this->assertEquals([['address' => 'example@example.com', 'name' => null]], $mailable->replyTo);
+        $this->assertEquals([$options['reply_to'] + ['name' => null]], $mailable->replyTo);
 
-        $mailable = new SesTemplate('TestTemplate', ['foo' => 'bar'], ['reply_to' => ['xxxxxxx' => 'example@example
-        .com']]);
+        $options = [
+            'reply_to' => [
+                'xxxxxxx' => 'example@example.com',
+            ],
+        ];
+        $mailable = new SesTemplate('TestTemplate', ['foo' => 'bar'], $options);
         $mailable->build();
 
         $this->assertEquals([], $mailable->replyTo);
