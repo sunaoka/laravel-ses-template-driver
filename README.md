@@ -46,7 +46,8 @@ If you need to include [additional options](https://docs.aws.amazon.com/aws-sdk-
 ],
 ```
 
-## usage
+## Basic usage
+
 ```php
 use Sunaoka\LaravelSesTemplateDriver\Mail\SesTemplate;
 
@@ -68,6 +69,41 @@ class Foo
 }
 ```
 
+### Options
+
+Set  Reply-to header
+
+```php
+use Sunaoka\LaravelSesTemplateDriver\Mail\SesTemplate;
+
+class Foo
+{
+    public function sendmail()
+    {
+        $templateName = 'MyTemplate';
+        $templateData = [
+            'name'           => 'Alejandro',
+            'favoriteanimal' => 'alligator',
+        ];
+        $options = [
+            'from' => [
+                'address' => 'alejandro.rosalez@example.com', // required
+                'name'    => 'Alejandro Rosalez',             // optional
+            ],
+            'reply_to' => [
+                'address' => 'alejandro.rosalez@example.com', // required
+                'name'    => 'Alejandro Rosalez',             // optional
+            ],
+        ];
+
+        \Mail::to('alejandro.rosalez@example.com')
+            ->cc('cc@example.com')
+            ->bcc('bcc@example.com')
+            ->send(new SesTemplate($templateName, $templateData, $options));
+    }
+}
+```
+
 ### To send a templated email to a single destination
 
 ```json
@@ -82,28 +118,6 @@ class Foo
 ```
 
 > Not supported, to send a templated email to multiple destinations.
-
-## Tips
-
-### How to set Reply-to header
-
-Call the `alwaysReplyTo` method before the `send` method.
-
-```php
-\Mail::alwaysReplyTo('reply-to@example.com');
-
-\Mail::to('alejandro.rosalez@example.com')
-    ->send(new SesTemplate($templateName, $templateData));
-```
-
-or, set the `reply_to` option in your `config/mail.php` configuration file.
-
-```php
-'reply_to' => [
-    'address' => 'reply-to@example.com',
-    'name'    => 'Reply to name',
-],
-```
 
 ## Reference
 
