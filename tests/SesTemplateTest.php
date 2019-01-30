@@ -116,4 +116,22 @@ class SesTemplateTest extends TestCase
 
         $this->assertEquals([], $mailable->replyTo);
     }
+
+    public function testOptions()
+    {
+        $options = [
+            'from' => [
+                'address' => 'example@example.com',
+                'name'    => 'example name',
+            ],
+            'reply_to' => [
+                'address' => 'example@example.com',
+                'name'    => 'example name',
+            ],
+        ];
+        $mailable = new SesTemplate('TestTemplate', ['foo' => 'bar']);
+        $mailable->setOptions($options);
+
+        $this->assertEquals($options, $mailable->getOptions());
+    }
 }

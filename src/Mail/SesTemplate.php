@@ -56,4 +56,24 @@ class SesTemplate extends Mailable
 
         return $this->subject($this->template)->html(json_encode($this->templateData));
     }
+
+    /**
+     * Get the transmission options being used by the transport.
+     *
+     * @return array
+     */
+    public function getOptions(): array
+    {
+        return $this->options;
+    }
+
+    /**
+     * Set the transmission options being used by the transport.
+     *
+     * @param array $options
+     */
+    public function setOptions(array $options): void
+    {
+        $this->options = $options;
+    }
 }
