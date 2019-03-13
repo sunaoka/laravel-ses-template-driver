@@ -78,6 +78,26 @@ class SesTemplate extends Mailable
     }
 
     /**
+     * Get the transmission template data being used by the transport.
+     *
+     * @return array
+     */
+    public function getTemplateData(): array
+    {
+        return $this->templateData;
+    }
+
+    /**
+     * Set the transmission template data being used by the transport.
+     *
+     * @param array $templateData
+     */
+    public function setTemplateData(array $templateData): void
+    {
+        $this->templateData = $templateData;
+    }
+
+    /**
      * Get the transmission options being used by the transport.
      *
      * @return array
