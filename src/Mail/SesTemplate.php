@@ -13,7 +13,7 @@ class SesTemplate extends Mailable
     /**
      * @var string
      */
-    private $template;
+    private $templateName;
 
     /**
      * @var array
@@ -28,13 +28,13 @@ class SesTemplate extends Mailable
     /**
      * Create a new message instance.
      *
-     * @param string $template     Template Name
+     * @param string $templateName Template Name
      * @param array  $templateData Template Data
      * @param array  $options      Options
      */
-    public function __construct(string $template, array $templateData, array $options = [])
+    public function __construct(string $templateName, array $templateData, array $options = [])
     {
-        $this->template = $template;
+        $this->templateName = $templateName;
         $this->templateData = $templateData;
         $this->options = $options;
     }
@@ -54,7 +54,7 @@ class SesTemplate extends Mailable
             $this->replyTo($this->options['reply_to']['address'], $this->options['reply_to']['name'] ?? null);
         }
 
-        return $this->subject($this->template)->html(json_encode($this->templateData));
+        return $this->subject($this->templateName)->html(json_encode($this->templateData));
     }
 
     /**
