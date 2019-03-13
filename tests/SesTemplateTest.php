@@ -127,6 +127,16 @@ class SesTemplateTest extends TestCase
         $this->assertEquals('ModifiedTemplate', $mailable->getTemplateName());
     }
 
+    public function testTemplateData()
+    {
+        $mailable = new SesTemplate('TestTemplate', ['foo' => 'bar']);
+        $this->assertSame(['foo' => 'bar'], $mailable->getTemplateData());
+
+        $mailable->setTemplateData(['baz' => 'qux']);
+
+        $this->assertSame(['baz' => 'qux'], $mailable->getTemplateData());
+    }
+
     public function testOptions()
     {
         $options = [
