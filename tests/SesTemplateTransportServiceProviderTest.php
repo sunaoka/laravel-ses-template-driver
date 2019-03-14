@@ -56,7 +56,7 @@ class SesTemplateTransportServiceProviderTest extends TestCase
         $this->assertInstanceOf(SesTemplateTransport::class, $transport);
 
         /** @var SesClient $ses */
-        $ses = $this->readAttribute($transport, 'ses');
+        $ses = $transport->ses();
 
         $this->assertEquals('us-east-1', $ses->getRegion());
     }
