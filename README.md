@@ -1,4 +1,4 @@
-# Amazon SES template mail driver for Laravel 5
+# Amazon SES template mail driver for Laravel 5 and 6
 
 [![Latest Stable Version](https://poser.pugx.org/sunaoka/laravel-ses-template-driver/v/stable)](https://packagist.org/packages/sunaoka/laravel-ses-template-driver)
 [![License](https://poser.pugx.org/sunaoka/laravel-ses-template-driver/license)](https://packagist.org/packages/sunaoka/laravel-ses-template-driver)
@@ -19,7 +19,9 @@ Next, set the `driver` option in your `config/mail.php` configuration file to `s
 
 ```php
 'driver' => 'ses.template',
+```
 
+```php
 'ses' => [
     'key'    => 'your-ses-key',
     'secret' => 'your-ses-secret',

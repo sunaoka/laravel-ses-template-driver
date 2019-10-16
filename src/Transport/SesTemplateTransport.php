@@ -80,4 +80,14 @@ class SesTemplateTransport extends Transport
 
         return $this->numberOfRecipients($message);
     }
+
+    /**
+     * Get the Amazon SES client for the SesTransport instance.
+     *
+     * @return \Aws\Ses\SesClient
+     */
+    public function ses()
+    {
+        return $this->ses;
+    }
 }
