@@ -3,6 +3,7 @@
 [![Latest Stable Version](https://poser.pugx.org/sunaoka/laravel-ses-template-driver/v/stable)](https://packagist.org/packages/sunaoka/laravel-ses-template-driver)
 [![License](https://poser.pugx.org/sunaoka/laravel-ses-template-driver/license)](https://packagist.org/packages/sunaoka/laravel-ses-template-driver)
 [![PHP from Packagist](https://img.shields.io/packagist/php-v/sunaoka/laravel-ses-template-driver)](composer.json)
+[![Laravel](https://img.shields.io/badge/laravel-5.x%20%7C%206.x-red)](https://laravel.com/)
 [![Build Status](https://travis-ci.org/sunaoka/laravel-ses-template-driver.svg?branch=develop)](https://travis-ci.org/sunaoka/laravel-ses-template-driver)
 [![codecov](https://codecov.io/gh/sunaoka/laravel-ses-template-driver/branch/develop/graph/badge.svg)](https://codecov.io/gh/sunaoka/laravel-ses-template-driver)
 
