@@ -22,6 +22,14 @@ A Mail Driver with support for [Sending Personalized Email Using the Amazon SES 
 
 ## Installation
 
+### Laravel 5.7.x, 5.8.x, 6.x
+
+```bash
+composer require sunaoka/laravel-ses-template-driver:'^1.0'
+```
+
+### Laravel 7.x
+
 ```bash
 composer require sunaoka/laravel-ses-template-driver
 ```
