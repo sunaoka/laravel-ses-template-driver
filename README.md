@@ -11,7 +11,24 @@
 
 A Mail Driver with support for [Sending Personalized Email Using the Amazon SES API](https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html).
 
+## Version Compatibility
+
+| Laravel | Amazon SES template mail driver |
+| ------- | ------------------------------- |
+| 5.7.x   | 1.x                             |
+| 5.8.x   | 1.x                             |
+| 6.x     | 1.x                             |
+| 7.x     | 2.x                             |
+
 ## Installation
+
+### Laravel 5.7.x, 5.8.x, 6.x
+
+```bash
+composer require sunaoka/laravel-ses-template-driver:'^1.0'
+```
+
+### Laravel 7.x
 
 ```bash
 composer require sunaoka/laravel-ses-template-driver
