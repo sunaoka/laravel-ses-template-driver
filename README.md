@@ -2,10 +2,10 @@
 
 [![Latest](https://poser.pugx.org/sunaoka/laravel-ses-template-driver/v)](https://packagist.org/packages/sunaoka/laravel-ses-template-driver)
 [![License](https://poser.pugx.org/sunaoka/laravel-ses-template-driver/license)](https://packagist.org/packages/sunaoka/laravel-ses-template-driver)
-[![PHP](https://img.shields.io/packagist/php-v/sunaoka/laravel-ses-template-driver/v1.0.0)](composer.json)
-[![Laravel](https://img.shields.io/badge/laravel-5.x%20%7C%206.x-red)](https://laravel.com/)
-[![Build](https://travis-ci.org/sunaoka/laravel-ses-template-driver.svg?branch=v1.x)](https://travis-ci.org/sunaoka/laravel-ses-template-driver)
-[![codecov](https://codecov.io/gh/sunaoka/laravel-ses-template-driver/branch/v1.x/graph/badge.svg)](https://codecov.io/gh/sunaoka/laravel-ses-template-driver)
+[![PHP](https://img.shields.io/packagist/php-v/sunaoka/laravel-ses-template-driver)](composer.json)
+[![Laravel](https://img.shields.io/badge/laravel-7.x-red)](https://laravel.com/)
+[![Build](https://travis-ci.org/sunaoka/laravel-ses-template-driver.svg?branch=develop)](https://travis-ci.org/sunaoka/laravel-ses-template-driver)
+[![codecov](https://codecov.io/gh/sunaoka/laravel-ses-template-driver/branch/develop/graph/badge.svg)](https://codecov.io/gh/sunaoka/laravel-ses-template-driver)
 
 ----
 
