@@ -3,7 +3,7 @@
 namespace Sunaoka\LaravelSesTemplateDriver;
 
 use Aws\Ses\SesClient;
-use Illuminate\Mail\MailManager;
+use Illuminate\Mail\TransportManager;
 use Illuminate\Support\Arr;
 use Illuminate\Support\ServiceProvider;
 use Sunaoka\LaravelSesTemplateDriver\Transport\SesTemplateTransport;
@@ -17,27 +17,26 @@ class SesTemplateTransportServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->afterResolving(MailManager::class, function (MailManager $manager) {
-            return $this->registerTransport($manager);
+        $this->app->afterResolving(TransportManager::class, function (TransportManager $manager) {
+            $this->registerTransport($manager);
         });
     }
 
     /**
      * Register Transport
      *
-     * @param MailManager $manager
+     * @param TransportManager $manager
      */
-    public function registerTransport(MailManager $manager)
+    public function registerTransport(TransportManager $manager)
     {
-        $manager->extend('sestemplate', function () {
+        $manager->extend('ses.template', function () {
             $config = array_merge($this->app['config']->get('services.ses', []), [
-                'version' => 'latest', 'service' => 'email',
+                'version' => 'latest',
+                'service' => 'email',
             ]);
+            $client = new SesClient($this->addSesCredentials($config));
 
-            return new SesTemplateTransport(
-                new SesClient($this->addSesCredentials($config)),
-                $config['options'] ?? []
-            );
+            return new SesTemplateTransport($client, $config['options'] ?? []);
         });
     }
 
@@ -50,7 +49,7 @@ class SesTemplateTransportServiceProvider extends ServiceProvider
      */
     protected function addSesCredentials(array $config)
     {
-        if (! empty($config['key']) && ! empty($config['secret'])) {
+        if ($config['key'] && $config['secret']) {
             $config['credentials'] = Arr::only($config, ['key', 'secret', 'token']);
         }
 
