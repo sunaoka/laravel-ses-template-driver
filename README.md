@@ -1,10 +1,10 @@
-# Amazon SES template mail driver for Laravel 7
+# Amazon SES template mail driver for Laravel 5, 6 and 7
 
-[![Latest Stable Version](https://poser.pugx.org/sunaoka/laravel-ses-template-driver/v/stable)](https://packagist.org/packages/sunaoka/laravel-ses-template-driver)
+[![Latest](https://poser.pugx.org/sunaoka/laravel-ses-template-driver/v)](https://packagist.org/packages/sunaoka/laravel-ses-template-driver)
 [![License](https://poser.pugx.org/sunaoka/laravel-ses-template-driver/license)](https://packagist.org/packages/sunaoka/laravel-ses-template-driver)
-[![PHP from Packagist](https://img.shields.io/packagist/php-v/sunaoka/laravel-ses-template-driver)](composer.json)
+[![PHP](https://img.shields.io/packagist/php-v/sunaoka/laravel-ses-template-driver)](composer.json)
 [![Laravel](https://img.shields.io/badge/laravel-7.x-red)](https://laravel.com/)
-[![Build Status](https://travis-ci.org/sunaoka/laravel-ses-template-driver.svg?branch=develop)](https://travis-ci.org/sunaoka/laravel-ses-template-driver)
+[![Build](https://travis-ci.org/sunaoka/laravel-ses-template-driver.svg?branch=develop)](https://travis-ci.org/sunaoka/laravel-ses-template-driver)
 [![codecov](https://codecov.io/gh/sunaoka/laravel-ses-template-driver/branch/develop/graph/badge.svg)](https://codecov.io/gh/sunaoka/laravel-ses-template-driver)
 
 ----
@@ -34,9 +34,17 @@ composer require sunaoka/laravel-ses-template-driver:'^1.0'
 composer require sunaoka/laravel-ses-template-driver
 ```
 
-Next, set the `driver` and `mailers` option in your `config/mail.php` configuration file to `sestemplate` and verify that your `config/services.php` configuration file contains the following options:
+Next, set the following in `config/mail.php` and `config/services.php`.
 
 ### config/mail.php
+
+#### Laravel 5.7.x, 5.8.x, 6.x
+
+```php
+'driver' => 'ses.template',
+```
+
+#### Laravel 7.x
 
 ```php
 'driver' => 'sestemplate',
