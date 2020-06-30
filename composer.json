@@ -18,6 +18,11 @@
         "illuminate/bus": "^5.7 || ^6.0",
         "illuminate/queue": "^5.7 || ^6.0"
     },
+    "require-dev": {
+        "phpunit/phpunit": "^7.5 || ^8.0",
+        "illuminate/container": "^5.7 || ^6.0",
+        "illuminate/config": "^5.7 || ^6.0"
+    },
     "autoload": {
         "psr-4": {
             "Sunaoka\\LaravelSesTemplateDriver\\": "src/"
@@ -36,9 +41,5 @@
             "aliases": {
             }
         }
-    },
-    "require-dev": {
-        "phpunit/phpunit": "^7.5 || ^8.0",
-        "illuminate/container": "^5.7 || ^6.0"
     }
 }

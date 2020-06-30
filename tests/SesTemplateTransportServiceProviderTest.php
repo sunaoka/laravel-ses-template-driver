@@ -3,10 +3,10 @@
 namespace Sunaoka\LaravelSesTemplateDriver\Tests;
 
 use Aws\Ses\SesClient;
+use Illuminate\Config\Repository;
 use Illuminate\Container\Container;
 use Illuminate\Mail\MailServiceProvider;
 use Illuminate\Mail\TransportManager;
-use Illuminate\Support\Collection;
 use Sunaoka\LaravelSesTemplateDriver\SesTemplateTransportServiceProvider;
 use Sunaoka\LaravelSesTemplateDriver\Transport\SesTemplateTransport;
 
@@ -18,14 +18,16 @@ class SesTemplateTransportServiceProviderTest extends TestCase
     public function testRegister()
     {
         $app = new Container();
-        $app['config'] = new Collection([
-            'mail.driver'  => 'ses.template',
-            'services.ses' => [
-                'key'    => 'foo',
-                'secret' => 'bar',
-                'region' => 'us-east-1',
-            ],
-        ]);
+        $app->singleton('config', function () {
+            return new Repository([
+                'mail.driver'  => 'ses.template',
+                'services.ses' => [
+                    'key'    => 'foo',
+                    'secret' => 'bar',
+                    'region' => 'us-east-1',
+                ],
+            ]);
+        });
 
         (new SesTemplateTransportServiceProvider($app))->register();
         $this->callRestrictedMethod(new MailServiceProvider($app), 'registerSwiftTransport');
@@ -36,14 +38,16 @@ class SesTemplateTransportServiceProviderTest extends TestCase
     public function testRegisterDriver()
     {
         $app = new Container();
-        $app['config'] = new Collection([
-            'mail.driver'  => 'ses.template',
-            'services.ses' => [
-                'key'    => 'foo',
-                'secret' => 'bar',
-                'region' => 'us-east-1',
-            ],
-        ]);
+        $app->singleton('config', function () {
+            return new Repository([
+                'mail.driver'  => 'ses.template',
+                'services.ses' => [
+                    'key'    => 'foo',
+                    'secret' => 'bar',
+                    'region' => 'us-east-1',
+                ],
+            ]);
+        });
 
         $manager = new TransportManager($app);
 
