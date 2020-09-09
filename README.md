@@ -1,9 +1,9 @@
-# Amazon SES template mail driver for Laravel 5, 6 and 7
+# Amazon SES template mail driver for Laravel 5, 6, 7 and 8
 
 [![Latest](https://poser.pugx.org/sunaoka/laravel-ses-template-driver/v)](https://packagist.org/packages/sunaoka/laravel-ses-template-driver)
 [![License](https://poser.pugx.org/sunaoka/laravel-ses-template-driver/license)](https://packagist.org/packages/sunaoka/laravel-ses-template-driver)
 [![PHP](https://img.shields.io/packagist/php-v/sunaoka/laravel-ses-template-driver)](composer.json)
-[![Laravel](https://img.shields.io/badge/laravel-7.x-red)](https://laravel.com/)
+[![Laravel](https://img.shields.io/badge/laravel-7.x%20%7C%208.x-red)](https://laravel.com/)
 [![Build](https://travis-ci.org/sunaoka/laravel-ses-template-driver.svg?branch=develop)](https://travis-ci.org/sunaoka/laravel-ses-template-driver)
 [![codecov](https://codecov.io/gh/sunaoka/laravel-ses-template-driver/branch/develop/graph/badge.svg)](https://codecov.io/gh/sunaoka/laravel-ses-template-driver)
 
@@ -19,6 +19,7 @@ A Mail Driver with support for [Sending Personalized Email Using the Amazon SES 
 | 5.8.x   | 1.x                             |
 | 6.x     | 1.x                             |
 | 7.x     | 2.x                             |
+| 8.x     | 2.x                             |
 
 ## Installation
 
@@ -28,7 +29,7 @@ A Mail Driver with support for [Sending Personalized Email Using the Amazon SES 
 composer require sunaoka/laravel-ses-template-driver:'^1.0'
 ```
 
-### Laravel 7.x
+### Laravel 7.x, 8.x
 
 ```bash
 composer require sunaoka/laravel-ses-template-driver
@@ -44,7 +45,7 @@ Next, set the following in `config/mail.php` and `config/services.php`.
 'driver' => 'ses.template',
 ```
 
-#### Laravel 7.x
+#### Laravel 7.x, 8.x
 
 ```php
 'default' => 'sestemplate',
