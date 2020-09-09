@@ -47,7 +47,7 @@ Next, set the following in `config/mail.php` and `config/services.php`.
 #### Laravel 7.x
 
 ```php
-'driver' => 'sestemplate',
+'default' => 'sestemplate',
 
 'mailers' => [
     'sestemplate' => [
