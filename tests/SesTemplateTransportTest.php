@@ -21,7 +21,7 @@ class SesTemplateTransportTest extends TestCase
 
         /** @var SesClient|MockObject $client */
         $client = $this->getMockBuilder(SesClient::class)
-            ->addMethods(['sendTemplatedEmail'])
+            ->setMethods(['sendTemplatedEmail'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -59,7 +59,7 @@ class SesTemplateTransportTest extends TestCase
 
         /** @var SesClient|MockObject $client */
         $client = $this->getMockBuilder(SesClient::class)
-            ->addMethods(['sendTemplatedEmail'])
+            ->setMethods(['sendTemplatedEmail'])
             ->disableOriginalConstructor()
             ->getMock();
 
