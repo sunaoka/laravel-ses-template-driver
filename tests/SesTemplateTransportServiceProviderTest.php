@@ -59,7 +59,7 @@ class SesTemplateTransportServiceProviderTest extends TestCase
         });
 
         $app->singleton('view', function () {
-            return new MockViewFacatory();
+            return new MockViewFactory();
         });
 
         $app->singleton('events', function () {
@@ -83,7 +83,7 @@ class SesTemplateTransportServiceProviderTest extends TestCase
 
 }
 
-class MockViewFacatory implements \Illuminate\Contracts\View\Factory
+class MockViewFactory implements \Illuminate\Contracts\View\Factory
 {
     public function exists($view)
     {
