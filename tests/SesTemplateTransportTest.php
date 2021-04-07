@@ -4,7 +4,7 @@ namespace Sunaoka\LaravelSesTemplateDriver\Tests;
 
 use Aws\Ses\SesClient;
 use Illuminate\Support\Str;
-use PHPUnit\Framework\MockObject\MockBuilder;
+use PHPUnit\Framework\MockObject\MockObject;
 use Sunaoka\LaravelSesTemplateDriver\Transport\SesTemplateTransport;
 use Swift_Message;
 
@@ -19,9 +19,9 @@ class SesTemplateTransportTest extends TestCase
         $message->setBcc('bcc@example.com');
         $message->setReplyTo('reply-to@example.com');
 
-        /** @var SesClient|MockBuilder $client */
+        /** @var SesClient|MockObject $client */
         $client = $this->getMockBuilder(SesClient::class)
-            ->setMethods(['sendTemplatedEmail'])
+            ->addMethods(['sendTemplatedEmail'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -57,9 +57,9 @@ class SesTemplateTransportTest extends TestCase
         $message->setBcc('bcc@example.com');
         $message->setReplyTo('reply-to@example.com');
 
-        /** @var SesClient|MockBuilder $client */
+        /** @var SesClient|MockObject $client */
         $client = $this->getMockBuilder(SesClient::class)
-            ->setMethods(['sendTemplatedEmail'])
+            ->addMethods(['sendTemplatedEmail'])
             ->disableOriginalConstructor()
             ->getMock();
 
