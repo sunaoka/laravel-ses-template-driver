@@ -2,20 +2,21 @@
 
 namespace Sunaoka\LaravelSesTemplateDriver\Tests;
 
-use Aws\Ses\SesClient;
 use Illuminate\Config\Repository;
 use Illuminate\Container\Container;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Mail\MailServiceProvider;
 use Illuminate\Mail\TransportManager;
+use ReflectionException;
 use Sunaoka\LaravelSesTemplateDriver\SesTemplateTransportServiceProvider;
 use Sunaoka\LaravelSesTemplateDriver\Transport\SesTemplateTransport;
 
 class SesTemplateTransportServiceProviderTest extends TestCase
 {
     /**
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
-    public function testRegister()
+    public function testRegister(): void
     {
         $app = new Container();
         $app->singleton('config', function () {
@@ -29,13 +30,14 @@ class SesTemplateTransportServiceProviderTest extends TestCase
             ]);
         });
 
+        /** @var Application $app */
         (new SesTemplateTransportServiceProvider($app))->register();
         $this->callRestrictedMethod(new MailServiceProvider($app), 'registerSwiftTransport');
 
-        $this->assertInstanceOf(TransportManager::class, $app['swift.transport']);
+        self::assertInstanceOf(TransportManager::class, $app['swift.transport']);
     }
 
-    public function testRegisterDriver()
+    public function testRegisterDriver(): void
     {
         $app = new Container();
         $app->singleton('config', function () {
@@ -51,17 +53,17 @@ class SesTemplateTransportServiceProviderTest extends TestCase
 
         $manager = new TransportManager($app);
 
+        /** @var Application $app */
         $provider = new SesTemplateTransportServiceProvider($app);
         $provider->registerTransport($manager);
 
         /** @var SesTemplateTransport $transport */
         $transport = $manager->driver();
 
-        $this->assertInstanceOf(SesTemplateTransport::class, $transport);
+        self::assertInstanceOf(SesTemplateTransport::class, $transport);
 
-        /** @var SesClient $ses */
         $ses = $transport->ses();
 
-        $this->assertEquals('us-east-1', $ses->getRegion());
+        self::assertSame('us-east-1', $ses->getRegion());
     }
 }
