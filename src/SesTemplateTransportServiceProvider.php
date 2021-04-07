@@ -15,10 +15,10 @@ class SesTemplateTransportServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         $this->app->afterResolving(MailManager::class, function (MailManager $manager) {
-            return $this->registerTransport($manager);
+            $this->registerTransport($manager);
         });
     }
 
@@ -27,7 +27,7 @@ class SesTemplateTransportServiceProvider extends ServiceProvider
      *
      * @param MailManager $manager
      */
-    public function registerTransport(MailManager $manager)
+    public function registerTransport(MailManager $manager): void
     {
         $manager->extend('sestemplate', function () {
             $config = array_merge($this->app['config']->get('services.ses', []), [
@@ -48,7 +48,7 @@ class SesTemplateTransportServiceProvider extends ServiceProvider
      *
      * @return array
      */
-    protected function addSesCredentials(array $config)
+    protected function addSesCredentials(array $config): array
     {
         if (! empty($config['key']) && ! empty($config['secret'])) {
             $config['credentials'] = Arr::only($config, ['key', 'secret', 'token']);
