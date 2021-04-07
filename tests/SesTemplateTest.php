@@ -2,26 +2,27 @@
 
 namespace Sunaoka\LaravelSesTemplateDriver\Tests;
 
+use ReflectionException;
 use Sunaoka\LaravelSesTemplateDriver\Mail\SesTemplate;
 
 class SesTemplateTest extends TestCase
 {
     /**
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
-    public function testBuild()
+    public function testBuild(): void
     {
         $mailable = new SesTemplate('TestTemplate', ['foo' => 'bar']);
         $mailable->build();
 
-        $this->assertEquals('TestTemplate', $mailable->subject);
+        self::assertSame('TestTemplate', $mailable->subject);
 
         $html = $this->getRestrictedProperty($mailable, 'html');
 
-        $this->assertEquals(json_encode(['foo' => 'bar']), $html);
+        self::assertSame(json_encode(['foo' => 'bar']), $html);
     }
 
-    public function testBuildWithFrom()
+    public function testBuildWithFrom(): void
     {
         $options = [
             'from' => [
@@ -32,7 +33,7 @@ class SesTemplateTest extends TestCase
         $mailable = new SesTemplate('TestTemplate', ['foo' => 'bar'], $options);
         $mailable->build();
 
-        $this->assertEquals([$options['from']], $mailable->from);
+        self::assertEqualsCanonicalizing([$options['from']], $mailable->from);
 
         $options = [
             'from' => [
@@ -43,10 +44,10 @@ class SesTemplateTest extends TestCase
         $mailable = new SesTemplate('TestTemplate', ['foo' => 'bar'], $options);
         $mailable->build();
 
-        $this->assertEquals([], $mailable->from);
+        self::assertSame([], $mailable->from);
     }
 
-    public function testBuildWithFromOnlyAddress()
+    public function testBuildWithFromOnlyAddress(): void
     {
         $options = [
             'from' => [
@@ -56,7 +57,7 @@ class SesTemplateTest extends TestCase
         $mailable = new SesTemplate('TestTemplate', ['foo' => 'bar'], $options);
         $mailable->build();
 
-        $this->assertEquals([$options['from'] + ['name' => null]], $mailable->from);
+        self::assertEqualsCanonicalizing([$options['from'] + ['name' => null]], $mailable->from);
 
         $options = [
             'from' => [
@@ -66,10 +67,10 @@ class SesTemplateTest extends TestCase
         $mailable = new SesTemplate('TestTemplate', ['foo' => 'bar'], $options);
         $mailable->build();
 
-        $this->assertEquals([], $mailable->from);
+        self::assertSame([], $mailable->from);
     }
 
-    public function testBuildWithReplyTo()
+    public function testBuildWithReplyTo(): void
     {
         $options = [
             'reply_to' => [
@@ -80,7 +81,7 @@ class SesTemplateTest extends TestCase
         $mailable = new SesTemplate('TestTemplate', ['foo' => 'bar'], $options);
         $mailable->build();
 
-        $this->assertEquals([$options['reply_to']], $mailable->replyTo);
+        self::assertEqualsCanonicalizing([$options['reply_to']], $mailable->replyTo);
 
         $options = [
             'reply_to' => [
@@ -91,10 +92,10 @@ class SesTemplateTest extends TestCase
         $mailable = new SesTemplate('TestTemplate', ['foo' => 'bar'], $options);
         $mailable->build();
 
-        $this->assertEquals([], $mailable->replyTo);
+        self::assertSame([], $mailable->replyTo);
     }
 
-    public function testBuildWithReplyToOnlyAddress()
+    public function testBuildWithReplyToOnlyAddress(): void
     {
         $options = [
             'reply_to' => [
@@ -104,7 +105,7 @@ class SesTemplateTest extends TestCase
         $mailable = new SesTemplate('TestTemplate', ['foo' => 'bar'], $options);
         $mailable->build();
 
-        $this->assertEquals([$options['reply_to'] + ['name' => null]], $mailable->replyTo);
+        self::assertEqualsCanonicalizing([$options['reply_to'] + ['name' => null]], $mailable->replyTo);
 
         $options = [
             'reply_to' => [
@@ -114,33 +115,33 @@ class SesTemplateTest extends TestCase
         $mailable = new SesTemplate('TestTemplate', ['foo' => 'bar'], $options);
         $mailable->build();
 
-        $this->assertEquals([], $mailable->replyTo);
+        self::assertSame([], $mailable->replyTo);
     }
 
-    public function testTemplateName()
+    public function testTemplateName(): void
     {
         $mailable = new SesTemplate('TestTemplate', ['foo' => 'bar']);
-        $this->assertEquals('TestTemplate', $mailable->getTemplateName());
+        self::assertSame('TestTemplate', $mailable->getTemplateName());
 
         $mailable->setTemplateName('ModifiedTemplate');
 
-        $this->assertEquals('ModifiedTemplate', $mailable->getTemplateName());
+        self::assertSame('ModifiedTemplate', $mailable->getTemplateName());
     }
 
-    public function testTemplateData()
+    public function testTemplateData(): void
     {
         $mailable = new SesTemplate('TestTemplate', ['foo' => 'bar']);
-        $this->assertSame(['foo' => 'bar'], $mailable->getTemplateData());
+        self::assertSame(['foo' => 'bar'], $mailable->getTemplateData());
 
         $mailable->setTemplateData(['baz' => 'qux']);
 
-        $this->assertSame(['baz' => 'qux'], $mailable->getTemplateData());
+        self::assertSame(['baz' => 'qux'], $mailable->getTemplateData());
     }
 
-    public function testOptions()
+    public function testOptions(): void
     {
         $options = [
-            'from' => [
+            'from'     => [
                 'address' => 'example@example.com',
                 'name'    => 'example name',
             ],
@@ -152,6 +153,6 @@ class SesTemplateTest extends TestCase
         $mailable = new SesTemplate('TestTemplate', ['foo' => 'bar']);
         $mailable->setOptions($options);
 
-        $this->assertEquals($options, $mailable->getOptions());
+        self::assertSame($options, $mailable->getOptions());
     }
 }

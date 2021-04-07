@@ -15,7 +15,7 @@ class SesTemplateTransportServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         $this->app->afterResolving(TransportManager::class, function (TransportManager $manager) {
             $this->registerTransport($manager);
@@ -27,7 +27,7 @@ class SesTemplateTransportServiceProvider extends ServiceProvider
      *
      * @param TransportManager $manager
      */
-    public function registerTransport(TransportManager $manager)
+    public function registerTransport(TransportManager $manager): void
     {
         $manager->extend('ses.template', function () {
             $config = array_merge($this->app['config']->get('services.ses', []), [
@@ -47,7 +47,7 @@ class SesTemplateTransportServiceProvider extends ServiceProvider
      *
      * @return array
      */
-    protected function addSesCredentials(array $config)
+    protected function addSesCredentials(array $config): array
     {
         if ($config['key'] && $config['secret']) {
             $config['credentials'] = Arr::only($config, ['key', 'secret', 'token']);
