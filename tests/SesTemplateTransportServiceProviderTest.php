@@ -2,30 +2,29 @@
 
 namespace Sunaoka\LaravelSesTemplateDriver\Tests;
 
-use Aws\Ses\SesClient;
 use Illuminate\Config\Repository;
 use Illuminate\Container\Container;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Mail\Mailer;
-use Illuminate\Mail\MailServiceProvider;
 use Illuminate\Mail\MailManager;
-use Illuminate\Support\Collection;
+use Illuminate\Mail\MailServiceProvider;
+use ReflectionException;
 use Sunaoka\LaravelSesTemplateDriver\SesTemplateTransportServiceProvider;
 use Sunaoka\LaravelSesTemplateDriver\Transport\SesTemplateTransport;
 
 class SesTemplateTransportServiceProviderTest extends TestCase
 {
     /**
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
-    public function testRegister()
+    public function testRegister(): void
     {
         $app = new Container();
         $app->singleton('config', function () {
             return new Repository([
-                'mail.default' => 'sestemplate',
+                'mail.default'             => 'sestemplate',
                 'mail.mailers.sestemplate' => ['transport' => 'sestemplate'],
-                'services' => [
+                'services'                 => [
                     'ses' => [
                         'key'    => 'foo',
                         'secret' => 'bar',
@@ -35,20 +34,21 @@ class SesTemplateTransportServiceProviderTest extends TestCase
             ]);
         });
 
+        /** @var Application $app */
         (new SesTemplateTransportServiceProvider($app))->register();
         $this->callRestrictedMethod(new MailServiceProvider($app), 'registerIlluminateMailer');
 
-        $this->assertInstanceOf(MailManager::class, $app['mail.manager']);
+        self::assertInstanceOf(MailManager::class, $app['mail.manager']);
     }
 
-    public function testRegisterDriver()
+    public function testRegisterDriver(): void
     {
         $app = new Container();
         $app->singleton('config', function () {
             return new Repository([
-                'mail.default' => 'sestemplate',
+                'mail.default'             => 'sestemplate',
                 'mail.mailers.sestemplate' => ['transport' => 'sestemplate'],
-                'services' => [
+                'services'                 => [
                     'ses' => [
                         'key'    => 'foo',
                         'secret' => 'bar',
@@ -59,13 +59,14 @@ class SesTemplateTransportServiceProviderTest extends TestCase
         });
 
         $app->singleton('view', function () {
-            return new MockViewFacatory();
+            return new MockViewFactory();
         });
 
         $app->singleton('events', function () {
             return null;
         });
 
+        /** @var Application $app */
         $manager = new MailManager($app);
 
         $provider = new SesTemplateTransportServiceProvider($app);
@@ -73,17 +74,16 @@ class SesTemplateTransportServiceProviderTest extends TestCase
 
         /** @var SesTemplateTransport $transport */
         $transport = $manager->getSwiftMailer()->getTransport();
-        $this->assertInstanceOf(SesTemplateTransport::class, $transport);
+        self::assertInstanceOf(SesTemplateTransport::class, $transport);
 
-        /** @var SesClient $ses */
         $ses = $transport->ses();
 
-        $this->assertEquals('us-east-1', $ses->getRegion());
+        self::assertEquals('us-east-1', $ses->getRegion());
     }
 
 }
 
-class MockViewFacatory implements \Illuminate\Contracts\View\Factory
+class MockViewFactory implements Factory
 {
     public function exists($view)
     {
