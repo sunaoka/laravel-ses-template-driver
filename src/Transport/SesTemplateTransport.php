@@ -11,7 +11,7 @@ class SesTemplateTransport extends Transport
     /**
      * The Amazon SES instance.
      *
-     * @var \Aws\Ses\SesClient
+     * @var SesClient
      */
     protected $ses;
 
@@ -25,8 +25,8 @@ class SesTemplateTransport extends Transport
     /**
      * Create a new SES transport instance.
      *
-     * @param  \Aws\Ses\SesClient $ses
-     * @param  array              $options
+     * @param SesClient $ses
+     * @param array     $options
      *
      * @return void
      */
@@ -39,7 +39,7 @@ class SesTemplateTransport extends Transport
     /**
      * {@inheritdoc}
      */
-    public function send(Swift_Mime_SimpleMessage $message, &$failedRecipients = null)
+    public function send(Swift_Mime_SimpleMessage $message, &$failedRecipients = null): int
     {
         $this->beforeSendPerformed($message);
 
@@ -84,9 +84,9 @@ class SesTemplateTransport extends Transport
     /**
      * Get the Amazon SES client for the SesTransport instance.
      *
-     * @return \Aws\Ses\SesClient
+     * @return SesClient
      */
-    public function ses()
+    public function ses(): SesClient
     {
         return $this->ses;
     }

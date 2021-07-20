@@ -42,9 +42,9 @@ class SesTemplate extends Mailable
     /**
      * Build the message.
      *
-     * @return $this
+     * @return self
      */
-    public function build()
+    public function build(): self
     {
         if (isset($this->options['from']['address'])) {
             $this->from($this->options['from']['address'], $this->options['from']['name'] ?? null);
