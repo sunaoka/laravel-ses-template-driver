@@ -11,38 +11,25 @@ class SesTemplate extends Mailable
     use Queueable, SerializesModels;
 
     /**
-     * @var string
-     */
-    private $templateName;
-
-    /**
-     * @var array
-     */
-    private $templateData;
-
-    /**
-     * @var array
-     */
-    private $options;
-
-    /**
      * Create a new message instance.
      *
      * @param string $templateName Template Name
      * @param array  $templateData Template Data
      * @param array  $options      Options
+     *
+     * @return void
      */
-    public function __construct(string $templateName, array $templateData, array $options = [])
-    {
-        $this->templateName = $templateName;
-        $this->templateData = $templateData;
-        $this->options = $options;
+    public function __construct(
+        private string $templateName,
+        private array $templateData,
+        private array $options = []
+    ) {
     }
 
     /**
      * Build the message.
      *
-     * @return self
+     * @return $this
      */
     public function build(): self
     {

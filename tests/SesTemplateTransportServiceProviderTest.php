@@ -41,7 +41,7 @@ class SesTemplateTransportServiceProviderTest extends TestCase
         self::assertInstanceOf(MailManager::class, $app['mail.manager']);
     }
 
-    public function testRegisterDriver(): void
+    public function testRegisterTransport(): void
     {
         $app = new Container();
         $app->singleton('config', function () {
@@ -73,8 +73,9 @@ class SesTemplateTransportServiceProviderTest extends TestCase
         $provider->registerTransport($manager);
 
         /** @var SesTemplateTransport $transport */
-        $transport = $manager->getSwiftMailer()->getTransport();
+        $transport = $manager->getSymfonyTransport();
         self::assertInstanceOf(SesTemplateTransport::class, $transport);
+        self::assertSame('sestemplate', (string)$transport);
 
         $ses = $transport->ses();
 

@@ -2,109 +2,94 @@
 
 namespace Sunaoka\LaravelSesTemplateDriver\Tests;
 
+use Aws\MockHandler;
+use Aws\Result;
 use Aws\Ses\SesClient;
-use Illuminate\Support\Str;
-use PHPUnit\Framework\MockObject\MockObject;
 use Sunaoka\LaravelSesTemplateDriver\Transport\SesTemplateTransport;
-use Swift_Message;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Email;
 
 class SesTemplateTransportTest extends TestCase
 {
     public function testSendBySender(): void
     {
-        $message = new Swift_Message('TemplateName', ['foo' => 'bar']);
-        $message->setSender('myself@example.com', 'myself');
-        $message->setTo('me@example.com');
-        $message->setCc('cc@example.com');
-        $message->setBcc('bcc@example.com');
-        $message->setReplyTo('reply-to@example.com');
+        $message = (new Email())
+            ->sender(new Address('myself@example.com', 'myself'))
+            ->to(new Address('me@example.com'))
+            ->cc(new Address('cc@example.com'))
+            ->bcc(new Address('bcc@example.com'))
+            ->replyTo(new Address('reply-to@example.com'))
+            ->subject('TemplateName')
+            ->html(json_encode(['foo' => 'bar']));
 
-        /** @var SesClient|MockObject $client */
-        $client = $this->getMockBuilder(SesClient::class)
-            ->addMethods(['sendTemplatedEmail'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $mockHandler = new MockHandler();
+        $mockHandler->append(new Result(['MessageId' => 'xxx']));
+
+        $client = new SesClient([
+            'credentials' => [
+                'key'    => 'key',
+                'secret' => 'secret',
+            ],
+            'region'      => 'us-west-1',
+            'version'     => 'latest',
+            'handler'     => $mockHandler,
+        ]);
 
         $transport = new SesTemplateTransport($client);
 
-        $messageId = Str::random(32);
-        $sendTemplatedEmailMock = new sendTemplatedEmailMock($messageId);
-        $client->expects(self::once())
-            ->method('sendTemplatedEmail')
-            ->with(self::equalTo([
-                'Source'           => 'myself <myself@example.com>',
-                'Destination'      => [
-                    'ToAddresses'  => ['me@example.com'],
-                    'CcAddresses'  => ['cc@example.com'],
-                    'BccAddresses' => ['bcc@example.com'],
-                ],
-                'ReplyToAddresses' => ['reply-to@example.com'],
-                'Template'         => 'TemplateName',
-                'TemplateData'     => ['foo' => 'bar'],
-            ]))
-            ->willReturn($sendTemplatedEmailMock);
+        $actual = $transport->send($message);
 
-        $transport->send($message);
-        self::assertSame($messageId, $message->getHeaders()->get('X-SES-Message-ID')->getFieldBody());
+        self::assertNotNull($actual);
+
+        $actual = $mockHandler->getLastCommand()->toArray();
+
+        self::assertSame('myself <myself@example.com>', $actual['Source']);
+        self::assertSame(['me@example.com'], $actual['Destination']['ToAddresses']);
+        self::assertSame(['cc@example.com'], $actual['Destination']['CcAddresses']);
+        self::assertSame(['bcc@example.com'], $actual['Destination']['BccAddresses']);
+        self::assertSame(['reply-to@example.com'], $actual['ReplyToAddresses']);
+        self::assertSame('TemplateName', $actual['Template']);
+        self::assertSame(json_encode(['foo' => 'bar']), $actual['TemplateData']);
     }
 
     public function testSendByFrom(): void
     {
-        $message = new Swift_Message('TemplateName', ['foo' => 'bar']);
-        $message->setFrom('myself@example.com', 'myself');
-        $message->setTo('me@example.com');
-        $message->setCc('cc@example.com');
-        $message->setBcc('bcc@example.com');
-        $message->setReplyTo('reply-to@example.com');
+        $message = (new Email())
+            ->from(new Address('myself@example.com', 'myself'))
+            ->to(new Address('me@example.com'))
+            ->cc(new Address('cc@example.com'))
+            ->bcc(new Address('bcc@example.com'))
+            ->replyTo(new Address('reply-to@example.com'))
+            ->subject('TemplateName')
+            ->html(json_encode(['foo' => 'bar']));
 
-        /** @var SesClient|MockObject $client */
-        $client = $this->getMockBuilder(SesClient::class)
-            ->addMethods(['sendTemplatedEmail'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $mockHandler = new MockHandler();
+        $mockHandler->append(new Result(['MessageId' => 'xxx']));
+
+        $client = new SesClient([
+            'credentials' => [
+                'key'    => 'key',
+                'secret' => 'secret',
+            ],
+            'region'      => 'us-west-1',
+            'version'     => 'latest',
+            'handler'     => $mockHandler,
+        ]);
 
         $transport = new SesTemplateTransport($client);
 
-        $messageId = Str::random(32);
-        $sendTemplatedEmailMock = new sendTemplatedEmailMock($messageId);
-        $client->expects(self::once())
-            ->method('sendTemplatedEmail')
-            ->with(self::equalTo([
-                'Source'           => 'myself <myself@example.com>',
-                'Destination'      => [
-                    'ToAddresses'  => ['me@example.com'],
-                    'CcAddresses'  => ['cc@example.com'],
-                    'BccAddresses' => ['bcc@example.com'],
-                ],
-                'ReplyToAddresses' => ['reply-to@example.com'],
-                'Template'         => 'TemplateName',
-                'TemplateData'     => ['foo' => 'bar'],
-            ]))
-            ->willReturn($sendTemplatedEmailMock);
+        $actual = $transport->send($message);
 
-        $transport->send($message);
-        self::assertSame($messageId, $message->getHeaders()->get('X-SES-Message-ID')->getFieldBody());
-    }
-}
+        self::assertNotNull($actual);
 
-class sendTemplatedEmailMock
-{
-    protected $getResponse;
+        $actual = $mockHandler->getLastCommand()->toArray();
 
-    public function __construct(string $responseValue)
-    {
-        $this->getResponse = $responseValue;
-    }
-
-    /**
-     * Mock the get() call for the sendTemplatedEmail response.
-     *
-     * @param string $key
-     *
-     * @return string
-     */
-    public function get(string $key): string
-    {
-        return $this->getResponse;
+        self::assertSame('myself <myself@example.com>', $actual['Source']);
+        self::assertSame(['me@example.com'], $actual['Destination']['ToAddresses']);
+        self::assertSame(['cc@example.com'], $actual['Destination']['CcAddresses']);
+        self::assertSame(['bcc@example.com'], $actual['Destination']['BccAddresses']);
+        self::assertSame(['reply-to@example.com'], $actual['ReplyToAddresses']);
+        self::assertSame('TemplateName', $actual['Template']);
+        self::assertSame(json_encode(['foo' => 'bar']), $actual['TemplateData']);
     }
 }

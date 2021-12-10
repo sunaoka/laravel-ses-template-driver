@@ -3,82 +3,94 @@
 namespace Sunaoka\LaravelSesTemplateDriver\Transport;
 
 use Aws\Ses\SesClient;
-use Illuminate\Mail\Transport\Transport;
-use Swift_Mime_SimpleMessage;
+use Psr\EventDispatcher\EventDispatcherInterface;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\Mailer\SentMessage;
+use Symfony\Component\Mailer\Transport\AbstractTransport;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Email;
 
-class SesTemplateTransport extends Transport
+class SesTemplateTransport extends AbstractTransport
 {
-    /**
-     * The Amazon SES instance.
-     *
-     * @var SesClient
-     */
-    protected $ses;
-
-    /**
-     * The Amazon SES transmission options.
-     *
-     * @var array
-     */
-    protected $options = [];
-
     /**
      * Create a new SES transport instance.
      *
-     * @param SesClient $ses
-     * @param array     $options
-     *
-     * @return void
+     * @param SesClient                     $ses
+     * @param array                         $options
+     * @param EventDispatcherInterface|null $dispatcher
+     * @param LoggerInterface|null          $logger
      */
-    public function __construct(SesClient $ses, $options = [])
-    {
-        $this->ses = $ses;
-        $this->options = $options;
+    public function __construct(
+        protected SesClient $ses,
+        protected array $options = [],
+        EventDispatcherInterface $dispatcher = null,
+        LoggerInterface $logger = null
+    ) {
+        parent::__construct($dispatcher, $logger);
     }
 
     /**
-     * {@inheritdoc}
+     * @param SentMessage $message
+     *
+     * @return void
      */
-    public function send(Swift_Mime_SimpleMessage $message, &$failedRecipients = null): int
+    protected function doSend(SentMessage $message): void
     {
-        $this->beforeSendPerformed($message);
-
-        $template = $message->getSubject();
-        $templateData = $message->getBody();
-
-        $destination['ToAddresses'] = array_keys($message->getTo());
-
-        if (! is_null($message->getCc())) {
-            $destination['CcAddresses'] = array_keys($message->getCc());
-        }
-        if (! is_null($message->getBcc())) {
-            $destination['BccAddresses'] = array_keys($message->getBcc());
-        }
-
-        $from = $message->getSender() ?: $message->getFrom();
-        $mailAddress = key($from);
-        $source = sprintf('%s <%s>', mb_encode_mimeheader($from[$mailAddress]), $mailAddress);
+        /** @var Email $originalMessage */
+        $originalMessage = $message->getOriginalMessage();
 
         $args = [
-            'Destination'  => $destination,
-            'Source'       => $source,
-            'Template'     => $template,
-            'TemplateData' => $templateData,
+            'Destination'      => [
+                'ToAddresses'  => $this->stringifyAddresses($originalMessage->getTo()),
+                'CcAddresses'  => $this->stringifyAddresses($originalMessage->getCc()),
+                'BccAddresses' => $this->stringifyAddresses($originalMessage->getBcc()),
+            ],
+            'ReplyToAddresses' => $this->stringifyAddresses($originalMessage->getReplyTo()),
+            'Source'           => $this->getMailbox($message->getEnvelope()->getSender()),
+            'Template'         => $originalMessage->getSubject(),
+            'TemplateData'     => $originalMessage->getBody()->bodyToString(),
         ];
-
-        if (! is_null($message->getReplyTo())) {
-            $args['ReplyToAddresses'] = array_keys($message->getReplyTo());
-        }
 
         $args = array_merge($this->options, $args);
 
         $result = $this->ses->sendTemplatedEmail($args);
 
-        $message->getHeaders()->addTextHeader('X-SES-Message-ID', $result->get('MessageId'));
+        $originalMessage->getHeaders()->addTextHeader('X-SES-Message-ID', $result->get('MessageId'));
+    }
 
-        $this->sendPerformed($message);
+    /**
+     * @param Address[] $addresses
+     *
+     * @return string[]
+     */
+    protected function stringifyAddresses(array $addresses): array
+    {
+        return array_map(function (Address $address) {
+            return $this->getMailbox($address);
+        }, $addresses);
+    }
 
-        return $this->numberOfRecipients($message);
+    /**
+     * @param Address $address
+     *
+     * @return string
+     */
+    private function getMailbox(Address $address): string
+    {
+        if ($address->getName() === '') {
+            return $address->getEncodedAddress();
+        }
+        return sprintf('%s <%s>', mb_encode_mimeheader($address->getName()), $address->getEncodedAddress());
+    }
+
+    /**
+     * Get the string representation of the transport.
+     *
+     * @return string
+     */
+    public function __toString(): string
+    {
+        return 'sestemplate';
     }
 
     /**

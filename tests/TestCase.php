@@ -16,7 +16,7 @@ class TestCase extends BaseTestCase
      * @return mixed
      * @throws ReflectionException
      */
-    protected function getRestrictedProperty($class, string $name)
+    protected function getRestrictedProperty(mixed $class, string $name): mixed
     {
         $reflectionClass = new ReflectionClass($class);
 
@@ -34,7 +34,7 @@ class TestCase extends BaseTestCase
      * @return mixed
      * @throws ReflectionException
      */
-    protected function callRestrictedMethod($class, string $name, array $args = [])
+    protected function callRestrictedMethod(mixed $class, string $name, array $args = []): mixed
     {
         $reflectionMethod = new ReflectionMethod($class, $name);
         $reflectionMethod->setAccessible(true);

@@ -4,7 +4,7 @@ on:
   push:
   workflow_dispatch:
   schedule:
-    - cron: '0 1 * * *'
+    - cron: '30 1 * * *'
 
 jobs:
   test:
@@ -14,7 +14,7 @@ jobs:
 
     strategy:
       matrix:
-        php-version: ['7.2', '7.3', '7.4', '8.0', '8.1']
+        php-version: ['8.0', '8.1']
 
     steps:
       - name: Setup PHP ${{ matrix.php-version }}
