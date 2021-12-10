@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sunaoka\LaravelSesTemplateDriver\Mail;
 
 use Illuminate\Bus\Queueable;
@@ -8,7 +10,8 @@ use Illuminate\Queue\SerializesModels;
 
 class SesTemplate extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * Create a new message instance.
@@ -41,7 +44,7 @@ class SesTemplate extends Mailable
             $this->replyTo($this->options['reply_to']['address'], $this->options['reply_to']['name'] ?? null);
         }
 
-        return $this->subject($this->templateName)->html(json_encode($this->templateData));
+        return $this->subject($this->templateName)->html((string)json_encode($this->templateData));
     }
 
     /**

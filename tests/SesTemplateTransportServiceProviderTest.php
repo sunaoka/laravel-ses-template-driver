@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sunaoka\LaravelSesTemplateDriver\Tests;
 
 use Illuminate\Config\Repository;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sunaoka\LaravelSesTemplateDriver;
 
 use Aws\Ses\SesClient;

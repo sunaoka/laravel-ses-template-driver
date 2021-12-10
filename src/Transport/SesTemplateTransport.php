@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sunaoka\LaravelSesTemplateDriver\Transport;
 
 use Aws\Ses\SesClient;
