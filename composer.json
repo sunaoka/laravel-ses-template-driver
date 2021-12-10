@@ -19,10 +19,10 @@
         "illuminate/queue": "^9.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^9.5.10",
-        "illuminate/container": "^9.0",
         "illuminate/config": "^9.0",
-        "illuminate/contracts": "^9.0"
+        "illuminate/container": "^9.0",
+        "illuminate/contracts": "^9.0",
+        "phpunit/phpunit": "^9.5.10"
     },
     "autoload": {
         "psr-4": {
