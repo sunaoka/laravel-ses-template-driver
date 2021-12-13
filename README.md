@@ -9,7 +9,7 @@
 
 ----
 
-A Mail Driver with support for [Sending Personalized Email Using the Amazon SES API](https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html).
+A Mail Driver with support for [Using templates to send personalized emails with the Amazon SES API](https://docs.aws.amazon.com/ses/latest/dg/send-personalized-email-api.html).
 
 ## Version Compatibility
 
@@ -169,4 +169,4 @@ class Foo
 ## Reference
 
 - [Mail - Laravel - The PHP Framework For Web Artisans](https://laravel.com/docs/master/mail)
-- [Sending Personalized Email Using the Amazon SES API](https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html)
+- [Using templates to send personalized emails with the Amazon SES API](https://docs.aws.amazon.com/ses/latest/dg/send-personalized-email-api.html)
