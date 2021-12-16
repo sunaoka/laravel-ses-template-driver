@@ -2,11 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Sunaoka\LaravelSesTemplateDriver\Tests;
+namespace Sunaoka\LaravelSesTemplateDriver\Tests\Transport;
 
 use Aws\MockHandler;
 use Aws\Result;
 use Aws\Ses\SesClient;
+use Sunaoka\LaravelSesTemplateDriver\Tests\TestCase;
 use Sunaoka\LaravelSesTemplateDriver\Transport\SesTemplateTransport;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;

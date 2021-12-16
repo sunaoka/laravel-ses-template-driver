@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Sunaoka\LaravelSesTemplateDriver\Tests;
+namespace Sunaoka\LaravelSesTemplateDriver\Tests\Mail;
 
 use Sunaoka\LaravelSesTemplateDriver\Mail\SesTemplate;
+use Sunaoka\LaravelSesTemplateDriver\Tests\TestCase;
 
 class SesTemplateTest extends TestCase
 {
