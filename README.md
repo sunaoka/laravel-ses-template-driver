@@ -166,6 +166,141 @@ class Foo
 
 > Not supported, to send a templated email to multiple destinations.
 
+## Artisan Console Commands
+
+### Lists the email templates present in your Amazon SES account in the current AWS Region.
+
+#### Options
+
+```bash
+php artisan ses-template:list-templates --help
+```
+
+```text
+Description:
+  Lists the email templates present in your Amazon SES account in the current AWS Region
+
+Usage:
+  ses-template:list-templates [options]
+
+Options:
+      --name            Sort by the name of the template [default]
+      --time            Sort by the time and date the template was created
+      --asc             Sort by ascending order [default]
+      --desc            Sort by descending order
+      --json            The output is formatted as a JSON string
+```
+
+#### Output Text format
+
+```bash
+php artisan ses-template:list-templates
+```
+
+```text
++----+-------------+---------------------------+
+| No | Name        | Created At                |
++----+-------------+---------------------------+
+| 0  | MyTemplate  | 2020-11-24T15:01:21+00:00 |
+| 1  | MyTemplate2 | 2020-11-24T15:01:25+00:00 |
++----+-------------+---------------------------+
+
+Enter a number to display the template object:
+> 0
+
+TemplateName:
+MyTemplate
+
+SubjectPart:
+Greetings, {{name}}!
+
+TextPart:
+Dear {{name}},\r\nYour favorite animal is {{favoriteanimal}}.
+
+HtmlPart:
+<h1>Hello {{name}},</h1><p>Your favorite animal is {{favoriteanimal}}.</p>
+```
+
+#### Output JSON format
+
+```bash
+php artisan ses-template:list-templates --json
+```
+
+```json
+{
+  "TemplatesMetadata": [
+    {
+      "Name": "MyTemplate",
+      "CreatedTimestamp": "2020-11-24T15:01:21+00:00"
+    },
+    {
+      "Name": "MyTemplate2",
+      "CreatedTimestamp": "2020-11-24T15:01:25+00:00"
+    }
+  ]
+}
+```
+
+### Displays the template object for the template you specify
+
+#### Options
+
+```bash
+php artisan ses-template:get-template --help
+```
+
+```text
+Description:
+  Displays the template object for the template you specify
+
+Usage:
+  ses-template:get-template [options] [--] <TemplateName>
+
+Arguments:
+  TemplateName          The name of the template to retrieve
+
+Options:
+      --json            The output is formatted as a JSON string
+```
+
+#### Output Text format
+
+```bash
+php artisan ses-template:get-template MyTemplate
+```
+
+```text
+TemplateName:
+MyTemplate
+
+SubjectPart:
+Greetings, {{name}}!
+
+TextPart:
+Dear {{name}},\r\nYour favorite animal is {{favoriteanimal}}.
+
+HtmlPart:
+<h1>Hello {{name}},</h1><p>Your favorite animal is {{favoriteanimal}}.</p>
+```
+
+#### Output JSON format
+
+```bash
+php artisan ses-template:get-template MyTemplate --json
+```
+
+```json
+{
+  "Template": {
+    "TemplateName": "MyTemplate",
+    "SubjectPart": "Greetings, {{name}}!",
+    "HtmlPart": "<h1>Hello {{name}},</h1><p>Your favorite animal is {{favoriteanimal}}.</p>",
+    "TextPart": "Dear {{name}},\r\nYour favorite animal is {{favoriteanimal}}."
+  }
+}
+```
+
 ## Reference
 
 - [Mail - Laravel - The PHP Framework For Web Artisans](https://laravel.com/docs/master/mail)
