@@ -32,15 +32,28 @@ class SesTemplateTransportServiceProvider extends ServiceProvider
     public function registerTransport(MailManager $manager): void
     {
         $manager->extend('sestemplate', function () {
-            $config = array_merge($this->app['config']->get('services.ses', []), [
-                'version' => 'latest', 'service' => 'email',
-            ]);
-
             return new SesTemplateTransport(
-                new SesClient($this->addSesCredentials($config)),
+                $this->createClient(),
                 $config['options'] ?? []
             );
         });
+    }
+
+    /**
+     * Create new SES Client
+     *
+     * @return SesClient
+     */
+    protected function createClient(): SesClient
+    {
+        $config = array_merge($this->app['config']->get('services.ses', []), [
+            'version' => 'latest',
+            'service' => 'email',
+        ]);
+
+        $config = $this->addSesCredentials($config);
+
+        return new SesClient($config);
     }
 
     /**

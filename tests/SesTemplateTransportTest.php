@@ -94,4 +94,36 @@ class SesTemplateTransportTest extends TestCase
         self::assertSame('TemplateName', $actual['Template']);
         self::assertSame(json_encode(['foo' => 'bar']), $actual['TemplateData']);
     }
+
+    public function testToString(): void
+    {
+        $client = new SesClient([
+            'credentials' => [
+                'key'    => 'key',
+                'secret' => 'secret',
+            ],
+            'region'      => 'us-west-1',
+            'version'     => 'latest',
+        ]);
+
+        $transport = new SesTemplateTransport($client);
+
+        self::assertSame('sestemplate', (string)$transport);
+    }
+
+    public function testSes(): void
+    {
+        $client = new SesClient([
+            'credentials' => [
+                'key'    => 'key',
+                'secret' => 'secret',
+            ],
+            'region'      => 'us-west-1',
+            'version'     => 'latest',
+        ]);
+
+        $transport = new SesTemplateTransport($client);
+
+        self::assertSame('us-west-1', $transport->ses()->getRegion());
+    }
 }

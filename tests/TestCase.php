@@ -4,43 +4,41 @@ declare(strict_types=1);
 
 namespace Sunaoka\LaravelSesTemplateDriver\Tests;
 
-use PHPUnit\Framework\TestCase as BaseTestCase;
-use ReflectionClass;
-use ReflectionException;
-use ReflectionMethod;
+use Illuminate\Foundation\Application;
+use Orchestra\Testbench\TestCase as BaseTestCase;
+use Sunaoka\LaravelSesTemplateDriver\SesTemplateTransportServiceProvider;
 
-class TestCase extends BaseTestCase
+abstract class TestCase extends BaseTestCase
 {
     /**
-     * @param mixed  $class
-     * @param string $name
+     * Get package providers.
      *
-     * @return mixed
-     * @throws ReflectionException
+     * @param Application $app
+     *
+     * @return array
      */
-    protected function getRestrictedProperty(mixed $class, string $name): mixed
+    protected function getPackageProviders($app): array
     {
-        $reflectionClass = new ReflectionClass($class);
-
-        $property = $reflectionClass->getProperty($name);
-        $property->setAccessible(true);
-
-        return $property->getValue($class);
+        return [
+            SesTemplateTransportServiceProvider::class,
+        ];
     }
 
     /**
-     * @param mixed  $class
-     * @param string $name
-     * @param array  $args
+     * Define environment setup.
      *
-     * @return mixed
-     * @throws ReflectionException
+     * @param Application $app
+     *
+     * @return void
      */
-    protected function callRestrictedMethod(mixed $class, string $name, array $args = []): mixed
+    protected function defineEnvironment($app): void
     {
-        $reflectionMethod = new ReflectionMethod($class, $name);
-        $reflectionMethod->setAccessible(true);
-
-        return $reflectionMethod->invokeArgs($class, $args);
+        $app['config']->set('mail.default', 'sestemplate');
+        $app['config']->set('mail.mailers.sestemplate', ['transport' => 'sestemplate']);
+        $app['config']->set('services.ses', [
+            'key'    => 'foo',
+            'secret' => 'bar',
+            'region' => 'us-east-2',
+        ]);
     }
 }
