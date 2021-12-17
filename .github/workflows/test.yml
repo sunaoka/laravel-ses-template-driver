@@ -24,6 +24,8 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v2
+        with:
+          ref: v2.x
 
       - name: Install dependencies
         run: composer install --quiet --no-ansi --prefer-dist --no-progress --no-interaction
