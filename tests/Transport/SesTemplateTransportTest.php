@@ -1,6 +1,6 @@
 <?php
 
-namespace Sunaoka\LaravelSesTemplateDriver\Tests;
+namespace Sunaoka\LaravelSesTemplateDriver\Tests\Transport;
 
 use Aws\MockHandler;
 use Aws\Result;
@@ -8,6 +8,7 @@ use Aws\Ses\SesClient;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
 use Sunaoka\LaravelSesTemplateDriver\Helper;
+use Sunaoka\LaravelSesTemplateDriver\Tests\TestCase;
 use Sunaoka\LaravelSesTemplateDriver\Transport\SesTemplateTransport;
 use Swift_Message;
 
