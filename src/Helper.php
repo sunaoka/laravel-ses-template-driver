@@ -12,10 +12,18 @@ use Symfony\Component\Mailer\Transport\AbstractTransport;
 
 class Helper
 {
+    /**
+     * @param Application $app
+     */
     public function __construct(private Application $app)
     {
     }
 
+    /**
+     * Create new Transport
+     *
+     * @return AbstractTransport
+     */
     public function createTransport(): AbstractTransport
     {
         return new SesTemplateTransport(
