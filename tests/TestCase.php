@@ -39,6 +39,15 @@ abstract class TestCase extends BaseTestCase
             'key'    => 'foo',
             'secret' => 'bar',
             'region' => 'us-east-2',
+            'options' => [
+                'ConfigurationSetName' => 'MyConfigurationSet',
+                'Tags' => [
+                    [
+                        'Name'  => 'foo',
+                        'Value' => 'bar',
+                    ],
+                ],
+            ],
         ]);
     }
 }

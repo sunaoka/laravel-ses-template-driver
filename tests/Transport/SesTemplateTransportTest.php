@@ -6,9 +6,9 @@ namespace Sunaoka\LaravelSesTemplateDriver\Tests\Transport;
 
 use Aws\MockHandler;
 use Aws\Result;
-use Aws\Ses\SesClient;
+use Illuminate\Support\Facades\Config;
+use Sunaoka\LaravelSesTemplateDriver\Helper;
 use Sunaoka\LaravelSesTemplateDriver\Tests\TestCase;
-use Sunaoka\LaravelSesTemplateDriver\Transport\SesTemplateTransport;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
 
@@ -28,17 +28,9 @@ class SesTemplateTransportTest extends TestCase
         $mockHandler = new MockHandler();
         $mockHandler->append(new Result(['MessageId' => 'xxx']));
 
-        $client = new SesClient([
-            'credentials' => [
-                'key'    => 'key',
-                'secret' => 'secret',
-            ],
-            'region'      => 'us-west-1',
-            'version'     => 'latest',
-            'handler'     => $mockHandler,
-        ]);
+        Config::set('services.ses.handler', $mockHandler);
 
-        $transport = new SesTemplateTransport($client);
+        $transport = (new Helper($this->app))->createTransport();
 
         $actual = $transport->send($message);
 
@@ -46,6 +38,9 @@ class SesTemplateTransportTest extends TestCase
 
         $actual = $mockHandler->getLastCommand()->toArray();
 
+        self::assertSame('MyConfigurationSet', $actual['ConfigurationSetName']);
+        self::assertSame('foo', $actual['Tags'][0]['Name']);
+        self::assertSame('bar', $actual['Tags'][0]['Value']);
         self::assertSame('myself <myself@example.com>', $actual['Source']);
         self::assertSame(['me@example.com'], $actual['Destination']['ToAddresses']);
         self::assertSame(['cc@example.com'], $actual['Destination']['CcAddresses']);
@@ -69,17 +64,9 @@ class SesTemplateTransportTest extends TestCase
         $mockHandler = new MockHandler();
         $mockHandler->append(new Result(['MessageId' => 'xxx']));
 
-        $client = new SesClient([
-            'credentials' => [
-                'key'    => 'key',
-                'secret' => 'secret',
-            ],
-            'region'      => 'us-west-1',
-            'version'     => 'latest',
-            'handler'     => $mockHandler,
-        ]);
+        Config::set('services.ses.handler', $mockHandler);
 
-        $transport = new SesTemplateTransport($client);
+        $transport = (new Helper($this->app))->createTransport();
 
         $actual = $transport->send($message);
 
@@ -87,6 +74,9 @@ class SesTemplateTransportTest extends TestCase
 
         $actual = $mockHandler->getLastCommand()->toArray();
 
+        self::assertSame('MyConfigurationSet', $actual['ConfigurationSetName']);
+        self::assertSame('foo', $actual['Tags'][0]['Name']);
+        self::assertSame('bar', $actual['Tags'][0]['Value']);
         self::assertSame('myself <myself@example.com>', $actual['Source']);
         self::assertSame(['me@example.com'], $actual['Destination']['ToAddresses']);
         self::assertSame(['cc@example.com'], $actual['Destination']['CcAddresses']);
@@ -98,33 +88,15 @@ class SesTemplateTransportTest extends TestCase
 
     public function testToString(): void
     {
-        $client = new SesClient([
-            'credentials' => [
-                'key'    => 'key',
-                'secret' => 'secret',
-            ],
-            'region'      => 'us-west-1',
-            'version'     => 'latest',
-        ]);
-
-        $transport = new SesTemplateTransport($client);
+        $transport = (new Helper($this->app))->createTransport();
 
         self::assertSame('sestemplate', (string)$transport);
     }
 
     public function testSes(): void
     {
-        $client = new SesClient([
-            'credentials' => [
-                'key'    => 'key',
-                'secret' => 'secret',
-            ],
-            'region'      => 'us-west-1',
-            'version'     => 'latest',
-        ]);
+        $transport = (new Helper($this->app))->createTransport();
 
-        $transport = new SesTemplateTransport($client);
-
-        self::assertSame('us-west-1', $transport->ses()->getRegion());
+        self::assertSame('us-east-2', $transport->ses()->getRegion());
     }
 }
