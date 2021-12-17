@@ -2,11 +2,8 @@
 
 namespace Sunaoka\LaravelSesTemplateDriver;
 
-use Aws\Ses\SesClient;
 use Illuminate\Mail\MailManager;
-use Illuminate\Support\Arr;
 use Illuminate\Support\ServiceProvider;
-use Sunaoka\LaravelSesTemplateDriver\Transport\SesTemplateTransport;
 
 class SesTemplateTransportServiceProvider extends ServiceProvider
 {
@@ -30,30 +27,7 @@ class SesTemplateTransportServiceProvider extends ServiceProvider
     public function registerTransport(MailManager $manager): void
     {
         $manager->extend('sestemplate', function () {
-            $config = array_merge($this->app['config']->get('services.ses', []), [
-                'version' => 'latest', 'service' => 'email',
-            ]);
-
-            return new SesTemplateTransport(
-                new SesClient($this->addSesCredentials($config)),
-                $config['options'] ?? []
-            );
+            return (new Helper($this->app))->createTransport();
         });
-    }
-
-    /**
-     * Add the SES credentials to the configuration array.
-     *
-     * @param  array $config
-     *
-     * @return array
-     */
-    protected function addSesCredentials(array $config): array
-    {
-        if (! empty($config['key']) && ! empty($config['secret'])) {
-            $config['credentials'] = Arr::only($config, ['key', 'secret', 'token']);
-        }
-
-        return $config;
     }
 }
