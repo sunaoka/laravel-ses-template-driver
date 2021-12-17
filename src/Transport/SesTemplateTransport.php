@@ -30,7 +30,7 @@ class SesTemplateTransport extends Transport
      *
      * @return void
      */
-    public function __construct(SesClient $ses, $options = [])
+    public function __construct(SesClient $ses, array $options = [])
     {
         $this->ses = $ses;
         $this->options = $options;

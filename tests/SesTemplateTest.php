@@ -2,14 +2,10 @@
 
 namespace Sunaoka\LaravelSesTemplateDriver\Tests;
 
-use ReflectionException;
 use Sunaoka\LaravelSesTemplateDriver\Mail\SesTemplate;
 
 class SesTemplateTest extends TestCase
 {
-    /**
-     * @throws ReflectionException
-     */
     public function testBuild(): void
     {
         $mailable = new SesTemplate('TestTemplate', ['foo' => 'bar']);
@@ -17,9 +13,7 @@ class SesTemplateTest extends TestCase
 
         self::assertSame('TestTemplate', $mailable->subject);
 
-        $html = $this->getRestrictedProperty($mailable, 'html');
-
-        self::assertSame(json_encode(['foo' => 'bar']), $html);
+        self::assertSame(json_encode(['foo' => 'bar']), $mailable->render());
     }
 
     public function testBuildWithFrom(): void

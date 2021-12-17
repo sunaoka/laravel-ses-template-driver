@@ -2,43 +2,49 @@
 
 namespace Sunaoka\LaravelSesTemplateDriver\Tests;
 
-use PHPUnit\Framework\TestCase as BaseTestCase;
-use ReflectionClass;
-use ReflectionException;
-use ReflectionMethod;
+use Illuminate\Foundation\Application;
+use Orchestra\Testbench\TestCase as BaseTestCase;
+use Sunaoka\LaravelSesTemplateDriver\SesTemplateTransportServiceProvider;
 
 class TestCase extends BaseTestCase
 {
     /**
-     * @param mixed  $class
-     * @param string $name
+     * Get package providers.
      *
-     * @return mixed
-     * @throws ReflectionException
+     * @param Application $app
+     *
+     * @return array
      */
-    protected function getRestrictedProperty($class, string $name)
+    protected function getPackageProviders($app): array
     {
-        $reflectionClass = new ReflectionClass($class);
-
-        $property = $reflectionClass->getProperty($name);
-        $property->setAccessible(true);
-
-        return $property->getValue($class);
+        return [
+            SesTemplateTransportServiceProvider::class,
+        ];
     }
 
     /**
-     * @param mixed  $class
-     * @param string $name
-     * @param array  $args
+     * Define environment setup.
      *
-     * @return mixed
-     * @throws ReflectionException
+     * @param Application $app
+     *
+     * @return void
      */
-    protected function callRestrictedMethod($class, string $name, array $args = [])
+    protected function getEnvironmentSetUp($app): void
     {
-        $reflectionMethod = new ReflectionMethod($class, $name);
-        $reflectionMethod->setAccessible(true);
-
-        return $reflectionMethod->invokeArgs($class, $args);
+        $app['config']->set('mail.driver', 'ses.template');
+        $app['config']->set('services.ses', [
+            'key'    => 'foo',
+            'secret' => 'bar',
+            'region' => 'us-east-2',
+            'options' => [
+                'ConfigurationSetName' => 'MyConfigurationSet',
+                'Tags' => [
+                    [
+                        'Name'  => 'foo',
+                        'Value' => 'bar',
+                    ],
+                ],
+            ],
+        ]);
     }
 }
