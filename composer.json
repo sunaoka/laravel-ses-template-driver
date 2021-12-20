@@ -13,7 +13,9 @@
     "require": {
         "php": "^7.2.5 || ^8.0",
         "ext-json": "*",
+        "ext-mbstring": "*",
         "aws/aws-sdk-php": "^3.36.25",
+        "illuminate/console": "^7.0 || ^8.0",
         "illuminate/mail": "^7.0 || ^8.0"
     },
     "require-dev": {
@@ -40,5 +42,12 @@
             "aliases": {
             }
         }
-    }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
