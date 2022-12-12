@@ -14,7 +14,7 @@
         "php": "^8.0",
         "ext-json": "*",
         "ext-mbstring": "*",
-        "aws/aws-sdk-php": "^3.36.25",
+        "aws/aws-sdk-php": "^3.245.0",
         "illuminate/console": "^9.0",
         "illuminate/mail": "^9.0"
     },
@@ -33,7 +33,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "3.0-dev"
+            "dev-main": "3.0-dev"
         },
         "laravel": {
             "providers": [
