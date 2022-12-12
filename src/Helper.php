@@ -68,6 +68,6 @@ class Helper
             $config['credentials'] = Arr::only($config, ['key', 'secret', 'token']);
         }
 
-        return $config;
+        return Arr::except($config, ['token']);
     }
 }
