@@ -8,25 +8,38 @@ on:
 
 jobs:
   test:
-    name: Test
-
-    runs-on: ubuntu-latest
-
+    runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
-        php-version: ['8.0', '8.1', '8.2']
+        os: [ ubuntu-latest ]
+        php: [ '8.0', '8.1', '8.2' ]
+        laravel: [ 9, 10 ]
+        exclude:
+          - php: 8.0
+            laravel: 10
+
+    name: PHP ${{ matrix.php }} - Laravel ${{ matrix.laravel }}
 
     steps:
-      - name: Setup PHP ${{ matrix.php-version }}
+      - name: Setup PHP ${{ matrix.php }}
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php-version }}
+          php-version: ${{ matrix.php }}
+          ini-values: error_reporting=E_ALL
+          tools: composer:v2
 
       - name: Checkout
         uses: actions/checkout@v3
 
       - name: Install dependencies
-        run: composer install --quiet --no-ansi --prefer-dist --no-progress --no-interaction
+        run: |
+          composer require "illuminate/mail=^${{ matrix.laravel }}" --no-update
+          composer update --prefer-dist --no-interaction --no-progress
+
+      - name: Migrate phpunit XML configuration
+        continue-on-error: true
+        run: vendor/bin/phpunit --migrate-configuration
 
       - name: Run test suite
         run: vendor/bin/phpunit --coverage-clover=coverage.xml
