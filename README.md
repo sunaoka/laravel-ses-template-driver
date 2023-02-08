@@ -3,7 +3,7 @@
 [![Latest](https://poser.pugx.org/sunaoka/laravel-ses-template-driver/v)](https://packagist.org/packages/sunaoka/laravel-ses-template-driver)
 [![License](https://poser.pugx.org/sunaoka/laravel-ses-template-driver/license)](https://packagist.org/packages/sunaoka/laravel-ses-template-driver)
 [![PHP](https://img.shields.io/packagist/php-v/sunaoka/laravel-ses-template-driver)](composer.json)
-[![Laravel](https://img.shields.io/badge/laravel-9.x-red)](https://laravel.com/)
+[![Laravel](https://img.shields.io/badge/laravel-9.x%20%7C%2010.x-red)](https://laravel.com/)
 [![Test](https://github.com/sunaoka/laravel-ses-template-driver/actions/workflows/test.yml/badge.svg?branch=develop)](https://github.com/sunaoka/laravel-ses-template-driver/actions/workflows/test.yml)
 [![codecov](https://codecov.io/gh/sunaoka/laravel-ses-template-driver/branch/develop/graph/badge.svg)](https://codecov.io/gh/sunaoka/laravel-ses-template-driver)
 
@@ -21,6 +21,7 @@ A Mail Driver with support for [Using templates to send personalized emails with
 | 7.x     | 2.x                             |
 | 8.x     | 2.x                             |
 | 9.x     | 3.x                             |
+| 10.x    | 3.x                             |
 
 ## Installation
 
@@ -36,7 +37,7 @@ composer require sunaoka/laravel-ses-template-driver:'^1.0'
 composer require sunaoka/laravel-ses-template-driver:'^2.0'
 ```
 
-### Laravel 9.x
+### Laravel 9.x, 10.x
 
 ```bash
 composer require sunaoka/laravel-ses-template-driver
@@ -52,7 +53,7 @@ Next, set the following in `config/mail.php` and `config/services.php`.
 'driver' => 'ses.template',
 ```
 
-#### Laravel 7.x, 8.x, 9.x
+#### Laravel 7.x, 8.x, 9.x, 10.x
 
 ```php
 'default' => 'sestemplate',
