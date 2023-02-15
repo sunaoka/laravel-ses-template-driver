@@ -82,7 +82,7 @@ class ListTemplatesCommandTest extends TestCase
             ->assertSuccessful();
     }
 
-    public function invokeTextSuccessProvider(): array
+    public static function invokeTextSuccessProvider(): array
     {
         return [
             'Name ascending'  => [[0, 1], ['--name' => true, '--asc' => true]],
