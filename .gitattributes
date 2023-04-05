@@ -5,3 +5,4 @@
 /.travis.yml export-ignore
 /phpunit.xml export-ignore
 /tests export-ignore
+/phpstan.neon export-ignore

@@ -35,7 +35,7 @@ class SesTemplateTransportServiceProvider extends ServiceProvider
     public function registerTransport(MailManager $manager): void
     {
         $manager->extend('sestemplate', function () {
-            return (new Helper($this->app))->createTransport();
+            return (new Helper())->createTransport();
         });
     }
 
@@ -47,11 +47,11 @@ class SesTemplateTransportServiceProvider extends ServiceProvider
     public function registerCommands(): void
     {
         $this->app->singleton('command.ses-template.list-templates', function ($app) {
-            return new ListTemplatesCommand((new Helper($app))->createClient());
+            return new ListTemplatesCommand((new Helper())->createClient());
         });
 
         $this->app->singleton('command.ses-template.get-template', function ($app) {
-            return new GetTemplateCommand((new Helper($app))->createClient());
+            return new GetTemplateCommand((new Helper())->createClient());
         });
 
         $this->commands(

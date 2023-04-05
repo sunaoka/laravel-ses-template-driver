@@ -53,7 +53,7 @@ abstract class Command extends BaseCommand
      */
     protected function json(mixed $value): void
     {
-        $this->getOutput()->writeln(json_encode($value, JSON_THROW_ON_ERROR), OutputInterface::VERBOSITY_QUIET);
+        $this->getOutput()->writeln(json_encode($value, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE), OutputInterface::VERBOSITY_QUIET);
     }
 
     /**

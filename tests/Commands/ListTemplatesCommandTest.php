@@ -7,11 +7,16 @@ namespace Sunaoka\LaravelSesTemplateDriver\Tests\Commands;
 use Aws\Api\DateTimeResult;
 use Aws\MockHandler;
 use Aws\Result;
+use Exception;
 use Illuminate\Support\Facades\Config;
 use Sunaoka\LaravelSesTemplateDriver\Tests\TestCase;
 
 class ListTemplatesCommandTest extends TestCase
 {
+    /**
+     * @return array{TemplatesMetadata: array{array{No: null, Name: string, CreatedTimestamp: string}, array{No: null, Name: string, CreatedTimestamp: string}}}
+     * @throws Exception
+     */
     protected function setSuccessMockHandler(): array
     {
         $templatesMetadata = [
@@ -65,6 +70,8 @@ class ListTemplatesCommandTest extends TestCase
      * @param array $options
      *
      * @return void
+     *
+     * @throws Exception
      */
     public function testInvokeTextSuccess(array $nums, array $options): void
     {
@@ -82,7 +89,7 @@ class ListTemplatesCommandTest extends TestCase
             ->assertSuccessful();
     }
 
-    public function invokeTextSuccessProvider(): array
+    public static function invokeTextSuccessProvider(): array
     {
         return [
             'Name ascending'  => [[0, 1], ['--name' => true, '--asc' => true]],
@@ -92,6 +99,9 @@ class ListTemplatesCommandTest extends TestCase
         ];
     }
 
+    /**
+     * @throws Exception
+     */
     public function testInvokeJsonSuccess(): void
     {
         $table = $this->setSuccessMockHandler();

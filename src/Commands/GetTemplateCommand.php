@@ -36,12 +36,13 @@ class GetTemplateCommand extends Command
      */
     public function handle(): int
     {
+        /** @var string $templateName */
         $templateName = $this->argument('TemplateName');
 
         try {
             $template = $this->getTemplate($templateName);
         } catch (AwsException $e) {
-            $this->error($e->getAwsErrorMessage());
+            $this->error((string)$e->getAwsErrorMessage());
             return Command::FAILURE;
         }
 
@@ -72,6 +73,7 @@ class GetTemplateCommand extends Command
             'TemplateName' => $templateName,
         ]);
 
+        /** @var array */
         return $template['Template'];
     }
 }
