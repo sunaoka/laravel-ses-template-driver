@@ -59,9 +59,10 @@ class SesTemplateTransport extends AbstractTransport
 
         $args = array_merge($this->options, $args);
 
+        /** @var array{MessageId: string} $result */
         $result = $this->ses->sendTemplatedEmail($args);
 
-        $originalMessage->getHeaders()->addTextHeader('X-SES-Message-ID', $result->get('MessageId'));
+        $originalMessage->getHeaders()->addTextHeader('X-SES-Message-ID', $result['MessageId']);
     }
 
     /**

@@ -9,6 +9,7 @@ use Aws\Result;
 use Illuminate\Support\Facades\Config;
 use Sunaoka\LaravelSesTemplateDriver\Helper;
 use Sunaoka\LaravelSesTemplateDriver\Tests\TestCase;
+use Sunaoka\LaravelSesTemplateDriver\Transport\SesTemplateTransport;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
 
@@ -35,14 +36,14 @@ class SesTemplateTransportTest extends TestCase
             ->bcc(new Address('bcc@example.com'))
             ->replyTo(new Address('reply-to@example.com'))
             ->subject('TemplateName')
-            ->html(json_encode($templateData));
+            ->html((string)json_encode($templateData));
 
         $mockHandler = new MockHandler();
         $mockHandler->append(new Result(['MessageId' => 'xxx']));
 
         Config::set('services.ses.handler', $mockHandler);
 
-        $transport = (new Helper($this->app))->createTransport();
+        $transport = (new Helper())->createTransport();
 
         $actual = $transport->send($message);
 
@@ -83,14 +84,14 @@ class SesTemplateTransportTest extends TestCase
             ->bcc(new Address('bcc@example.com'))
             ->replyTo(new Address('reply-to@example.com'))
             ->subject('TemplateName')
-            ->html(json_encode($templateData));
+            ->html((string)json_encode($templateData));
 
         $mockHandler = new MockHandler();
         $mockHandler->append(new Result(['MessageId' => 'xxx']));
 
         Config::set('services.ses.handler', $mockHandler);
 
-        $transport = (new Helper($this->app))->createTransport();
+        $transport = (new Helper())->createTransport();
 
         $actual = $transport->send($message);
 
@@ -112,14 +113,16 @@ class SesTemplateTransportTest extends TestCase
 
     public function testToString(): void
     {
-        $transport = (new Helper($this->app))->createTransport();
+        /** @var SesTemplateTransport $transport */
+        $transport = (new Helper())->createTransport();
 
         self::assertSame('sestemplate', (string)$transport);
     }
 
     public function testSes(): void
     {
-        $transport = (new Helper($this->app))->createTransport();
+        /** @var SesTemplateTransport $transport */
+        $transport = (new Helper())->createTransport();
 
         self::assertSame('us-east-2', $transport->ses()->getRegion());
     }

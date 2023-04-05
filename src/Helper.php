@@ -5,20 +5,13 @@ declare(strict_types=1);
 namespace Sunaoka\LaravelSesTemplateDriver;
 
 use Aws\Ses\SesClient;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Config;
 use Sunaoka\LaravelSesTemplateDriver\Transport\SesTemplateTransport;
 use Symfony\Component\Mailer\Transport\AbstractTransport;
 
 class Helper
 {
-    /**
-     * @param Application $app
-     */
-    public function __construct(private Application $app)
-    {
-    }
-
     /**
      * Create new Transport
      *
@@ -28,7 +21,7 @@ class Helper
     {
         return new SesTemplateTransport(
             $this->createClient(),
-            $this->app['config']->get('services.ses.options', [])
+            Config::get('services.ses.options', [])  // @phpstan-ignore-line
         );
     }
 
@@ -39,10 +32,13 @@ class Helper
      */
     public function createClient(): SesClient
     {
-        $config = array_merge($this->app['config']->get('services.ses', []), [
-            'version' => 'latest',
-            'service' => 'email',
-        ]);
+        $config = array_merge(
+            Config::get('services.ses', []),  // @phpstan-ignore-line
+            [
+                'version' => 'latest',
+                'service' => 'email',
+            ]
+        );
 
         $config = $this->addSesCredentials($config);
 

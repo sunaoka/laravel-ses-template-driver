@@ -58,13 +58,14 @@ class ListTemplatesCommand extends Command
             return Command::SUCCESS;
         }
 
+        $timezone = new DateTimeZone(Config::get('app.timezone', 'UTC'));  // @phpstan-ignore-line
         $choices = [];
         foreach ($templates as $index => $template) {
             /** @var array{Name: string, CreatedTimestamp: DateTimeResult} $template */
             $choices[] = [
                 'No'               => $index,
                 'Name'             => $template['Name'],
-                'CreatedTimestamp' => $template['CreatedTimestamp']->setTimezone(new DateTimeZone(Config::get('app.timezone', 'UTC'))),
+                'CreatedTimestamp' => $template['CreatedTimestamp']->setTimezone($timezone),
             ];
         }
 
@@ -97,24 +98,26 @@ class ListTemplatesCommand extends Command
         $this->output->write('.');
 
         $start = microtime(true);
+
+        /** @var array{TemplatesMetadata: array, NextToken: string|null} $result */
         $result = $this->ses->listTemplates([
             'MaxItems'  => 100,
             'NextToken' => $nextToken,
         ]);
 
-        $template = $result->get('TemplatesMetadata');
+        $template = $result['TemplatesMetadata'];
         if (count($template) > 0) {
             $templates = $templates->merge($template);
         }
 
-        if ($result->get('NextToken') !== null) {
+        if ($result['NextToken'] !== null) {
             // You can execute this operation no more than once per second.
             // @see <https://docs.aws.amazon.com/ses/latest/APIReference/API_ListTemplates.html>
             $wait = (int)((1 - (microtime(true) - $start)) * 1000000);
             if ($wait > 0) {
                 usleep($wait);
             }
-            return $this->listTemplates($result->get('NextToken'), $templates);
+            return $this->listTemplates($result['NextToken'], $templates);
         }
 
         $this->info(' done.');

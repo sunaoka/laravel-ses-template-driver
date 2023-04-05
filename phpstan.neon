@@ -1,0 +1,19 @@
+includes:
+    - vendor/nunomaduro/larastan/extension.neon
+
+parameters:
+
+    level: 9
+
+    checkMissingIterableValueType: false
+
+    checkGenericClassInNonGenericObjectType: false
+
+    paths:
+        - src/
+        - tests/
+
+    ignoreErrors:
+        -
+            message: '#Cannot call method .+ on Illuminate\\Testing\\PendingCommand\|int#'
+            path: tests/*
