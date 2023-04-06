@@ -7,7 +7,8 @@ on:
     - cron: '30 1 * * *'
 
 jobs:
-  test:
+
+  test_v3:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -31,6 +32,97 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: |
+          composer require "illuminate/mail=^${{ matrix.laravel }}" --no-update
+          composer update --prefer-dist --no-interaction --no-progress
+
+      - name: Run test suite
+        run: vendor/bin/phpunit --coverage-clover=coverage.xml
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage.xml
+          fail_ci_if_error: false
+
+  test_v2:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-latest ]
+        php: ['7.2', '7.3', '7.4', '8.0', '8.1']
+        laravel: [ 7, 8 ]
+        exclude:
+          - php: 7.1
+            laravel: 6
+          - php: 7.1
+            laravel: 7
+          - php: 7.1
+            laravel: 8
+          - php: 7.2
+            laravel: 8
+          - php: 8.1
+            laravel: 6
+          - php: 8.1
+            laravel: 7
+
+    name: PHP ${{ matrix.php }} - Laravel ${{ matrix.laravel }}
+
+    steps:
+      - name: Setup PHP ${{ matrix.php }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          ini-values: error_reporting=E_ALL
+          tools: composer:v2
+
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: v2.x
+
+      - name: Install dependencies
+        run: composer install --quiet --no-ansi --prefer-dist --no-progress --no-interaction
+
+      - name: Run test suite
+        run: vendor/bin/phpunit --coverage-clover=coverage.xml
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage.xml
+          fail_ci_if_error: false
+  test_v1:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-latest ]
+        php: [ '7.1', '7.2', '7.3', '7.4' ]
+        laravel: [ 5.7, 5.8, 6 ]
+        exclude:
+          - php: 7.1
+            laravel: 6
+
+    name: PHP ${{ matrix.php }} - Laravel ${{ matrix.laravel }}
+
+    steps:
+      - name: Setup PHP ${{ matrix.php }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          ini-values: error_reporting=E_ALL
+          tools: composer:v2
+
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: v1.x
 
       - name: Install dependencies
         run: |
