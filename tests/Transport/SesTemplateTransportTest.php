@@ -10,18 +10,32 @@ use Illuminate\Support\Str;
 use Sunaoka\LaravelSesTemplateDriver\Helper;
 use Sunaoka\LaravelSesTemplateDriver\Tests\TestCase;
 use Sunaoka\LaravelSesTemplateDriver\Transport\SesTemplateTransport;
+use Swift_Attachment;
 use Swift_Message;
 
 class SesTemplateTransportTest extends TestCase
 {
     public function testSendBySender(): void
     {
-        $message = new Swift_Message('TemplateName', json_encode(['foo' => 'bar']));
+        $templateData = [
+            'foo1' => 'bar1',
+            'foo2' => 'bar2',
+            'foo3' => 'bar3',
+            'foo4' => 'bar4',
+            'foo5' => 'bar5',
+            'foo6' => 'bar6',
+            'foo7' => 'bar7',
+            'foo8' => 'bar8',
+            'foo9' => 'bar9',
+        ];
+
+        $message = new Swift_Message('TemplateName', json_encode($templateData));
         $message->setSender('myself@example.com', 'myself');
         $message->setTo('me@example.com');
         $message->setCc('cc@example.com');
         $message->setBcc('bcc@example.com');
         $message->setReplyTo('reply-to@example.com');
+        $message->attach(Swift_Attachment::fromPath(__FILE__));
 
         $messageId = Str::random(32);
 
@@ -47,19 +61,32 @@ class SesTemplateTransportTest extends TestCase
         self::assertSame(['bcc@example.com'], $actual['Destination']['BccAddresses']);
         self::assertSame(['reply-to@example.com'], $actual['ReplyToAddresses']);
         self::assertSame('TemplateName', $actual['Template']);
-        self::assertSame(json_encode(['foo' => 'bar']), $actual['TemplateData']);
+        self::assertSame(json_encode($templateData), $actual['TemplateData']);
 
         self::assertSame($messageId, $message->getHeaders()->get('X-SES-Message-ID')->getFieldBody());
     }
 
     public function testSendByFrom(): void
     {
-        $message = new Swift_Message('TemplateName', json_encode(['foo' => 'bar']));
+        $templateData = [
+            'foo1' => 'bar1',
+            'foo2' => 'bar2',
+            'foo3' => 'bar3',
+            'foo4' => 'bar4',
+            'foo5' => 'bar5',
+            'foo6' => 'bar6',
+            'foo7' => 'bar7',
+            'foo8' => 'bar8',
+            'foo9' => 'bar9',
+        ];
+
+        $message = new Swift_Message('TemplateName', json_encode($templateData));
         $message->setFrom('myself@example.com', 'myself');
         $message->setTo('me@example.com');
         $message->setCc('cc@example.com');
         $message->setBcc('bcc@example.com');
         $message->setReplyTo('reply-to@example.com');
+        $message->attach(Swift_Attachment::fromPath(__FILE__));
 
         $messageId = Str::random(32);
 
@@ -85,7 +112,7 @@ class SesTemplateTransportTest extends TestCase
         self::assertSame(['bcc@example.com'], $actual['Destination']['BccAddresses']);
         self::assertSame(['reply-to@example.com'], $actual['ReplyToAddresses']);
         self::assertSame('TemplateName', $actual['Template']);
-        self::assertSame(json_encode(['foo' => 'bar']), $actual['TemplateData']);
+        self::assertSame(json_encode($templateData), $actual['TemplateData']);
 
         self::assertSame($messageId, $message->getHeaders()->get('X-SES-Message-ID')->getFieldBody());
     }
