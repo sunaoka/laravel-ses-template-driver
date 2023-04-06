@@ -36,7 +36,9 @@ class SesTemplateTransportTest extends TestCase
             ->bcc(new Address('bcc@example.com'))
             ->replyTo(new Address('reply-to@example.com'))
             ->subject('TemplateName')
-            ->html((string)json_encode($templateData));
+            ->html((string)json_encode($templateData))
+            ->attach('attach')
+            ->embed('embed');
 
         $mockHandler = new MockHandler();
         $mockHandler->append(new Result(['MessageId' => 'xxx']));
@@ -84,7 +86,9 @@ class SesTemplateTransportTest extends TestCase
             ->bcc(new Address('bcc@example.com'))
             ->replyTo(new Address('reply-to@example.com'))
             ->subject('TemplateName')
-            ->html((string)json_encode($templateData));
+            ->html((string)json_encode($templateData))
+            ->attach('attach')
+            ->embed('embed');
 
         $mockHandler = new MockHandler();
         $mockHandler->append(new Result(['MessageId' => 'xxx']));
