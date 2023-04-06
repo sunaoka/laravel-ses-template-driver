@@ -11,7 +11,6 @@ use Symfony\Component\Mailer\SentMessage;
 use Symfony\Component\Mailer\Transport\AbstractTransport;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
-use Symfony\Component\Mime\Part\TextPart;
 
 class SesTemplateTransport extends AbstractTransport
 {
@@ -42,9 +41,6 @@ class SesTemplateTransport extends AbstractTransport
         /** @var Email $originalMessage */
         $originalMessage = $message->getOriginalMessage();
 
-        /** @var TextPart $textPart */
-        $textPart = $originalMessage->getBody();
-
         $args = [
             'Destination'      => [
                 'ToAddresses'  => $this->stringifyAddresses($originalMessage->getTo()),
@@ -54,7 +50,7 @@ class SesTemplateTransport extends AbstractTransport
             'ReplyToAddresses' => $this->stringifyAddresses($originalMessage->getReplyTo()),
             'Source'           => $this->getMailbox($message->getEnvelope()->getSender()),
             'Template'         => $originalMessage->getSubject(),
-            'TemplateData'     => $textPart->getBody(),
+            'TemplateData'     => $originalMessage->getHtmlBody(),
         ];
 
         $args = array_merge($this->options, $args);
