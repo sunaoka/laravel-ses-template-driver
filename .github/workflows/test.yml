@@ -31,7 +31,7 @@ jobs:
           tools: composer:v2
 
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install dependencies
         run: |
@@ -85,7 +85,7 @@ jobs:
           tools: composer:v2
 
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: v2.x
 
@@ -124,7 +124,7 @@ jobs:
           tools: composer:v2
 
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: v1.x
 
