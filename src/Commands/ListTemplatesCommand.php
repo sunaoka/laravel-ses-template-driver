@@ -6,10 +6,14 @@ namespace Sunaoka\LaravelSesTemplateDriver\Commands;
 
 use Aws\Api\DateTimeResult;
 use DateTimeZone;
+use Exception;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use JsonException;
 
+/**
+ * @phpstan-type TemplateMetadata array{Name: string, CreatedTimestamp: \Aws\Api\DateTimeResult}
+ */
 class ListTemplatesCommand extends Command
 {
     /**
@@ -39,6 +43,7 @@ class ListTemplatesCommand extends Command
      * @return int
      *
      * @throws JsonException
+     * @throws Exception
      */
     public function handle(): int
     {
@@ -86,9 +91,9 @@ class ListTemplatesCommand extends Command
 
     /**
      * @param string|null     $nextToken
-     * @param Collection|null $templates
+     * @param Collection<int, TemplateMetadata>|null $templates
      *
-     * @return Collection
+     * @return Collection<int, TemplateMetadata>
      */
     private function listTemplates(?string $nextToken = null, ?Collection $templates = null): Collection
     {
@@ -99,7 +104,7 @@ class ListTemplatesCommand extends Command
 
         $start = microtime(true);
 
-        /** @var array{TemplatesMetadata: array, NextToken: string|null} $result */
+        /** @var array{TemplatesMetadata: TemplateMetadata[], NextToken: string|null} $result */
         $result = $this->ses->listTemplates([
             'MaxItems'  => 100,
             'NextToken' => $nextToken,

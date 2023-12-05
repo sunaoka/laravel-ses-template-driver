@@ -7,6 +7,9 @@ namespace Sunaoka\LaravelSesTemplateDriver\Commands;
 use Aws\Exception\AwsException;
 use JsonException;
 
+/**
+ * @phpstan-type Template array{TemplateName: string, SubjectPart: string, HtmlPart: string, TextPart: string}
+ */
 class GetTemplateCommand extends Command
 {
     /**
@@ -63,7 +66,9 @@ class GetTemplateCommand extends Command
     /**
      * @param string $templateName
      *
-     * @return string[]
+     * @return array
+     *
+     * @phpstan-return Template
      *
      * @throws AwsException
      */
@@ -73,7 +78,7 @@ class GetTemplateCommand extends Command
             'TemplateName' => $templateName,
         ]);
 
-        /** @var array */
+        /** @var Template */
         return $template['Template'];
     }
 }
