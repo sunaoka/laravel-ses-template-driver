@@ -19,7 +19,7 @@
         "illuminate/mail": "^9.0 || ^10.0"
     },
     "require-dev": {
-        "nunomaduro/larastan": "^2.5",
+        "larastan/larastan": "^2.7.0",
         "orchestra/testbench": "^7.0 || ^8.0"
     },
     "autoload": {
