@@ -16,10 +16,9 @@ class SesTemplate extends Mailable
     /**
      * Create a new message instance.
      *
-     * @param string $templateName Template Name
-     * @param array  $templateData Template Data
-     * @param array  $options      Options
-     *
+     * @param  string  $templateName  Template Name
+     * @param  array  $templateData  Template Data
+     * @param  array  $options  Options
      * @return void
      */
     public function __construct(
@@ -44,13 +43,11 @@ class SesTemplate extends Mailable
             $this->replyTo($this->options['reply_to']['address'], $this->options['reply_to']['name'] ?? null);
         }
 
-        return $this->subject($this->templateName)->html((string)json_encode($this->templateData));
+        return $this->subject($this->templateName)->html((string) json_encode($this->templateData));
     }
 
     /**
      * Get the transmission template name being used by the transport.
-     *
-     * @return string
      */
     public function getTemplateName(): string
     {
@@ -59,8 +56,6 @@ class SesTemplate extends Mailable
 
     /**
      * Set the transmission template name being used by the transport.
-     *
-     * @param string $templateName
      */
     public function setTemplateName(string $templateName): void
     {
@@ -69,8 +64,6 @@ class SesTemplate extends Mailable
 
     /**
      * Get the transmission template data being used by the transport.
-     *
-     * @return array
      */
     public function getTemplateData(): array
     {
@@ -79,8 +72,6 @@ class SesTemplate extends Mailable
 
     /**
      * Set the transmission template data being used by the transport.
-     *
-     * @param array $templateData
      */
     public function setTemplateData(array $templateData): void
     {
@@ -89,8 +80,6 @@ class SesTemplate extends Mailable
 
     /**
      * Get the transmission options being used by the transport.
-     *
-     * @return array
      */
     public function getOptions(): array
     {
@@ -99,8 +88,6 @@ class SesTemplate extends Mailable
 
     /**
      * Set the transmission options being used by the transport.
-     *
-     * @param array $options
      */
     public function setOptions(array $options): void
     {

@@ -13,9 +13,7 @@ abstract class TestCase extends BaseTestCase
     /**
      * Get package providers.
      *
-     * @param Application $app
-     *
-     * @return array
+     * @param  Application  $app
      */
     protected function getPackageProviders($app): array
     {
@@ -27,23 +25,21 @@ abstract class TestCase extends BaseTestCase
     /**
      * Define environment setup.
      *
-     * @param Application $app
-     *
-     * @return void
+     * @param  Application  $app
      */
     protected function defineEnvironment($app): void
     {
         $app['config']->set('mail.default', 'sestemplate');
         $app['config']->set('mail.mailers.sestemplate', ['transport' => 'sestemplate']);
         $app['config']->set('services.ses', [
-            'key'    => 'foo',
+            'key' => 'foo',
             'secret' => 'bar',
             'region' => 'us-east-2',
             'options' => [
                 'ConfigurationSetName' => 'MyConfigurationSet',
                 'Tags' => [
                     [
-                        'Name'  => 'foo',
+                        'Name' => 'foo',
                         'Value' => 'bar',
                     ],
                 ],

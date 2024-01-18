@@ -40,8 +40,6 @@ class ListTemplatesCommand extends Command
     /**
      * Execute the console command.
      *
-     * @return int
-     *
      * @throws JsonException
      * @throws Exception
      */
@@ -50,16 +48,18 @@ class ListTemplatesCommand extends Command
         $templates = $this->listTemplates();
         if ($templates->isEmpty()) {
             $this->error('No templates found.');
+
             return Command::FAILURE;
         }
 
-        $descending = (bool)$this->option('desc');
+        $descending = (bool) $this->option('desc');
         $sort = $this->option('time') ? 'CreatedTimestamp' : 'Name';
 
         $templates = $templates->sortBy($sort, SORT_NATURAL, $descending)->values();
 
         if ($this->isJson) {
             $this->json(['TemplatesMetadata' => $templates]);
+
             return Command::SUCCESS;
         }
 
@@ -68,8 +68,8 @@ class ListTemplatesCommand extends Command
         foreach ($templates as $index => $template) {
             /** @var array{Name: string, CreatedTimestamp: DateTimeResult} $template */
             $choices[] = [
-                'No'               => $index,
-                'Name'             => $template['Name'],
+                'No' => $index,
+                'Name' => $template['Name'],
                 'CreatedTimestamp' => $template['CreatedTimestamp']->setTimezone($timezone),
             ];
         }
@@ -90,9 +90,7 @@ class ListTemplatesCommand extends Command
     }
 
     /**
-     * @param string|null     $nextToken
-     * @param Collection<int, TemplateMetadata>|null $templates
-     *
+     * @param  Collection<int, TemplateMetadata>|null  $templates
      * @return Collection<int, TemplateMetadata>
      */
     private function listTemplates(?string $nextToken = null, ?Collection $templates = null): Collection
@@ -106,7 +104,7 @@ class ListTemplatesCommand extends Command
 
         /** @var array{TemplatesMetadata: TemplateMetadata[], NextToken: string|null} $result */
         $result = $this->ses->listTemplates([
-            'MaxItems'  => 100,
+            'MaxItems' => 100,
             'NextToken' => $nextToken,
         ]);
 
@@ -118,10 +116,11 @@ class ListTemplatesCommand extends Command
         if ($result['NextToken'] !== null) {
             // You can execute this operation no more than once per second.
             // @see <https://docs.aws.amazon.com/ses/latest/APIReference/API_ListTemplates.html>
-            $wait = (int)((1 - (microtime(true) - $start)) * 1000000);
+            $wait = (int) ((1 - (microtime(true) - $start)) * 1000000);
             if ($wait > 0) {
                 usleep($wait);
             }
+
             return $this->listTemplates($result['NextToken'], $templates);
         }
 

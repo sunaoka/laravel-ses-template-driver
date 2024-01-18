@@ -33,8 +33,6 @@ class GetTemplateCommand extends Command
     /**
      * Execute the console command.
      *
-     * @return int
-     *
      * @throws JsonException
      */
     public function handle(): int
@@ -44,13 +42,16 @@ class GetTemplateCommand extends Command
 
         try {
             $template = $this->getTemplate($templateName);
+
         } catch (AwsException $e) {
-            $this->error((string)$e->getAwsErrorMessage());
+            $this->error((string) $e->getAwsErrorMessage());
+
             return Command::FAILURE;
         }
 
         if ($this->isJson) {
             $this->json(['Template' => $template]);
+
             return Command::SUCCESS;
         }
 
@@ -64,10 +65,6 @@ class GetTemplateCommand extends Command
     }
 
     /**
-     * @param string $templateName
-     *
-     * @return array
-     *
      * @phpstan-return Template
      *
      * @throws AwsException

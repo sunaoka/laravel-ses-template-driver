@@ -12,9 +12,7 @@ use Sunaoka\LaravelSesTemplateDriver\Commands\ListTemplatesCommand;
 class SesTemplateTransportServiceProvider extends ServiceProvider
 {
     /**
-     * Register the Swift Transport instance.
-     *
-     * @return void
+     * Register the Transport instance.
      */
     public function register(): void
     {
@@ -29,8 +27,6 @@ class SesTemplateTransportServiceProvider extends ServiceProvider
 
     /**
      * Register Transport
-     *
-     * @param MailManager $manager
      */
     public function registerTransport(MailManager $manager): void
     {
@@ -41,8 +37,6 @@ class SesTemplateTransportServiceProvider extends ServiceProvider
 
     /**
      * Register Commands
-     *
-     * @return void
      */
     public function registerCommands(): void
     {
