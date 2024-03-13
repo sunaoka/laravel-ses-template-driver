@@ -36,7 +36,7 @@ class SesTemplateTransportTest extends TestCase
             ->bcc(new Address('bcc@example.com'))
             ->replyTo(new Address('reply-to@example.com'))
             ->subject('TemplateName')
-            ->html((string)json_encode($templateData))
+            ->html((string) json_encode($templateData))
             ->attach('attach')
             ->embed('embed');
 
@@ -86,7 +86,7 @@ class SesTemplateTransportTest extends TestCase
             ->bcc(new Address('bcc@example.com'))
             ->replyTo(new Address('reply-to@example.com'))
             ->subject('TemplateName')
-            ->html((string)json_encode($templateData))
+            ->html((string) json_encode($templateData))
             ->attach('attach')
             ->embed('embed');
 
@@ -120,7 +120,7 @@ class SesTemplateTransportTest extends TestCase
         /** @var SesTemplateTransport $transport */
         $transport = (new Helper())->createTransport();
 
-        self::assertSame('sestemplate', (string)$transport);
+        self::assertSame('sestemplate', (string) $transport);
     }
 
     public function testSes(): void

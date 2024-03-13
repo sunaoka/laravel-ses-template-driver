@@ -15,17 +15,18 @@ class ListTemplatesCommandTest extends TestCase
 {
     /**
      * @return array{TemplatesMetadata: array{array{No: null, Name: string, CreatedTimestamp: string}, array{No: null, Name: string, CreatedTimestamp: string}}}
+     *
      * @throws Exception
      */
     protected function setSuccessMockHandler(): array
     {
         $templatesMetadata = [
             [
-                'Name'             => 'NewsAndUpdates',
+                'Name' => 'NewsAndUpdates',
                 'CreatedTimestamp' => DateTimeResult::fromTimestamp('2021-10-03T20:03:34.574Z'),
             ],
             [
-                'Name'             => 'SpecialOffers',
+                'Name' => 'SpecialOffers',
                 'CreatedTimestamp' => DateTimeResult::fromTimestamp('2020-08-05T16:04:12.640Z'),
             ],
         ];
@@ -33,9 +34,9 @@ class ListTemplatesCommandTest extends TestCase
         $template = [
             'Template' => [
                 'TemplateName' => 'MyTemplate',
-                'SubjectPart'  => 'Greetings, {{name}}!',
-                'HtmlPart'     => '<h1>Hello {{name}},</h1><p>Your favorite animal is {{favoriteanimal}}.</p>',
-                'TextPart'     => "Dear {{name}},\r\nYour favorite animal is {{favoriteanimal}}.",
+                'SubjectPart' => 'Greetings, {{name}}!',
+                'HtmlPart' => '<h1>Hello {{name}},</h1><p>Your favorite animal is {{favoriteanimal}}.</p>',
+                'TextPart' => "Dear {{name}},\r\nYour favorite animal is {{favoriteanimal}}.",
             ],
         ];
 
@@ -47,10 +48,10 @@ class ListTemplatesCommandTest extends TestCase
         Config::set('services.ses.handler', $mockHandler);
 
         return [
-            'TemplatesMetadata' => array_map(static fn($template) => [
-                'No'               => null,
-                'Name'             => $template['Name'],
-                'CreatedTimestamp' => (string)$template['CreatedTimestamp'],
+            'TemplatesMetadata' => array_map(static fn ($template) => [
+                'No' => null,
+                'Name' => $template['Name'],
+                'CreatedTimestamp' => (string) $template['CreatedTimestamp'],
             ], $templatesMetadata),
         ];
     }
@@ -66,10 +67,7 @@ class ListTemplatesCommandTest extends TestCase
     /**
      * @dataProvider invokeTextSuccessProvider
      *
-     * @param int[] $nums
-     * @param array $options
-     *
-     * @return void
+     * @param  int[]  $nums
      *
      * @throws Exception
      */
@@ -92,9 +90,9 @@ class ListTemplatesCommandTest extends TestCase
     public static function invokeTextSuccessProvider(): array
     {
         return [
-            'Name ascending'  => [[0, 1], ['--name' => true, '--asc' => true]],
+            'Name ascending' => [[0, 1], ['--name' => true, '--asc' => true]],
             'Name descending' => [[1, 0], ['--name' => true, '--desc' => true]],
-            'Time ascending'  => [[1, 0], ['--time' => true, '--asc' => true]],
+            'Time ascending' => [[1, 0], ['--time' => true, '--asc' => true]],
             'Time descending' => [[0, 1], ['--time' => true, '--desc' => true]],
         ];
     }

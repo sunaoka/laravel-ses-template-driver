@@ -19,9 +19,9 @@ class GetTemplateCommandTest extends TestCase
         $template = [
             'Template' => [
                 'TemplateName' => 'MyTemplate',
-                'SubjectPart'  => 'Greetings, {{name}}!',
-                'HtmlPart'     => '<h1>Hello {{name}},</h1><p>Your favorite animal is {{favoriteanimal}}.</p>',
-                'TextPart'     => "Dear {{name}},\r\nYour favorite animal is {{favoriteanimal}}.",
+                'SubjectPart' => 'Greetings, {{name}}!',
+                'HtmlPart' => '<h1>Hello {{name}},</h1><p>Your favorite animal is {{favoriteanimal}}.</p>',
+                'TextPart' => "Dear {{name}},\r\nYour favorite animal is {{favoriteanimal}}.",
             ],
         ];
 

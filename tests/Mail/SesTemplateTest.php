@@ -24,7 +24,7 @@ class SesTemplateTest extends TestCase
         $options = [
             'from' => [
                 'address' => 'example@example.com',
-                'name'    => 'example name',
+                'name' => 'example name',
             ],
         ];
         $mailable = new SesTemplate('TestTemplate', ['foo' => 'bar'], $options);
@@ -35,7 +35,7 @@ class SesTemplateTest extends TestCase
         $options = [
             'from' => [
                 'xxxxxxx' => 'example@example.com',
-                'name'    => 'example name',
+                'name' => 'example name',
             ],
         ];
         $mailable = new SesTemplate('TestTemplate', ['foo' => 'bar'], $options);
@@ -72,7 +72,7 @@ class SesTemplateTest extends TestCase
         $options = [
             'reply_to' => [
                 'address' => 'example@example.com',
-                'name'    => 'example name',
+                'name' => 'example name',
             ],
         ];
         $mailable = new SesTemplate('TestTemplate', ['foo' => 'bar'], $options);
@@ -83,7 +83,7 @@ class SesTemplateTest extends TestCase
         $options = [
             'reply_to' => [
                 'xxxxxxx' => 'example@example.com',
-                'name'    => 'example name',
+                'name' => 'example name',
             ],
         ];
         $mailable = new SesTemplate('TestTemplate', ['foo' => 'bar'], $options);
@@ -138,13 +138,13 @@ class SesTemplateTest extends TestCase
     public function testOptions(): void
     {
         $options = [
-            'from'     => [
+            'from' => [
                 'address' => 'example@example.com',
-                'name'    => 'example name',
+                'name' => 'example name',
             ],
             'reply_to' => [
                 'address' => 'example@example.com',
-                'name'    => 'example name',
+                'name' => 'example name',
             ],
         ];
         $mailable = new SesTemplate('TestTemplate', ['foo' => 'bar']);

@@ -1,13 +1,11 @@
 includes:
-    - vendor/nunomaduro/larastan/extension.neon
+    - vendor/larastan/larastan/extension.neon
 
 parameters:
 
     level: 9
 
     checkMissingIterableValueType: false
-
-    checkGenericClassInNonGenericObjectType: false
 
     paths:
         - src/

@@ -14,8 +14,6 @@ class Helper
 {
     /**
      * Create new Transport
-     *
-     * @return AbstractTransport
      */
     public function createTransport(): AbstractTransport
     {
@@ -27,8 +25,6 @@ class Helper
 
     /**
      * Create new SES Client
-     *
-     * @return SesClient
      */
     public function createClient(): SesClient
     {
@@ -47,14 +43,10 @@ class Helper
 
     /**
      * Add the SES credentials to the configuration array.
-     *
-     * @param array $config
-     *
-     * @return array
      */
     protected function addSesCredentials(array $config): array
     {
-        if (!empty($config['key']) && !empty($config['secret'])) {
+        if (! empty($config['key']) && ! empty($config['secret'])) {
             $config['credentials'] = Arr::only($config, ['key', 'secret', 'token']);
         }
 
