@@ -42,7 +42,6 @@ class GetTemplateCommand extends Command
 
         try {
             $template = $this->getTemplate($templateName);
-
         } catch (AwsException $e) {
             $this->error((string) $e->getAwsErrorMessage());
 
