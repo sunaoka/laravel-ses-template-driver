@@ -135,6 +135,7 @@ class SesTemplateTest extends TestCase
         self::assertSame([], $mailable->replyTo);
     }
 
+    #[DefineEnvironment('usesSesV2Transport')]
     public function testBuildWithHeaders(): void
     {
         $options = [
