@@ -7,6 +7,7 @@ namespace Sunaoka\LaravelSesTemplateDriver\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Arr;
 
 class SesTemplate extends Mailable
 {
@@ -41,6 +42,14 @@ class SesTemplate extends Mailable
 
         if (isset($this->options['reply_to']['address'])) {
             $this->replyTo($this->options['reply_to']['address'], $this->options['reply_to']['name'] ?? null);
+        }
+
+        if (isset($this->options['headers']) && Arr::isAssoc($this->options['headers'])) {
+            foreach ($this->options['headers'] as $key => $value) {
+                if (is_string($value)) {
+                    $this->metadata((string) $key, $value);
+                }
+            }
         }
 
         return $this->subject($this->templateName)->html((string) json_encode($this->templateData));
