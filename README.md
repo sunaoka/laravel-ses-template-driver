@@ -247,6 +247,23 @@ php artisan ses-template:list-templates --json
 }
 ```
 
+Amazon SES API v2
+
+```json
+{
+  "TemplatesMetadata": [
+    {
+      "TemplateName": "MyTemplate",
+      "CreatedTimestamp": "2020-11-24T15:01:21+00:00"
+    },
+    {
+      "TemplateName": "MyTemplate2",
+      "CreatedTimestamp": "2020-11-24T15:01:25+00:00"
+    }
+  ]
+}
+```
+
 ### Displays the template object for the template you specify
 
 #### Options
@@ -306,7 +323,64 @@ php artisan ses-template:get-template MyTemplate --json
 }
 ```
 
+Amazon SES API v2
+
+```json
+{
+  "Template": {
+    "TemplateName": "MyTemplate",
+    "TemplateContent": {
+      "Subject": "Greetings, {{name}}!",
+      "Html": "<h1>Hello {{name}},</h1><p>Your favorite animal is {{favoriteanimal}}.</p>",
+      "Text": "Dear {{name}},\r\nYour favorite animal is {{favoriteanimal}}."
+    }
+  }
+}
+```
+
+## AWS Identity and Access Management (IAM) Policy
+
+### Amazon SES API (v1) 
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "ses:SendTemplatedEmail",
+        "ses:ListTemplates",
+        "ses:GetTemplate"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+```
+
+### Amazon SES API v2
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "ses:SendEmail",
+        "ses:ListEmailTemplates",
+        "ses:GetEmailTemplate"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+```
+
 ## Reference
 
 - [Mail - Laravel - The PHP Framework For Web Artisans](https://laravel.com/docs/master/mail)
 - [Using templates to send personalized emails with the Amazon SES API](https://docs.aws.amazon.com/ses/latest/dg/send-personalized-email-api.html)
+- [Class Aws\Ses\SesClient | AWS SDK for PHP 3.x](https://docs.aws.amazon.com/aws-sdk-php/v3/api/class-Aws.Ses.SesClient.html)
+- [Class Aws\SesV2\SesV2Client | AWS SDK for PHP 3.x](https://docs.aws.amazon.com/aws-sdk-php/v3/api/class-Aws.SesV2.SesV2Client.html)
