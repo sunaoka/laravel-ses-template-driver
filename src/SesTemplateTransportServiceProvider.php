@@ -12,9 +12,12 @@ use Sunaoka\LaravelSesTemplateDriver\Commands\ListTemplatesCommand;
 use Sunaoka\LaravelSesTemplateDriver\Services\SesServiceInterface;
 use Sunaoka\LaravelSesTemplateDriver\Services\SesV1Service;
 use Sunaoka\LaravelSesTemplateDriver\Services\SesV2Service;
+use Sunaoka\LaravelSesTemplateDriver\Traits\TransportTrait;
 
 class SesTemplateTransportServiceProvider extends ServiceProvider
 {
+    use TransportTrait;
+
     /**
      * Register the Transport instance.
      */
@@ -35,11 +38,11 @@ class SesTemplateTransportServiceProvider extends ServiceProvider
     public function registerTransport(MailManager $manager): void
     {
         $manager->extend('sestemplate', function ($config) {
-            return (new Helper())->createSesTemplateTransport($config);
+            return $this->createSesTemplateTransport($config);
         });
 
         $manager->extend('sesv2template', function ($config) {
-            return (new Helper())->createSesV2TemplateTransport($config);
+            return $this->createSesV2TemplateTransport($config);
         });
     }
 
@@ -66,9 +69,9 @@ class SesTemplateTransportServiceProvider extends ServiceProvider
     {
         $transport = $app['config']->get('mail.mailers.sestemplate.transport', 'sestemplate');
         if ($transport === 'sesv2template') {
-            return new SesV2Service((new Helper())->createSesV2Client());
+            return new SesV2Service($this->createSesV2Client());
         }
 
-        return new SesV1Service((new Helper())->createSesClient());
+        return new SesV1Service($this->createSesClient());
     }
 }

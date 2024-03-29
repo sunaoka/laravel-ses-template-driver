@@ -9,8 +9,8 @@ use Aws\MockHandler;
 use Aws\Result;
 use Aws\SesV2\Exception\SesV2Exception;
 use RuntimeException;
-use Sunaoka\LaravelSesTemplateDriver\Helper;
 use Sunaoka\LaravelSesTemplateDriver\Tests\TestCase;
+use Sunaoka\LaravelSesTemplateDriver\Traits\TransportTrait;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\Header\MetadataHeader;
 use Symfony\Component\Mime\Address;
@@ -18,6 +18,8 @@ use Symfony\Component\Mime\Email;
 
 class SesV2TemplateTransportTest extends TestCase
 {
+    use TransportTrait;
+
     /**
      * @throws TransportExceptionInterface
      */
@@ -53,7 +55,7 @@ class SesV2TemplateTransportTest extends TestCase
 
         config(['services.ses.handler' => $mockHandler]);
 
-        $transport = (new Helper())->createSesV2TemplateTransport();
+        $transport = $this->createSesV2TemplateTransport();
 
         $actual = $transport->send($message);
 
@@ -109,7 +111,7 @@ class SesV2TemplateTransportTest extends TestCase
 
         config(['services.ses.handler' => $mockHandler]);
 
-        $transport = (new Helper())->createSesV2TemplateTransport();
+        $transport = $this->createSesV2TemplateTransport();
 
         $actual = $transport->send($message);
 
@@ -155,19 +157,19 @@ class SesV2TemplateTransportTest extends TestCase
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Request to Amazon SES API v2 failed. Reason: Template MyTemplate does not exist.');
 
-        (new Helper())->createSesV2TemplateTransport()->send($message);
+        $this->createSesV2TemplateTransport()->send($message);
     }
 
     public function testToString(): void
     {
-        $transport = (new Helper())->createSesV2TemplateTransport();
+        $transport = $this->createSesV2TemplateTransport();
 
         self::assertSame('sesv2template', (string) $transport);
     }
 
     public function testSes(): void
     {
-        $transport = (new Helper())->createSesV2TemplateTransport();
+        $transport = $this->createSesV2TemplateTransport();
 
         self::assertSame('us-east-2', $transport->ses()->getRegion());
     }
