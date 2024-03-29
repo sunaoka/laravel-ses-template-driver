@@ -7,13 +7,8 @@ namespace Sunaoka\LaravelSesTemplateDriver\Commands;
 use Aws\Api\DateTimeResult;
 use DateTimeZone;
 use Exception;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Config;
 use JsonException;
 
-/**
- * @phpstan-type TemplateMetadata array{Name: string, CreatedTimestamp: \Aws\Api\DateTimeResult}
- */
 class ListTemplatesCommand extends Command
 {
     /**
@@ -45,15 +40,17 @@ class ListTemplatesCommand extends Command
      */
     public function handle(): int
     {
-        $templates = $this->listTemplates();
+        $templates = $this->sesService->listTemplates();
         if ($templates->isEmpty()) {
             $this->error('No templates found.');
 
             return Command::FAILURE;
         }
 
+        $structure = $this->sesService->getListStructure();
+
         $descending = (bool) $this->option('desc');
-        $sort = $this->option('time') ? 'CreatedTimestamp' : 'Name';
+        $sort = $this->option('time') ? $structure['CreatedTimestamp'] : $structure['TemplateName'];
 
         $templates = $templates->sortBy($sort, SORT_NATURAL, $descending)->values();
 
@@ -63,13 +60,13 @@ class ListTemplatesCommand extends Command
             return Command::SUCCESS;
         }
 
-        $timezone = new DateTimeZone(Config::get('app.timezone', 'UTC'));  // @phpstan-ignore-line
+        $timezone = new DateTimeZone(config('app.timezone'));  // @phpstan-ignore-line
         $choices = [];
         foreach ($templates as $index => $template) {
             /** @var array{Name: string, CreatedTimestamp: DateTimeResult} $template */
             $choices[] = [
                 'No' => $index,
-                'Name' => $template['Name'],
+                'Name' => $template[$structure['TemplateName']],
                 'CreatedTimestamp' => $template['CreatedTimestamp']->setTimezone($timezone),
             ];
         }
@@ -87,45 +84,5 @@ class ListTemplatesCommand extends Command
         }
 
         return Command::SUCCESS;
-    }
-
-    /**
-     * @param  Collection<int, TemplateMetadata>|null  $templates
-     * @return Collection<int, TemplateMetadata>
-     */
-    private function listTemplates(?string $nextToken = null, ?Collection $templates = null): Collection
-    {
-        if ($templates === null) {
-            $templates = new Collection();
-        }
-        $this->output->write('.');
-
-        $start = microtime(true);
-
-        /** @var array{TemplatesMetadata: TemplateMetadata[], NextToken: string|null} $result */
-        $result = $this->ses->listTemplates([
-            'MaxItems' => 100,
-            'NextToken' => $nextToken,
-        ]);
-
-        $template = $result['TemplatesMetadata'];
-        if (count($template) > 0) {
-            $templates = $templates->merge($template);
-        }
-
-        if ($result['NextToken'] !== null) {
-            // You can execute this operation no more than once per second.
-            // @see <https://docs.aws.amazon.com/ses/latest/APIReference/API_ListTemplates.html>
-            $wait = (int) ((1 - (microtime(true) - $start)) * 1000000);
-            if ($wait > 0) {
-                usleep($wait);
-            }
-
-            return $this->listTemplates($result['NextToken'], $templates);
-        }
-
-        $this->info(' done.');
-
-        return $templates;
     }
 }

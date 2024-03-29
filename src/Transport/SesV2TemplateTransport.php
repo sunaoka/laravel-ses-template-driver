@@ -5,19 +5,20 @@ declare(strict_types=1);
 namespace Sunaoka\LaravelSesTemplateDriver\Transport;
 
 use Aws\Exception\AwsException;
-use Aws\Ses\SesClient;
+use Aws\SesV2\SesV2Client;
 use Stringable;
+use Symfony\Component\Mailer\Header\MetadataHeader;
 use Symfony\Component\Mailer\SentMessage;
 use Symfony\Component\Mailer\Transport\AbstractTransport;
 use Symfony\Component\Mime\Email;
 
-class SesTemplateTransport extends AbstractTransport implements Stringable
+class SesV2TemplateTransport extends AbstractTransport implements Stringable
 {
     /**
      * Create a new SES transport instance.
      */
     public function __construct(
-        protected SesClient $ses,
+        protected SesV2Client $ses,
         protected array $options = []
     ) {
         parent::__construct();
@@ -28,6 +29,13 @@ class SesTemplateTransport extends AbstractTransport implements Stringable
         /** @var Email $email */
         $email = $message->getOriginalMessage();
 
+        $headers = [];
+        foreach ($email->getHeaders()->all() as $header) {
+            if ($header instanceof MetadataHeader) {
+                $headers[] = ['Name' => $header->getKey(), 'Value' => $header->getValue()];
+            }
+        }
+
         try {
             $args = array_merge($this->options, [
                 'Destination' => [
@@ -36,17 +44,22 @@ class SesTemplateTransport extends AbstractTransport implements Stringable
                     'BccAddresses' => $this->stringifyAddresses($email->getBcc()),
                 ],
                 'ReplyToAddresses' => $this->stringifyAddresses($email->getReplyTo()),
-                'Source' => $message->getEnvelope()->getSender()->toString(),
-                'Template' => $email->getSubject(),
-                'TemplateData' => $email->getHtmlBody(),
+                'FromEmailAddress' => $message->getEnvelope()->getSender()->toString(),
+                'Content' => [
+                    'Template' => [
+                        'Headers' => $headers,
+                        'TemplateName' => $email->getSubject(),
+                        'TemplateData' => $email->getHtmlBody(),
+                    ],
+                ],
             ]);
 
-            $result = $this->ses->sendTemplatedEmail($args);
+            $result = $this->ses->sendEmail($args);
         } catch (AwsException $e) {
             $reason = $e->getAwsErrorMessage() ?? $e->getMessage();
 
             throw new \RuntimeException(
-                sprintf('Request to Amazon SES API failed. Reason: %s', $reason),
+                sprintf('Request to Amazon SES API v2 failed. Reason: %s', $reason),
                 $e->getCode(),
                 $e
             );
@@ -63,13 +76,13 @@ class SesTemplateTransport extends AbstractTransport implements Stringable
      */
     public function __toString(): string
     {
-        return 'sestemplate';
+        return 'sesv2template';
     }
 
     /**
-     * Get the Amazon SES client for the SesTransport instance.
+     * Get the Amazon SES v2 client for the SesTransport instance.
      */
-    public function ses(): SesClient
+    public function ses(): SesV2Client
     {
         return $this->ses;
     }

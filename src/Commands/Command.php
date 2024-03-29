@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Sunaoka\LaravelSesTemplateDriver\Commands;
 
-use Aws\Ses\SesClient;
 use Illuminate\Console\Command as BaseCommand;
 use JsonException;
+use Sunaoka\LaravelSesTemplateDriver\Services\SesServiceInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -17,7 +17,7 @@ abstract class Command extends BaseCommand
     /**
      * Create a new command instance.
      */
-    public function __construct(protected SesClient $ses)
+    public function __construct(protected SesServiceInterface $sesService)
     {
         parent::__construct();
     }
@@ -40,6 +40,19 @@ abstract class Command extends BaseCommand
     protected function json(mixed $value): void
     {
         $this->getOutput()->writeln(json_encode($value, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE), OutputInterface::VERBOSITY_QUIET);
+    }
+
+    protected function print(array $array): void
+    {
+        foreach ($array as $key => $value) {
+            if (is_array($value)) {
+                $this->print($value);
+            } else {
+                $this->info("{$key}:");
+                $this->line($value);
+                $this->newLine();
+            }
+        }
     }
 
     public function error($string, $verbosity = null): void

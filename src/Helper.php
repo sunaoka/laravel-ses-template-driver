@@ -5,40 +5,65 @@ declare(strict_types=1);
 namespace Sunaoka\LaravelSesTemplateDriver;
 
 use Aws\Ses\SesClient;
+use Aws\SesV2\SesV2Client;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Config;
 use Sunaoka\LaravelSesTemplateDriver\Transport\SesTemplateTransport;
-use Symfony\Component\Mailer\Transport\AbstractTransport;
+use Sunaoka\LaravelSesTemplateDriver\Transport\SesV2TemplateTransport;
 
 class Helper
 {
     /**
-     * Create new Transport
+     * Create an instance of the Symfony Amazon SES Transport driver.
      */
-    public function createTransport(): AbstractTransport
+    public function createSesTemplateTransport(array $config = []): SesTemplateTransport
     {
         return new SesTemplateTransport(
-            $this->createClient(),
-            Config::get('services.ses.options', [])  // @phpstan-ignore-line
+            $this->createSesClient($config),
+            config('services.ses.options', [])  // @phpstan-ignore-line
         );
     }
 
     /**
-     * Create new SES Client
+     * Create an instance of the Symfony Amazon SES V2 Transport driver.
      */
-    public function createClient(): SesClient
+    public function createSesV2TemplateTransport(array $config = []): SesV2TemplateTransport
+    {
+        return new SesV2TemplateTransport(
+            $this->createSesV2Client($config),
+            config('services.ses.options', [])  // @phpstan-ignore-line
+        );
+    }
+
+    /**
+     * Create an instance of the Amazon SES Client.
+     */
+    public function createSesClient(array $config = []): SesClient
     {
         $config = array_merge(
-            Config::get('services.ses', []),  // @phpstan-ignore-line
-            [
-                'version' => 'latest',
-                'service' => 'email',
-            ]
+            config('services.ses', []),  // @phpstan-ignore-line
+            ['version' => 'latest', 'service' => 'email'],
+            $config
         );
 
-        $config = $this->addSesCredentials($config);
+        $config = Arr::except($config, ['transport']);
 
-        return new SesClient($config);
+        return new SesClient($this->addSesCredentials($config));
+    }
+
+    /**
+     * Create an instance of the Amazon SES V2 Client.
+     */
+    public function createSesV2Client(array $config = []): SesV2Client
+    {
+        $config = array_merge(
+            config('services.ses', []),  // @phpstan-ignore-line
+            ['version' => 'latest'],
+            $config
+        );
+
+        $config = Arr::except($config, ['transport']);
+
+        return new SesV2Client($this->addSesCredentials($config));
     }
 
     /**

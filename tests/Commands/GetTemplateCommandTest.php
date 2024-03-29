@@ -8,13 +8,83 @@ use Aws\CommandInterface;
 use Aws\Exception\AwsException;
 use Aws\MockHandler;
 use Aws\Result;
-use Illuminate\Support\Facades\Config;
-use Psr\Http\Message\RequestInterface;
+use Orchestra\Testbench\Attributes\DefineEnvironment;
 use Sunaoka\LaravelSesTemplateDriver\Tests\TestCase;
 
 class GetTemplateCommandTest extends TestCase
 {
-    protected function setSuccessMockHandler(): array
+    protected function setSuccessMockHandler(array $template): void
+    {
+        $mockHandler = new MockHandler();
+        $mockHandler->append(new Result($template));
+
+        config(['services.ses.handler' => $mockHandler]);
+    }
+
+    protected function setFailureMockHandler(): void
+    {
+        $mockHandler = new MockHandler();
+        $mockHandler->append(static function (CommandInterface $cmd) {
+            return new AwsException('Template MyTemplate does not exist.', $cmd);
+        });
+
+        config(['services.ses.handler' => $mockHandler]);
+    }
+
+    #[DefineEnvironment('usesSesV1Transport')]
+    public function testSesV1InvokeTextSuccess(): void
+    {
+        $template = [
+            'Template' => [
+                'TemplateName' => 'MyTemplate',
+                'SubjectPart' => 'Greetings, {{name}}!',
+                'TextPart' => "Dear {{name}},\r\nYour favorite animal is {{favoriteanimal}}.",
+                'HtmlPart' => '<h1>Hello {{name}},</h1><p>Your favorite animal is {{favoriteanimal}}.</p>',
+            ],
+        ];
+
+        $this->setSuccessMockHandler($template);
+
+        $this->artisan('ses-template:get-template', ['TemplateName' => 'MyTemplate'])
+            ->expectsOutput('TemplateName:')
+            ->expectsOutput($template['Template']['TemplateName'])
+            ->expectsOutput('SubjectPart:')
+            ->expectsOutput($template['Template']['SubjectPart'])
+            ->expectsOutput('TextPart:')
+            ->expectsOutput($template['Template']['TextPart'])
+            ->expectsOutput('HtmlPart:')
+            ->expectsOutput($template['Template']['HtmlPart'])
+            ->assertSuccessful();
+    }
+
+    #[DefineEnvironment('usesSesV2Transport')]
+    public function testSesV2InvokeTextSuccess(): void
+    {
+        $template = [
+            'TemplateName' => 'MyTemplate',
+            'TemplateContent' => [
+                'Subject' => 'Greetings, {{name}}!',
+                'Text' => "Dear {{name}},\r\nYour favorite animal is {{favoriteanimal}}.",
+                'Html' => '<h1>Hello {{name}},</h1><p>Your favorite animal is {{favoriteanimal}}.</p>',
+            ],
+        ];
+
+        $this->setSuccessMockHandler($template);
+
+        $this->artisan('ses-template:get-template', ['TemplateName' => 'MyTemplate'])
+            ->expectsOutput('TemplateName:')
+            ->expectsOutput($template['TemplateName'])
+            ->expectsOutput('Subject:')
+            ->expectsOutput($template['TemplateContent']['Subject'])
+            ->expectsOutput('Text:')
+            ->expectsOutput($template['TemplateContent']['Text'])
+            ->expectsOutput('Html:')
+            ->expectsOutput($template['TemplateContent']['Html'])
+            ->assertSuccessful();
+    }
+
+    #[DefineEnvironment('usesSesV1Transport')]
+    public function testV1InvokeJsonSuccess(): void
     {
         $template = [
             'Template' => [
@@ -25,43 +95,26 @@ class GetTemplateCommandTest extends TestCase
             ],
         ];
 
-        $mockHandler = new MockHandler();
-        $mockHandler->append(new Result($template));
+        $this->setSuccessMockHandler($template);
 
-        Config::set('services.ses.handler', $mockHandler);
-
-        return $template;
-    }
-
-    protected function setFailureMockHandler(): void
-    {
-        $mockHandler = new MockHandler();
-        $mockHandler->append(function (CommandInterface $cmd, RequestInterface $req) {
-            return new AwsException('Template MyTemplate does not exist.', $cmd);
-        });
-
-        Config::set('services.ses.handler', $mockHandler);
-    }
-
-    public function testInvokeTextSuccess(): void
-    {
-        $template = $this->setSuccessMockHandler();
-
-        $this->artisan('ses-template:get-template', ['TemplateName' => 'MyTemplate'])
-            ->expectsOutput('TemplateName:')
-            ->expectsOutput($template['Template']['TemplateName'])
-            ->expectsOutput('SubjectPart:')
-            ->expectsOutput($template['Template']['SubjectPart'])
-            ->expectsOutput('HtmlPart:')
-            ->expectsOutput($template['Template']['HtmlPart'])
-            ->expectsOutput('TextPart:')
-            ->expectsOutput($template['Template']['TextPart'])
+        $this->artisan('ses-template:get-template', ['TemplateName' => 'MyTemplate', '--json' => true])
+            ->expectsOutput(json_encode($template))
             ->assertSuccessful();
     }
 
-    public function testInvokeJsonSuccess(): void
+    #[DefineEnvironment('usesSesV2Transport')]
+    public function testV2InvokeJsonSuccess(): void
     {
-        $template = $this->setSuccessMockHandler();
+        $template = [
+            'TemplateName' => 'MyTemplate',
+            'TemplateContent' => [
+                'Subject' => 'Greetings, {{name}}!',
+                'Text' => "Dear {{name}},\r\nYour favorite animal is {{favoriteanimal}}.",
+                'Html' => '<h1>Hello {{name}},</h1><p>Your favorite animal is {{favoriteanimal}}.</p>',
+            ],
+        ];
+
+        $this->setSuccessMockHandler($template);
 
         $this->artisan('ses-template:get-template', ['TemplateName' => 'MyTemplate', '--json' => true])
             ->expectsOutput(json_encode($template))

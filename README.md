@@ -20,9 +20,9 @@ A Mail Driver with support for [Using templates to send personalized emails with
 | 6.x     | 1.x                             |
 | 7.x     | 2.x                             |
 | 8.x     | 2.x                             |
-| 9.x     | 3.x                             |
-| 10.x    | 3.x                             |
-| 11.x    | 3.x                             |
+| 9.x     | 3.x, 4.x                        |
+| 10.x    | 3.x, 4.x                        |
+| 11.x    | 3.x, 4.x                        |
 
 ## Installation
 
@@ -61,7 +61,7 @@ Next, set the following in `config/mail.php` and `config/services.php`.
 
 'mailers' => [
     'sestemplate' => [
-        'transport' => 'sestemplate',
+        'transport' => 'sestemplate',  // or `sesv2template` - When using Amazon SES API v2
     ],
 ],
 ```
@@ -120,7 +120,7 @@ class Foo
 
 ### Options
 
-Set  Reply-to header
+Set Reply-to header
 
 ```php
 use Sunaoka\LaravelSesTemplateDriver\Mail\SesTemplate;
@@ -142,6 +142,9 @@ class Foo
             'reply_to' => [
                 'address' => 'alejandro.rosalez@example.com', // required
                 'name'    => 'Alejandro Rosalez',             // optional
+            ],
+            'headers' => [  // Only with Amazon SES API v2 ('transport' is `sesv2template`)
+                'X-Custom-Header' => 'Custom Value',
             ],
         ];
 

@@ -12,6 +12,5 @@ parameters:
         - tests/
 
     ignoreErrors:
-        -
-            message: '#Cannot call method .+ on Illuminate\\Testing\\PendingCommand\|int#'
-            path: tests/*
+        - message: '#Cannot call method .+ on Illuminate\\Testing\\PendingCommand\|int#'
+          path: tests/Commands/*
