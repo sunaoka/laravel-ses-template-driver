@@ -33,7 +33,7 @@ interface SesServiceInterface
     public function getTemplate(string $templateName): array;
 
     /**
-     * @return array{TemplateName: string, CreatedTimestamp: string}
+     * @return array{TemplateName: 'Name'|'TemplateName', CreatedTimestamp: 'CreatedTimestamp'}
      */
     public function getListStructure(): array;
 }

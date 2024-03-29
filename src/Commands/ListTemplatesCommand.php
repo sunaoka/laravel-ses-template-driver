@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Sunaoka\LaravelSesTemplateDriver\Commands;
 
-use Aws\Api\DateTimeResult;
 use DateTimeZone;
 use Exception;
 use JsonException;
@@ -63,11 +62,10 @@ class ListTemplatesCommand extends Command
         $timezone = new DateTimeZone(config('app.timezone'));  // @phpstan-ignore-line
         $choices = [];
         foreach ($templates as $index => $template) {
-            /** @var array{Name: string, CreatedTimestamp: DateTimeResult} $template */
             $choices[] = [
                 'No' => $index,
                 'Name' => $template[$structure['TemplateName']],
-                'CreatedTimestamp' => $template['CreatedTimestamp']->setTimezone($timezone),
+                'CreatedTimestamp' => $template[$structure['CreatedTimestamp']]->setTimezone($timezone),
             ];
         }
 
