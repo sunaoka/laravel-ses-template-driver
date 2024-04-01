@@ -9,6 +9,7 @@ use Aws\MockHandler;
 use Aws\Result;
 use Exception;
 use Orchestra\Testbench\Attributes\DefineEnvironment;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Sunaoka\LaravelSesTemplateDriver\Tests\TestCase;
 
 class ListTemplatesCommandTest extends TestCase
@@ -33,12 +34,11 @@ class ListTemplatesCommandTest extends TestCase
     }
 
     /**
-     * @dataProvider invokeTextSuccessProvider
-     *
      * @param  int[]  $nums
      *
      * @throws Exception
      */
+    #[DataProvider('invokeTextSuccessProvider')]
     #[DefineEnvironment('usesSesV1Transport')]
     public function testSesV1InvokeTextSuccess(array $nums, array $options): void
     {
@@ -98,12 +98,11 @@ class ListTemplatesCommandTest extends TestCase
     }
 
     /**
-     * @dataProvider invokeTextSuccessProvider
-     *
      * @param  int[]  $nums
      *
      * @throws Exception
      */
+    #[DataProvider('invokeTextSuccessProvider')]
     #[DefineEnvironment('usesSesV2Transport')]
     public function testSesV2InvokeTextSuccess(array $nums, array $options): void
     {

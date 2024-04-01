@@ -123,7 +123,9 @@ class Foo
 Set Reply-to header
 
 ```php
+use Illuminate\Mail\Mailables\Address;
 use Sunaoka\LaravelSesTemplateDriver\Mail\SesTemplate;
+use Sunaoka\LaravelSesTemplateDriver\Mail\SesTemplateOptions;
 
 class Foo
 {
@@ -134,19 +136,14 @@ class Foo
             'name'           => 'Alejandro',
             'favoriteanimal' => 'alligator',
         ];
-        $options = [
-            'from' => [
-                'address' => 'alejandro.rosalez@example.com', // required
-                'name'    => 'Alejandro Rosalez',             // optional
-            ],
-            'reply_to' => [
-                'address' => 'alejandro.rosalez@example.com', // required
-                'name'    => 'Alejandro Rosalez',             // optional
-            ],
-            'headers' => [  // Only with Amazon SES API v2 ('transport' is `sesv2template`)
-                'X-Custom-Header' => 'Custom Value',
-            ],
-        ];
+
+        $options = new SesTemplateOptions();
+        $options->from(new Address('alejandro.rosalez@example.com', 'Alejandro Rosalez'))
+                ->replyTo(new Address('alejandro.rosalez@example.com'));
+
+        // Only with Amazon SES API v2 ('transport' is `sesv2template`)
+        $options->header('X-Custom-Header1', 'Custom Value 1')
+                ->header('X-Custom-Header2', 'Custom Value 2');
 
         \Mail::to('alejandro.rosalez@example.com')
             ->cc('cc@example.com')
