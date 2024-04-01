@@ -3,7 +3,7 @@
 [![Latest](https://poser.pugx.org/sunaoka/laravel-ses-template-driver/v)](https://packagist.org/packages/sunaoka/laravel-ses-template-driver)
 [![License](https://poser.pugx.org/sunaoka/laravel-ses-template-driver/license)](https://packagist.org/packages/sunaoka/laravel-ses-template-driver)
 [![PHP](https://img.shields.io/packagist/php-v/sunaoka/laravel-ses-template-driver)](composer.json)
-[![Laravel](https://img.shields.io/badge/laravel-9.x%20%7C%2010.x%20%7C%2011.x-red)](https://laravel.com/)
+[![Laravel](https://img.shields.io/badge/laravel-10.x%20%7C%2011.x-red)](https://laravel.com/)
 [![Test](https://github.com/sunaoka/laravel-ses-template-driver/actions/workflows/test.yml/badge.svg?branch=develop)](https://github.com/sunaoka/laravel-ses-template-driver/actions/workflows/test.yml)
 [![codecov](https://codecov.io/gh/sunaoka/laravel-ses-template-driver/branch/develop/graph/badge.svg)](https://codecov.io/gh/sunaoka/laravel-ses-template-driver)
 
@@ -100,7 +100,7 @@ class Foo
 
 ### Options
 
-Set Reply-to header
+Set `From`, `Reply-To` and custom header.
 
 ```php
 use Illuminate\Mail\Mailables\Address;
@@ -124,6 +124,16 @@ class Foo
         // Only with Amazon SES API v2 ('transport' is `sesv2template`)
         $options->header('X-Custom-Header1', 'Custom Value 1')
                 ->header('X-Custom-Header2', 'Custom Value 2');
+
+        // You can also set it in the constructor.
+        $options = new SesTemplateOptions([
+            from: new Address('alejandro.rosalez@example.com', 'Alejandro Rosalez'),
+            replyTo: new Address('alejandro.rosalez@example.com'),
+            headers: [
+                'X-Custom-Header1' => 'Custom Value 1',
+                'X-Custom-Header2' => 'Custom Value 2',
+            ],
+        ]);
 
         \Mail::to('alejandro.rosalez@example.com')
             ->cc('cc@example.com')
