@@ -11,34 +11,22 @@
 
 A Mail Driver with support for [Using templates to send personalized emails with the Amazon SES API](https://docs.aws.amazon.com/ses/latest/dg/send-personalized-email-api.html).
 
-## Version Compatibility
+## Support Policy
 
-| Laravel | Amazon SES template mail driver |
-| ------- | ------------------------------- |
-| 5.7.x   | 1.x                             |
-| 5.8.x   | 1.x                             |
-| 6.x     | 1.x                             |
-| 7.x     | 2.x                             |
-| 8.x     | 2.x                             |
-| 9.x     | 3.x, 4.x                        |
-| 10.x    | 3.x, 4.x                        |
-| 11.x    | 3.x, 4.x                        |
+| Version (*1) | Laravel (*2) | PHP (*3)  |
+| ------------ | ------------ | --------- |
+| [1][v1.x]    | 5.7 - 6      | 7.1 - 7.4 |
+| [2][v2.x]    | 7 - 8        | 7.2 - 8.1 |
+| [3][v3.x]    | 9 - 11       | 8.0 - 8.3 |
+| 4            | 10 - 11      | 8.1 - 8.3 |
+
+(*1) Supported Amazon SES template mail driver (This Driver) version
+
+(*2) Supported Laravel versions
+
+(*3) Supported PHP versions
 
 ## Installation
-
-### Laravel 5.7.x, 5.8.x, 6.x
-
-```bash
-composer require sunaoka/laravel-ses-template-driver:'^1.0'
-```
-
-### Laravel 7.x, 8.x
-
-```bash
-composer require sunaoka/laravel-ses-template-driver:'^2.0'
-```
-
-### Laravel 9.x, 10.x, 11.x
 
 ```bash
 composer require sunaoka/laravel-ses-template-driver
@@ -47,14 +35,6 @@ composer require sunaoka/laravel-ses-template-driver
 Next, set the following in `config/mail.php` and `config/services.php`.
 
 ### config/mail.php
-
-#### Laravel 5.7.x, 5.8.x, 6.x
-
-```php
-'driver' => 'ses.template',
-```
-
-#### Laravel 7.x, 8.x, 9.x, 10.x, 11.x
 
 ```php
 'default' => 'sestemplate',
@@ -337,7 +317,7 @@ Amazon SES API v2
 
 ## AWS Identity and Access Management (IAM) Policy
 
-### Amazon SES API (v1) 
+### Amazon SES API (v1)
 
 ```json
 {
@@ -381,3 +361,7 @@ Amazon SES API v2
 - [Using templates to send personalized emails with the Amazon SES API](https://docs.aws.amazon.com/ses/latest/dg/send-personalized-email-api.html)
 - [Class Aws\Ses\SesClient | AWS SDK for PHP 3.x](https://docs.aws.amazon.com/aws-sdk-php/v3/api/class-Aws.Ses.SesClient.html)
 - [Class Aws\SesV2\SesV2Client | AWS SDK for PHP 3.x](https://docs.aws.amazon.com/aws-sdk-php/v3/api/class-Aws.SesV2.SesV2Client.html)
+
+[v1.x]: https://github.com//sunaoka/laravel-ses-template-driver/tree/v1.x
+[v2.x]: https://github.com//sunaoka/laravel-ses-template-driver/tree/v2.x
+[v3.x]: https://github.com//sunaoka/laravel-ses-template-driver/tree/v3.x
