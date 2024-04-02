@@ -7,7 +7,6 @@ namespace Sunaoka\LaravelSesTemplateDriver\Tests\Commands;
 use Aws\Api\DateTimeResult;
 use Aws\MockHandler;
 use Aws\Result;
-use Exception;
 use Orchestra\Testbench\Attributes\DefineEnvironment;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Sunaoka\LaravelSesTemplateDriver\Tests\TestCase;
@@ -36,7 +35,7 @@ class ListTemplatesCommandTest extends TestCase
     /**
      * @param  int[]  $nums
      *
-     * @throws Exception
+     * @throws \Exception
      */
     #[DataProvider('invokeTextSuccessProvider')]
     #[DefineEnvironment('usesSesV1Transport')]
@@ -100,7 +99,7 @@ class ListTemplatesCommandTest extends TestCase
     /**
      * @param  int[]  $nums
      *
-     * @throws Exception
+     * @throws \Exception
      */
     #[DataProvider('invokeTextSuccessProvider')]
     #[DefineEnvironment('usesSesV2Transport')]
@@ -172,7 +171,7 @@ class ListTemplatesCommandTest extends TestCase
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     #[DefineEnvironment('usesSesV1Transport')]
     public function testSesV1InvokeJsonSuccess(): void
@@ -220,12 +219,16 @@ class ListTemplatesCommandTest extends TestCase
         }
 
         $this->artisan('ses-template:list-templates', ['--json' => true])
-            ->expectsOutput(json_encode(['TemplatesMetadata' => collect($table)->sortBy('Name')->values()->all()]))
+            ->expectsOutput(
+                json_encode([
+                    'TemplatesMetadata' => collect($table)->sortBy('Name')->values()->all(),
+                ], JSON_THROW_ON_ERROR)
+            )
             ->assertSuccessful();
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     #[DefineEnvironment('usesSesV2Transport')]
     public function testSesV2InvokeJsonSuccess(): void
@@ -273,7 +276,11 @@ class ListTemplatesCommandTest extends TestCase
         }
 
         $this->artisan('ses-template:list-templates', ['--json' => true])
-            ->expectsOutput(json_encode(['TemplatesMetadata' => collect($table)->sortBy('TemplateName')->values()->all()]))
+            ->expectsOutput(
+                json_encode([
+                    'TemplatesMetadata' => collect($table)->sortBy('TemplateName')->values()->all(),
+                ], JSON_THROW_ON_ERROR)
+            )
             ->assertSuccessful();
     }
 
@@ -281,7 +288,7 @@ class ListTemplatesCommandTest extends TestCase
     {
         $this->setFailureMockHandler();
 
-        $this->artisan('ses-template:list-templates', [])
+        $this->artisan('ses-template:list-templates')
             ->assertFailed();
     }
 

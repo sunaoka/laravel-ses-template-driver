@@ -83,6 +83,9 @@ class GetTemplateCommandTest extends TestCase
             ->assertSuccessful();
     }
 
+    /**
+     * @throws \JsonException
+     */
     #[DefineEnvironment('usesSesV1Transport')]
     public function testV1InvokeJsonSuccess(): void
     {
@@ -98,10 +101,13 @@ class GetTemplateCommandTest extends TestCase
         $this->setSuccessMockHandler($template);
 
         $this->artisan('ses-template:get-template', ['TemplateName' => 'MyTemplate', '--json' => true])
-            ->expectsOutput(json_encode($template))
+            ->expectsOutput(json_encode($template, JSON_THROW_ON_ERROR))
             ->assertSuccessful();
     }
 
+    /**
+     * @throws \JsonException
+     */
     #[DefineEnvironment('usesSesV2Transport')]
     public function testV2InvokeJsonSuccess(): void
     {
@@ -117,7 +123,7 @@ class GetTemplateCommandTest extends TestCase
         $this->setSuccessMockHandler($template);
 
         $this->artisan('ses-template:get-template', ['TemplateName' => 'MyTemplate', '--json' => true])
-            ->expectsOutput(json_encode($template))
+            ->expectsOutput(json_encode($template, JSON_THROW_ON_ERROR))
             ->assertSuccessful();
     }
 

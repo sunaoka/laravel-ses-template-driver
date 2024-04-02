@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Sunaoka\LaravelSesTemplateDriver\Commands;
 
 use Illuminate\Console\Command as BaseCommand;
-use JsonException;
 use Sunaoka\LaravelSesTemplateDriver\Services\SesServiceInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -35,7 +34,7 @@ abstract class Command extends BaseCommand
     /**
      * Writes a json to the output
      *
-     * @throws JsonException
+     * @throws \JsonException
      */
     protected function json(mixed $value): void
     {
@@ -55,6 +54,9 @@ abstract class Command extends BaseCommand
         }
     }
 
+    /**
+     * @throws \JsonException
+     */
     public function error($string, $verbosity = null): void
     {
         if ($this->isJson) {

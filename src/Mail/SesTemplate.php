@@ -31,6 +31,8 @@ class SesTemplate extends Mailable
      * Build the message.
      *
      * @return $this
+     *
+     * @throws \JsonException
      */
     public function build(): self
     {
@@ -50,7 +52,7 @@ class SesTemplate extends Mailable
             }
         }
 
-        return $this->subject($this->templateName)->html((string) json_encode($this->templateData));
+        return $this->subject($this->templateName)->html((string) json_encode($this->templateData, JSON_THROW_ON_ERROR));
     }
 
     /**

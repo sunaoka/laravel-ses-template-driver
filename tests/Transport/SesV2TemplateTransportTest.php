@@ -8,7 +8,6 @@ use Aws\CommandInterface;
 use Aws\MockHandler;
 use Aws\Result;
 use Aws\SesV2\Exception\SesV2Exception;
-use RuntimeException;
 use Sunaoka\LaravelSesTemplateDriver\Tests\TestCase;
 use Sunaoka\LaravelSesTemplateDriver\Traits\TransportTrait;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
@@ -21,6 +20,7 @@ class SesV2TemplateTransportTest extends TestCase
     use TransportTrait;
 
     /**
+     * @throws \JsonException
      * @throws TransportExceptionInterface
      */
     public function testSendBySender(): void
@@ -44,7 +44,7 @@ class SesV2TemplateTransportTest extends TestCase
             ->bcc(new Address('bcc@example.com'))
             ->replyTo(new Address('reply-to@example.com'))
             ->subject('TemplateName')
-            ->html((string) json_encode($templateData))
+            ->html((string) json_encode($templateData, JSON_THROW_ON_ERROR))
             ->attach('attach')
             ->embed('embed');
 
@@ -72,11 +72,12 @@ class SesV2TemplateTransportTest extends TestCase
         self::assertSame(['bcc@example.com'], $actual['Destination']['BccAddresses']);
         self::assertSame(['reply-to@example.com'], $actual['ReplyToAddresses']);
         self::assertSame('TemplateName', $actual['Content']['Template']['TemplateName']);
-        self::assertSame(json_encode($templateData), $actual['Content']['Template']['TemplateData']);
+        self::assertSame(json_encode($templateData, JSON_THROW_ON_ERROR), $actual['Content']['Template']['TemplateData']);
         self::assertSame([['Name' => 'X-Custom-Header', 'Value' => 'Custom Value']], $actual['Content']['Template']['Headers']);
     }
 
     /**
+     * @throws \JsonException
      * @throws TransportExceptionInterface
      */
     public function testSendByFrom(): void
@@ -100,7 +101,7 @@ class SesV2TemplateTransportTest extends TestCase
             ->bcc(new Address('bcc@example.com'))
             ->replyTo(new Address('reply-to@example.com'))
             ->subject('TemplateName')
-            ->html((string) json_encode($templateData))
+            ->html((string) json_encode($templateData, JSON_THROW_ON_ERROR))
             ->attach('attach')
             ->embed('embed');
 
@@ -128,11 +129,12 @@ class SesV2TemplateTransportTest extends TestCase
         self::assertSame(['bcc@example.com'], $actual['Destination']['BccAddresses']);
         self::assertSame(['reply-to@example.com'], $actual['ReplyToAddresses']);
         self::assertSame('TemplateName', $actual['Content']['Template']['TemplateName']);
-        self::assertSame(json_encode($templateData), $actual['Content']['Template']['TemplateData']);
+        self::assertSame(json_encode($templateData, JSON_THROW_ON_ERROR), $actual['Content']['Template']['TemplateData']);
         self::assertSame([['Name' => 'X-Custom-Header', 'Value' => 'Custom Value']], $actual['Content']['Template']['Headers']);
     }
 
     /**
+     * @throws \JsonException
      * @throws TransportExceptionInterface
      */
     public function testFailed(): void
@@ -141,7 +143,7 @@ class SesV2TemplateTransportTest extends TestCase
             ->sender(new Address('myself@example.com', 'Joe Q. Public'))
             ->to(new Address('me@example.com'))
             ->subject('TemplateName')
-            ->html((string) json_encode([]));
+            ->html((string) json_encode([], JSON_THROW_ON_ERROR));
 
         $mockHandler = new MockHandler();
         $mockHandler->append(static function (CommandInterface $cmd) {
@@ -154,7 +156,7 @@ class SesV2TemplateTransportTest extends TestCase
 
         config(['services.ses.handler' => $mockHandler]);
 
-        $this->expectException(RuntimeException::class);
+        $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Request to Amazon SES API v2 failed. Reason: Template MyTemplate does not exist.');
 
         $this->createSesV2TemplateTransport()->send($message);

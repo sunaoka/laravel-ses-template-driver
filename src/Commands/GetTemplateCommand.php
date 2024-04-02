@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Sunaoka\LaravelSesTemplateDriver\Commands;
 
 use Aws\Exception\AwsException;
-use JsonException;
 
 class GetTemplateCommand extends Command
 {
@@ -30,7 +29,7 @@ class GetTemplateCommand extends Command
     /**
      * Execute the console command.
      *
-     * @throws JsonException
+     * @throws \JsonException
      */
     public function handle(): int
     {

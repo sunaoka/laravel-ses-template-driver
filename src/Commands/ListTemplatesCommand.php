@@ -4,10 +4,6 @@ declare(strict_types=1);
 
 namespace Sunaoka\LaravelSesTemplateDriver\Commands;
 
-use DateTimeZone;
-use Exception;
-use JsonException;
-
 class ListTemplatesCommand extends Command
 {
     /**
@@ -34,8 +30,8 @@ class ListTemplatesCommand extends Command
     /**
      * Execute the console command.
      *
-     * @throws JsonException
-     * @throws Exception
+     * @throws \JsonException
+     * @throws \Exception
      */
     public function handle(): int
     {
@@ -59,7 +55,7 @@ class ListTemplatesCommand extends Command
             return Command::SUCCESS;
         }
 
-        $timezone = new DateTimeZone(config('app.timezone'));  // @phpstan-ignore-line
+        $timezone = new \DateTimeZone(config('app.timezone'));  // @phpstan-ignore-line
         $choices = [];
         foreach ($templates as $index => $template) {
             $choices[] = [
