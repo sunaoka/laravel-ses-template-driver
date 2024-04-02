@@ -7,6 +7,7 @@ namespace Sunaoka\LaravelSesTemplateDriver\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Arr;
 
 class SesTemplate extends Mailable
 {
@@ -18,13 +19,11 @@ class SesTemplate extends Mailable
      *
      * @param  string  $templateName  Template Name
      * @param  array  $templateData  Template Data
-     * @param  array  $options  Options
-     * @return void
      */
     public function __construct(
         private string $templateName,
         private array $templateData,
-        private array $options = []
+        private SesTemplateOptions $options = new SesTemplateOptions(),
     ) {
     }
 
@@ -32,18 +31,28 @@ class SesTemplate extends Mailable
      * Build the message.
      *
      * @return $this
+     *
+     * @throws \JsonException
      */
     public function build(): self
     {
-        if (isset($this->options['from']['address'])) {
-            $this->from($this->options['from']['address'], $this->options['from']['name'] ?? null);
+        if ($this->options->from !== null) {
+            $this->from($this->options->from);
         }
 
-        if (isset($this->options['reply_to']['address'])) {
-            $this->replyTo($this->options['reply_to']['address'], $this->options['reply_to']['name'] ?? null);
+        if ($this->options->replyTo !== null) {
+            $this->replyTo($this->options->replyTo);
         }
 
-        return $this->subject($this->templateName)->html((string) json_encode($this->templateData));
+        if ($this->options->headers !== null && Arr::isAssoc($this->options->headers)) {
+            foreach ($this->options->headers as $key => $value) {
+                if (is_string($value)) {
+                    $this->metadata((string) $key, $value);
+                }
+            }
+        }
+
+        return $this->subject($this->templateName)->html((string) json_encode($this->templateData, JSON_THROW_ON_ERROR));
     }
 
     /**
@@ -81,7 +90,7 @@ class SesTemplate extends Mailable
     /**
      * Get the transmission options being used by the transport.
      */
-    public function getOptions(): array
+    public function getOptions(): SesTemplateOptions
     {
         return $this->options;
     }
@@ -89,7 +98,7 @@ class SesTemplate extends Mailable
     /**
      * Set the transmission options being used by the transport.
      */
-    public function setOptions(array $options): void
+    public function setOptions(SesTemplateOptions $options): void
     {
         $this->options = $options;
     }

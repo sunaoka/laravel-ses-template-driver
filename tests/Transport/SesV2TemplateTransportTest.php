@@ -7,14 +7,15 @@ namespace Sunaoka\LaravelSesTemplateDriver\Tests\Transport;
 use Aws\CommandInterface;
 use Aws\MockHandler;
 use Aws\Result;
-use Aws\Ses\Exception\SesException;
+use Aws\SesV2\Exception\SesV2Exception;
 use Sunaoka\LaravelSesTemplateDriver\Tests\TestCase;
 use Sunaoka\LaravelSesTemplateDriver\Traits\TransportTrait;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Mailer\Header\MetadataHeader;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
 
-class SesTemplateTransportTest extends TestCase
+class SesV2TemplateTransportTest extends TestCase
 {
     use TransportTrait;
 
@@ -47,12 +48,14 @@ class SesTemplateTransportTest extends TestCase
             ->attach('attach')
             ->embed('embed');
 
+        $message->getHeaders()->add(new MetadataHeader('X-Custom-Header', 'Custom Value'));
+
         $mockHandler = new MockHandler();
         $mockHandler->append(new Result(['MessageId' => 'xxx']));
 
         config(['services.ses.handler' => $mockHandler]);
 
-        $transport = $this->createSesTemplateTransport();
+        $transport = $this->createSesV2TemplateTransport();
 
         $actual = $transport->send($message);
 
@@ -63,18 +66,19 @@ class SesTemplateTransportTest extends TestCase
         self::assertSame('MyConfigurationSet', $actual['ConfigurationSetName']);
         self::assertSame('foo', $actual['Tags'][0]['Name']);
         self::assertSame('bar', $actual['Tags'][0]['Value']);
-        self::assertSame('"Joe Q. Public" <myself@example.com>', $actual['Source']);
+        self::assertSame('"Joe Q. Public" <myself@example.com>', $actual['FromEmailAddress']);
         self::assertSame(['me@example.com'], $actual['Destination']['ToAddresses']);
         self::assertSame(['cc@example.com'], $actual['Destination']['CcAddresses']);
         self::assertSame(['bcc@example.com'], $actual['Destination']['BccAddresses']);
         self::assertSame(['reply-to@example.com'], $actual['ReplyToAddresses']);
-        self::assertSame('TemplateName', $actual['Template']);
-        self::assertSame(json_encode($templateData, JSON_THROW_ON_ERROR), $actual['TemplateData']);
+        self::assertSame('TemplateName', $actual['Content']['Template']['TemplateName']);
+        self::assertSame(json_encode($templateData, JSON_THROW_ON_ERROR), $actual['Content']['Template']['TemplateData']);
+        self::assertSame([['Name' => 'X-Custom-Header', 'Value' => 'Custom Value']], $actual['Content']['Template']['Headers']);
     }
 
     /**
-     * @throws TransportExceptionInterface
      * @throws \JsonException
+     * @throws TransportExceptionInterface
      */
     public function testSendByFrom(): void
     {
@@ -101,12 +105,14 @@ class SesTemplateTransportTest extends TestCase
             ->attach('attach')
             ->embed('embed');
 
+        $message->getHeaders()->add(new MetadataHeader('X-Custom-Header', 'Custom Value'));
+
         $mockHandler = new MockHandler();
         $mockHandler->append(new Result(['MessageId' => 'xxx']));
 
         config(['services.ses.handler' => $mockHandler]);
 
-        $transport = $this->createSesTemplateTransport();
+        $transport = $this->createSesV2TemplateTransport();
 
         $actual = $transport->send($message);
 
@@ -117,13 +123,14 @@ class SesTemplateTransportTest extends TestCase
         self::assertSame('MyConfigurationSet', $actual['ConfigurationSetName']);
         self::assertSame('foo', $actual['Tags'][0]['Name']);
         self::assertSame('bar', $actual['Tags'][0]['Value']);
-        self::assertSame('"Giant; \"Big\" Box" <myself@example.com>', $actual['Source']);
+        self::assertSame('"Giant; \"Big\" Box" <myself@example.com>', $actual['FromEmailAddress']);
         self::assertSame(['me@example.com'], $actual['Destination']['ToAddresses']);
         self::assertSame(['cc@example.com'], $actual['Destination']['CcAddresses']);
         self::assertSame(['bcc@example.com'], $actual['Destination']['BccAddresses']);
         self::assertSame(['reply-to@example.com'], $actual['ReplyToAddresses']);
-        self::assertSame('TemplateName', $actual['Template']);
-        self::assertSame(json_encode($templateData, JSON_THROW_ON_ERROR), $actual['TemplateData']);
+        self::assertSame('TemplateName', $actual['Content']['Template']['TemplateName']);
+        self::assertSame(json_encode($templateData, JSON_THROW_ON_ERROR), $actual['Content']['Template']['TemplateData']);
+        self::assertSame([['Name' => 'X-Custom-Header', 'Value' => 'Custom Value']], $actual['Content']['Template']['Headers']);
     }
 
     /**
@@ -140,7 +147,7 @@ class SesTemplateTransportTest extends TestCase
 
         $mockHandler = new MockHandler();
         $mockHandler->append(static function (CommandInterface $cmd) {
-            return new SesException('', $cmd, [
+            return new SesV2Exception('', $cmd, [
                 'errorType' => 'client',
                 'code' => 'NotFoundException',
                 'message' => 'Template MyTemplate does not exist.',
@@ -150,23 +157,21 @@ class SesTemplateTransportTest extends TestCase
         config(['services.ses.handler' => $mockHandler]);
 
         $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('Request to Amazon SES API failed. Reason: Template MyTemplate does not exist.');
+        $this->expectExceptionMessage('Request to Amazon SES API v2 failed. Reason: Template MyTemplate does not exist.');
 
-        $transport = $this->createSesTemplateTransport();
-
-        $transport->send($message);
+        $this->createSesV2TemplateTransport()->send($message);
     }
 
     public function testToString(): void
     {
-        $transport = $this->createSesTemplateTransport();
+        $transport = $this->createSesV2TemplateTransport();
 
-        self::assertSame('sestemplate', (string) $transport);
+        self::assertSame('sesv2template', (string) $transport);
     }
 
     public function testSes(): void
     {
-        $transport = $this->createSesTemplateTransport();
+        $transport = $this->createSesV2TemplateTransport();
 
         self::assertSame('us-east-2', $transport->ses()->getRegion());
     }

@@ -1,7 +1,7 @@
 {
     "name": "sunaoka/laravel-ses-template-driver",
     "description": "Amazon SES template mail driver for Laravel.",
-    "keywords": ["laravel", "aws", "ses", "mail", "driver"],
+    "keywords": ["laravel", "aws", "ses", "sesv2", "mail", "driver"],
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -11,17 +11,17 @@
         }
     ],
     "require": {
-        "php": "^8.0",
+        "php": "^8.1",
         "ext-json": "*",
         "ext-mbstring": "*",
         "aws/aws-sdk-php": "^3.245.0",
-        "illuminate/console": "^9.0 || ^10.0 || ^11.0",
-        "illuminate/mail": "^9.0 || ^10.0 || ^11.0"
+        "illuminate/console": "^10.0 || ^11.0",
+        "illuminate/mail": "^10.0 || ^11.0"
     },
     "require-dev": {
         "larastan/larastan": "^2.7.0",
-        "laravel/pint": "^1.5",
-        "orchestra/testbench": "^7.0 || ^8.0 || ^9.0"
+        "laravel/pint": "^1.6",
+        "orchestra/testbench": "^8.0 || ^9.0"
     },
     "autoload": {
         "psr-4": {
@@ -35,7 +35,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-main": "3.0-dev"
+            "dev-main": "4.0-dev"
         },
         "laravel": {
             "providers": [
