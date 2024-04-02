@@ -6,12 +6,11 @@ namespace Sunaoka\LaravelSesTemplateDriver\Transport;
 
 use Aws\Exception\AwsException;
 use Aws\Ses\SesClient;
-use Stringable;
 use Symfony\Component\Mailer\SentMessage;
 use Symfony\Component\Mailer\Transport\AbstractTransport;
 use Symfony\Component\Mime\Email;
 
-class SesTemplateTransport extends AbstractTransport implements Stringable
+class SesTemplateTransport extends AbstractTransport
 {
     /**
      * Create a new SES transport instance.
