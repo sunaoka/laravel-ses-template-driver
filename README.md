@@ -78,6 +78,7 @@ If you need to include [additional options](https://docs.aws.amazon.com/aws-sdk-
 ## Basic usage
 
 ```php
+use Illuminate\Support\Facades\Mail;
 use Sunaoka\LaravelSesTemplateDriver\Mail\SesTemplate;
 
 class Foo
@@ -86,11 +87,11 @@ class Foo
     {
         $templateName = 'MyTemplate';
         $templateData = [
-            'name'           => 'Alejandro',
+            'name' => 'Alejandro',
             'favoriteanimal' => 'alligator',
         ];
 
-        \Mail::to('alejandro.rosalez@example.com')
+        Mail::to('alejandro.rosalez@example.com')
             ->cc('cc@example.com')
             ->bcc('bcc@example.com')
             ->send(new SesTemplate($templateName, $templateData));
@@ -104,6 +105,7 @@ Set `From`, `Reply-To` and custom header.
 
 ```php
 use Illuminate\Mail\Mailables\Address;
+use Illuminate\Support\Facades\Mail;
 use Sunaoka\LaravelSesTemplateDriver\Mail\SesTemplate;
 use Sunaoka\LaravelSesTemplateDriver\Mail\SesTemplateOptions;
 
@@ -113,7 +115,7 @@ class Foo
     {
         $templateName = 'MyTemplate';
         $templateData = [
-            'name'           => 'Alejandro',
+            'name' => 'Alejandro',
             'favoriteanimal' => 'alligator',
         ];
 
@@ -126,16 +128,16 @@ class Foo
                 ->header('X-Custom-Header2', 'Custom Value 2');
 
         // You can also set it in the constructor.
-        $options = new SesTemplateOptions([
+        $options = new SesTemplateOptions(
             from: new Address('alejandro.rosalez@example.com', 'Alejandro Rosalez'),
             replyTo: new Address('alejandro.rosalez@example.com'),
             headers: [
                 'X-Custom-Header1' => 'Custom Value 1',
                 'X-Custom-Header2' => 'Custom Value 2',
             ],
-        ]);
+        );
 
-        \Mail::to('alejandro.rosalez@example.com')
+        Mail::to('alejandro.rosalez@example.com')
             ->cc('cc@example.com')
             ->bcc('bcc@example.com')
             ->send(new SesTemplate($templateName, $templateData, $options));
