@@ -64,10 +64,15 @@ class SesV2TemplateTransport extends AbstractTransport
             );
         }
 
+        /** @var string $messageId */
         $messageId = $result->get('MessageId');
+
+        $message->setMessageId($messageId);
 
         $email->getHeaders()->addHeader('X-Message-ID', $messageId);
         $email->getHeaders()->addHeader('X-SES-Message-ID', $messageId);
+
+        $email->getHeaders()->addHeader('X-Original-Message-ID', $message->getMessageId());
     }
 
     /**

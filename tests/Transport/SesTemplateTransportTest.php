@@ -47,16 +47,30 @@ class SesTemplateTransportTest extends TestCase
             ->attach('attach')
             ->embed('embed');
 
+        $messageId = '0123456789abcdef-01234567-0123-0123-0123-0123456789ab-000000';
+
         $mockHandler = new MockHandler();
-        $mockHandler->append(new Result(['MessageId' => 'xxx']));
+        $mockHandler->append(new Result(['MessageId' => $messageId]));
 
         config(['services.ses.handler' => $mockHandler]);
 
         $transport = $this->createSesTemplateTransport();
 
+        $originalMessageId = $message->generateMessageId();
+        $message->getHeaders()->addIdHeader('Message-ID', $originalMessageId);
+
         $actual = $transport->send($message);
 
         self::assertNotNull($actual);
+        self::assertSame($messageId, $actual->getMessageId());
+        self::assertInstanceOf(Email::class, $actual->getOriginalMessage());
+
+        /** @var Email $originalMessage */
+        $originalMessage = $actual->getOriginalMessage();
+
+        self::assertSame($messageId, $originalMessage->getHeaders()->get('X-Message-ID')?->getBody());
+        self::assertSame($messageId, $originalMessage->getHeaders()->get('X-SES-Message-ID')?->getBody());
+        self::assertSame($originalMessageId, $originalMessage->getHeaders()->get('X-Original-Message-ID')?->getBody());
 
         $actual = $mockHandler->getLastCommand()->toArray();
 
@@ -101,16 +115,30 @@ class SesTemplateTransportTest extends TestCase
             ->attach('attach')
             ->embed('embed');
 
+        $messageId = '0123456789abcdef-01234567-0123-0123-0123-0123456789ab-000000';
+
         $mockHandler = new MockHandler();
-        $mockHandler->append(new Result(['MessageId' => 'xxx']));
+        $mockHandler->append(new Result(['MessageId' => $messageId]));
 
         config(['services.ses.handler' => $mockHandler]);
 
         $transport = $this->createSesTemplateTransport();
 
+        $originalMessageId = $message->generateMessageId();
+        $message->getHeaders()->addIdHeader('Message-ID', $originalMessageId);
+
         $actual = $transport->send($message);
 
         self::assertNotNull($actual);
+        self::assertSame($messageId, $actual->getMessageId());
+        self::assertInstanceOf(Email::class, $actual->getOriginalMessage());
+
+        /** @var Email $originalMessage */
+        $originalMessage = $actual->getOriginalMessage();
+
+        self::assertSame($messageId, $originalMessage->getHeaders()->get('X-Message-ID')?->getBody());
+        self::assertSame($messageId, $originalMessage->getHeaders()->get('X-SES-Message-ID')?->getBody());
+        self::assertSame($originalMessageId, $originalMessage->getHeaders()->get('X-Original-Message-ID')?->getBody());
 
         $actual = $mockHandler->getLastCommand()->toArray();
 
@@ -152,9 +180,7 @@ class SesTemplateTransportTest extends TestCase
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Request to Amazon SES API failed. Reason: Template MyTemplate does not exist.');
 
-        $transport = $this->createSesTemplateTransport();
-
-        $transport->send($message);
+        $this->createSesTemplateTransport()->send($message);
     }
 
     public function testToString(): void
