@@ -91,10 +91,12 @@ class Foo
             'favoriteanimal' => 'alligator',
         ];
 
-        Mail::to('alejandro.rosalez@example.com')
+        $result = Mail::to('alejandro.rosalez@example.com')
             ->cc('cc@example.com')
             ->bcc('bcc@example.com')
             ->send(new SesTemplate($templateName, $templateData));
+            
+        echo $result->getMessageId();  // Message-ID overwritten by Amazon SES
     }
 }
 ```
@@ -137,10 +139,12 @@ class Foo
             ],
         );
 
-        Mail::to('alejandro.rosalez@example.com')
+        $result = Mail::to('alejandro.rosalez@example.com')
             ->cc('cc@example.com')
             ->bcc('bcc@example.com')
             ->send(new SesTemplate($templateName, $templateData, $options));
+            
+        echo $result->getMessageId();  // Message-ID overwritten by Amazon SES
     }
 }
 ```
