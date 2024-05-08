@@ -48,18 +48,32 @@ class SesV2TemplateTransportTest extends TestCase
             ->attach('attach')
             ->embed('embed');
 
+        $messageId = '0123456789abcdef-01234567-0123-0123-0123-0123456789ab-000000';
+
         $message->getHeaders()->add(new MetadataHeader('X-Custom-Header', 'Custom Value'));
 
         $mockHandler = new MockHandler();
-        $mockHandler->append(new Result(['MessageId' => 'xxx']));
+        $mockHandler->append(new Result(['MessageId' => $messageId]));
 
         config(['services.ses.handler' => $mockHandler]);
 
         $transport = $this->createSesV2TemplateTransport();
 
+        $originalMessageId = $message->generateMessageId();
+        $message->getHeaders()->addIdHeader('Message-ID', $originalMessageId);
+
         $actual = $transport->send($message);
 
         self::assertNotNull($actual);
+        self::assertSame($messageId, $actual->getMessageId());
+        self::assertInstanceOf(Email::class, $actual->getOriginalMessage());
+
+        /** @var Email $originalMessage */
+        $originalMessage = $actual->getOriginalMessage();
+
+        self::assertSame($messageId, $originalMessage->getHeaders()->get('X-Message-ID')?->getBody());
+        self::assertSame($messageId, $originalMessage->getHeaders()->get('X-SES-Message-ID')?->getBody());
+        self::assertSame($originalMessageId, $originalMessage->getHeaders()->get('X-Original-Message-ID')?->getBody());
 
         $actual = $mockHandler->getLastCommand()->toArray();
 
@@ -105,18 +119,32 @@ class SesV2TemplateTransportTest extends TestCase
             ->attach('attach')
             ->embed('embed');
 
+        $messageId = '0123456789abcdef-01234567-0123-0123-0123-0123456789ab-000000';
+
         $message->getHeaders()->add(new MetadataHeader('X-Custom-Header', 'Custom Value'));
 
         $mockHandler = new MockHandler();
-        $mockHandler->append(new Result(['MessageId' => 'xxx']));
+        $mockHandler->append(new Result(['MessageId' => $messageId]));
 
         config(['services.ses.handler' => $mockHandler]);
 
         $transport = $this->createSesV2TemplateTransport();
 
+        $originalMessageId = $message->generateMessageId();
+        $message->getHeaders()->addIdHeader('Message-ID', $originalMessageId);
+
         $actual = $transport->send($message);
 
         self::assertNotNull($actual);
+        self::assertSame($messageId, $actual->getMessageId());
+        self::assertInstanceOf(Email::class, $actual->getOriginalMessage());
+
+        /** @var Email $originalMessage */
+        $originalMessage = $actual->getOriginalMessage();
+
+        self::assertSame($messageId, $originalMessage->getHeaders()->get('X-Message-ID')?->getBody());
+        self::assertSame($messageId, $originalMessage->getHeaders()->get('X-SES-Message-ID')?->getBody());
+        self::assertSame($originalMessageId, $originalMessage->getHeaders()->get('X-Original-Message-ID')?->getBody());
 
         $actual = $mockHandler->getLastCommand()->toArray();
 
