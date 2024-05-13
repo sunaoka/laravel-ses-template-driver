@@ -55,7 +55,7 @@ class ListTemplatesCommand extends Command
             return Command::SUCCESS;
         }
 
-        $timezone = new \DateTimeZone(config('app.timezone'));  // @phpstan-ignore-line
+        $timezone = new \DateTimeZone(config('app.timezone'));  // @phpstan-ignore argument.type
         $choices = [];
         foreach ($templates as $index => $template) {
             $choices[] = [

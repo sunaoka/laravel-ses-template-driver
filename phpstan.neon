@@ -5,12 +5,12 @@ parameters:
 
     level: 9
 
-    checkMissingIterableValueType: false
-
     paths:
         - src/
         - tests/
 
     ignoreErrors:
+        - identifier: missingType.iterableValue
         - message: '#Cannot call method .+ on Illuminate\\Testing\\PendingCommand\|int#'
+          identifier: method.nonObject
           path: tests/Commands/*
