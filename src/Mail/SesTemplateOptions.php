@@ -15,8 +15,7 @@ class SesTemplateOptions
         public ?Address $from = null,
         public ?Address $replyTo = null,
         public ?array $headers = null
-    ) {
-    }
+    ) {}
 
     public function from(Address $from): self
     {

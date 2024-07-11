@@ -24,8 +24,7 @@ class SesTemplate extends Mailable
         private string $templateName,
         private array $templateData,
         private SesTemplateOptions $options = new SesTemplateOptions(),
-    ) {
-    }
+    ) {}
 
     /**
      * Build the message.

@@ -14,9 +14,7 @@ use Illuminate\Support\Collection;
  */
 class SesV2Service implements SesServiceInterface
 {
-    public function __construct(protected SesV2Client $client)
-    {
-    }
+    public function __construct(protected SesV2Client $client) {}
 
     public function getClient(): SesV2Client
     {
