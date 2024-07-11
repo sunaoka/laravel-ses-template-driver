@@ -10,6 +10,11 @@ jobs:
 
   test_v4:
     runs-on: ${{ matrix.os }}
+
+    env:
+      latest_php: 8.3
+      latest_laravel: 11
+
     strategy:
       fail-fast: false
       matrix:
@@ -39,8 +44,7 @@ jobs:
           composer update --prefer-dist --no-interaction --no-progress
 
       - name: Migrate phpunit XML configuration
-        continue-on-error: true
-        run: vendor/bin/phpunit --migrate-configuration
+        run: vendor/bin/phpunit --migrate-configuration || true
 
       - name: Run test suite
         run: vendor/bin/phpunit --coverage-clover=coverage.xml
@@ -51,6 +55,8 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./coverage.xml
           fail_ci_if_error: false
+        if: matrix.php == env.latest_php && matrix.laravel == env.latest_laravel
+
 
   test_v3:
     runs-on: ${{ matrix.os }}
@@ -89,18 +95,11 @@ jobs:
           composer update --prefer-dist --no-interaction --no-progress
 
       - name: Migrate phpunit XML configuration
-        continue-on-error: true
-        run: vendor/bin/phpunit --migrate-configuration
+        run: vendor/bin/phpunit --migrate-configuration || true
 
       - name: Run test suite
-        run: vendor/bin/phpunit --coverage-clover=coverage.xml
+        run: vendor/bin/phpunit
 
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./coverage.xml
-          fail_ci_if_error: false
 
   test_v2:
     runs-on: ${{ matrix.os }}
@@ -143,14 +142,9 @@ jobs:
         run: composer install --quiet --no-ansi --prefer-dist --no-progress --no-interaction
 
       - name: Run test suite
-        run: vendor/bin/phpunit --coverage-clover=coverage.xml
+        run: vendor/bin/phpunit
 
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./coverage.xml
-          fail_ci_if_error: false
+
   test_v1:
     runs-on: ${{ matrix.os }}
     strategy:
@@ -184,11 +178,4 @@ jobs:
           composer update --prefer-dist --no-interaction --no-progress
 
       - name: Run test suite
-        run: vendor/bin/phpunit --coverage-clover=coverage.xml
-
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./coverage.xml
-          fail_ci_if_error: false
+        run: vendor/bin/phpunit
