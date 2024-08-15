@@ -43,9 +43,13 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install dependencies
-        run: |
-          composer require "illuminate/mail=^${{ matrix.laravel }}" --no-update
-          composer update --prefer-dist --no-interaction --no-progress
+        uses: nick-fields/retry@v3
+        with:
+          timeout_seconds: 30
+          max_attempts: 3
+          command: |
+            composer require "illuminate/mail=^${{ matrix.laravel }}" --no-update
+            composer install --quiet --no-plugins --no-ansi --prefer-dist --no-progress --no-interaction
 
       - name: Migrate phpunit XML configuration
         run: vendor/bin/phpunit --migrate-configuration || true
@@ -94,9 +98,13 @@ jobs:
           ref: v3.x
 
       - name: Install dependencies
-        run: |
-          composer require "illuminate/mail=^${{ matrix.laravel }}" --no-update
-          composer update --prefer-dist --no-interaction --no-progress
+        uses: nick-fields/retry@v3
+        with:
+          timeout_seconds: 30
+          max_attempts: 3
+          command: |
+            composer require "illuminate/mail=^${{ matrix.laravel }}" --no-update
+            composer install --quiet --no-plugins --no-ansi --prefer-dist --no-progress --no-interaction
 
       - name: Migrate phpunit XML configuration
         run: vendor/bin/phpunit --migrate-configuration || true
@@ -143,7 +151,13 @@ jobs:
           ref: v2.x
 
       - name: Install dependencies
-        run: composer install --quiet --no-ansi --prefer-dist --no-progress --no-interaction
+        uses: nick-fields/retry@v3
+        with:
+          timeout_seconds: 30
+          max_attempts: 3
+          command: |
+            composer require "illuminate/mail=^${{ matrix.laravel }}" --no-update
+            composer install --quiet --no-plugins --no-ansi --prefer-dist --no-progress --no-interaction
 
       - name: Run test suite
         run: vendor/bin/phpunit
@@ -177,9 +191,13 @@ jobs:
           ref: v1.x
 
       - name: Install dependencies
-        run: |
-          composer require "illuminate/mail=^${{ matrix.laravel }}" --no-update
-          composer update --prefer-dist --no-interaction --no-progress
+        uses: nick-fields/retry@v3
+        with:
+          timeout_seconds: 30
+          max_attempts: 3
+          command: |
+            composer require "illuminate/mail=^${{ matrix.laravel }}" --no-update
+            composer install --quiet --no-plugins --no-ansi --prefer-dist --no-progress --no-interaction
 
       - name: Run test suite
         run: vendor/bin/phpunit
