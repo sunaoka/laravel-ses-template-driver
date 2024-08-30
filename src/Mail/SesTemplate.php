@@ -7,7 +7,6 @@ namespace Sunaoka\LaravelSesTemplateDriver\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Arr;
 
 class SesTemplate extends Mailable
 {
@@ -23,9 +22,8 @@ class SesTemplate extends Mailable
     public function __construct(
         private string $templateName,
         private array $templateData,
-        private SesTemplateOptions $options = new SesTemplateOptions(),
-    ) {
-    }
+        private SesTemplateOptions $options = new SesTemplateOptions,
+    ) {}
 
     /**
      * Build the message.
@@ -44,11 +42,9 @@ class SesTemplate extends Mailable
             $this->replyTo($this->options->replyTo);
         }
 
-        if ($this->options->headers !== null && Arr::isAssoc($this->options->headers)) {
+        if ($this->options->headers !== null) {
             foreach ($this->options->headers as $key => $value) {
-                if (is_string($value)) {
-                    $this->metadata((string) $key, $value);
-                }
+                $this->metadata($key, $value);
             }
         }
 

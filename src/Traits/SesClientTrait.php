@@ -16,7 +16,7 @@ trait SesClientTrait
     public function createSesClient(array $config = []): SesClient
     {
         $config = array_merge(
-            config('services.ses', []),  // @phpstan-ignore-line
+            config('services.ses', []),  // @phpstan-ignore argument.type
             ['version' => 'latest', 'service' => 'email'],
             $config
         );
@@ -32,7 +32,7 @@ trait SesClientTrait
     public function createSesV2Client(array $config = []): SesV2Client
     {
         $config = array_merge(
-            config('services.ses', []),  // @phpstan-ignore-line
+            config('services.ses', []),  // @phpstan-ignore argument.type
             ['version' => 'latest'],
             $config
         );

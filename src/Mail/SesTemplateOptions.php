@@ -9,13 +9,23 @@ use Illuminate\Mail\Mailables\Address;
 class SesTemplateOptions
 {
     /**
-     * @param  array<string, string>|null  $headers
+     * @var non-empty-array<string, string>|null
+     */
+    public ?array $headers = null;
+
+    /**
+     * @param  non-empty-array<string, string>|null  $headers
      */
     public function __construct(
         public ?Address $from = null,
         public ?Address $replyTo = null,
-        public ?array $headers = null
+        ?array $headers = null
     ) {
+        if ($headers !== null) {
+            foreach ($headers as $key => $value) {
+                $this->header($key, $value);
+            }
+        }
     }
 
     public function from(Address $from): self

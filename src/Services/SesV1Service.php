@@ -15,9 +15,7 @@ use Illuminate\Support\Collection;
  */
 class SesV1Service implements SesServiceInterface
 {
-    public function __construct(protected SesClient $client)
-    {
-    }
+    public function __construct(protected SesClient $client) {}
 
     public function getClient(): SesClient
     {
@@ -26,7 +24,7 @@ class SesV1Service implements SesServiceInterface
 
     public function listTemplates(): Collection
     {
-        $templates = new Collection();
+        $templates = new Collection;
         $nextToken = null;
 
         do {

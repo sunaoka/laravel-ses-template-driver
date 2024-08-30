@@ -14,9 +14,7 @@ use Illuminate\Support\Collection;
  */
 class SesV2Service implements SesServiceInterface
 {
-    public function __construct(protected SesV2Client $client)
-    {
-    }
+    public function __construct(protected SesV2Client $client) {}
 
     public function getClient(): SesV2Client
     {
@@ -25,7 +23,7 @@ class SesV2Service implements SesServiceInterface
 
     public function listTemplates(): Collection
     {
-        $templates = new Collection();
+        $templates = new Collection;
 
         $results = $this->getClient()->getPaginator('ListEmailTemplates', [
             'PageSize' => 100,

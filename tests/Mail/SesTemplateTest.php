@@ -47,7 +47,7 @@ class SesTemplateTest extends TestCase
      */
     public function testBuildWithFrom(): void
     {
-        $options = new SesTemplateOptions();
+        $options = new SesTemplateOptions;
         $options->from(new Address('example@example.com', 'example name'));
 
         $mailable = new SesTemplate('TestTemplate', ['foo' => 'bar'], $options);
@@ -61,7 +61,7 @@ class SesTemplateTest extends TestCase
      */
     public function testBuildWithFromOnlyAddress(): void
     {
-        $options = new SesTemplateOptions();
+        $options = new SesTemplateOptions;
         $options->from(new Address('example@example.com'));
 
         $mailable = new SesTemplate('TestTemplate', ['foo' => 'bar'], $options);
@@ -75,7 +75,7 @@ class SesTemplateTest extends TestCase
      */
     public function testBuildWithReplyTo(): void
     {
-        $options = new SesTemplateOptions();
+        $options = new SesTemplateOptions;
         $options->replyTo(new Address('example@example.com', 'example name'));
 
         $mailable = new SesTemplate('TestTemplate', ['foo' => 'bar'], $options);
@@ -89,7 +89,7 @@ class SesTemplateTest extends TestCase
      */
     public function testBuildWithReplyToOnlyAddress(): void
     {
-        $options = new SesTemplateOptions();
+        $options = new SesTemplateOptions;
         $options->replyTo(new Address('example@example.com'));
 
         $mailable = new SesTemplate('TestTemplate', ['foo' => 'bar'], $options);
@@ -104,7 +104,7 @@ class SesTemplateTest extends TestCase
     #[DefineEnvironment('usesSesV2Transport')]
     public function testBuildWithHeaders(): void
     {
-        $options = new SesTemplateOptions();
+        $options = new SesTemplateOptions;
         $options->header('X-Foo', 'foo')
             ->header('X-Bar', 'bar');
 
@@ -137,7 +137,7 @@ class SesTemplateTest extends TestCase
 
     public function testOptions(): void
     {
-        $options = new SesTemplateOptions();
+        $options = new SesTemplateOptions;
         $options->from(new Address('example@example.com', 'example name'))
             ->replyTo(new Address('example@example.com', 'example name'))
             ->header('X-Foo', 'foo')

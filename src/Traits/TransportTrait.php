@@ -18,7 +18,7 @@ trait TransportTrait
     {
         return new SesTemplateTransport(
             $this->createSesClient($config),
-            config('services.ses.options', [])  // @phpstan-ignore-line
+            config('services.ses.options', [])  // @phpstan-ignore argument.type
         );
     }
 
@@ -29,7 +29,7 @@ trait TransportTrait
     {
         return new SesV2TemplateTransport(
             $this->createSesV2Client($config),
-            config('services.ses.options', [])  // @phpstan-ignore-line
+            config('services.ses.options', [])  // @phpstan-ignore argument.type
         );
     }
 }
