@@ -15,7 +15,7 @@ class ListTemplatesCommandTest extends TestCase
 {
     protected function setSuccessMockHandler(array $templatesMetadata, array $template): void
     {
-        $mockHandler = new MockHandler();
+        $mockHandler = new MockHandler;
         foreach ($templatesMetadata as $metadata) {
             $mockHandler->append(new Result($metadata));
         }
@@ -26,7 +26,7 @@ class ListTemplatesCommandTest extends TestCase
 
     protected function setFailureMockHandler(): void
     {
-        $mockHandler = new MockHandler();
+        $mockHandler = new MockHandler;
         $mockHandler->append(new Result(['TemplatesMetadata' => [], 'NextToken' => null]));
 
         config(['services.ses.handler' => $mockHandler]);

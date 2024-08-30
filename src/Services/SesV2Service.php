@@ -23,7 +23,7 @@ class SesV2Service implements SesServiceInterface
 
     public function listTemplates(): Collection
     {
-        $templates = new Collection();
+        $templates = new Collection;
 
         $results = $this->getClient()->getPaginator('ListEmailTemplates', [
             'PageSize' => 100,

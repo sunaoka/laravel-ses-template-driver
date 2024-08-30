@@ -36,7 +36,7 @@ class SesTemplateTransportTest extends TestCase
             'foo9' => 'bar9',
         ];
 
-        $message = (new Email())
+        $message = (new Email)
             ->sender(new Address('myself@example.com', 'Joe Q. Public'))
             ->to(new Address('me@example.com'))
             ->cc(new Address('cc@example.com'))
@@ -49,7 +49,7 @@ class SesTemplateTransportTest extends TestCase
 
         $messageId = '0123456789abcdef-01234567-0123-0123-0123-0123456789ab-000000';
 
-        $mockHandler = new MockHandler();
+        $mockHandler = new MockHandler;
         $mockHandler->append(new Result(['MessageId' => $messageId]));
 
         config(['services.ses.handler' => $mockHandler]);
@@ -104,7 +104,7 @@ class SesTemplateTransportTest extends TestCase
             'foo9' => 'bar9',
         ];
 
-        $message = (new Email())
+        $message = (new Email)
             ->from(new Address('myself@example.com', 'Giant; "Big" Box'))
             ->to(new Address('me@example.com'))
             ->cc(new Address('cc@example.com'))
@@ -117,7 +117,7 @@ class SesTemplateTransportTest extends TestCase
 
         $messageId = '0123456789abcdef-01234567-0123-0123-0123-0123456789ab-000000';
 
-        $mockHandler = new MockHandler();
+        $mockHandler = new MockHandler;
         $mockHandler->append(new Result(['MessageId' => $messageId]));
 
         config(['services.ses.handler' => $mockHandler]);
@@ -160,13 +160,13 @@ class SesTemplateTransportTest extends TestCase
      */
     public function testFailed(): void
     {
-        $message = (new Email())
+        $message = (new Email)
             ->sender(new Address('myself@example.com', 'Joe Q. Public'))
             ->to(new Address('me@example.com'))
             ->subject('TemplateName')
             ->html((string) json_encode([], JSON_THROW_ON_ERROR));
 
-        $mockHandler = new MockHandler();
+        $mockHandler = new MockHandler;
         $mockHandler->append(static function (CommandInterface $cmd) {
             return new SesException('', $cmd, [
                 'errorType' => 'client',

@@ -23,7 +23,7 @@ class SesTemplate extends Mailable
     public function __construct(
         private string $templateName,
         private array $templateData,
-        private SesTemplateOptions $options = new SesTemplateOptions(),
+        private SesTemplateOptions $options = new SesTemplateOptions,
     ) {}
 
     /**

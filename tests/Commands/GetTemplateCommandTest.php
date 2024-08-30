@@ -15,7 +15,7 @@ class GetTemplateCommandTest extends TestCase
 {
     protected function setSuccessMockHandler(array $template): void
     {
-        $mockHandler = new MockHandler();
+        $mockHandler = new MockHandler;
         $mockHandler->append(new Result($template));
 
         config(['services.ses.handler' => $mockHandler]);
@@ -23,7 +23,7 @@ class GetTemplateCommandTest extends TestCase
 
     protected function setFailureMockHandler(): void
     {
-        $mockHandler = new MockHandler();
+        $mockHandler = new MockHandler;
         $mockHandler->append(static function (CommandInterface $cmd) {
             return new AwsException('Template MyTemplate does not exist.', $cmd);
         });

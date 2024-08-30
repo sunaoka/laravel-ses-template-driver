@@ -37,7 +37,7 @@ class SesV2TemplateTransportTest extends TestCase
             'foo9' => 'bar9',
         ];
 
-        $message = (new Email())
+        $message = (new Email)
             ->sender(new Address('myself@example.com', 'Joe Q. Public'))
             ->to(new Address('me@example.com'))
             ->cc(new Address('cc@example.com'))
@@ -52,7 +52,7 @@ class SesV2TemplateTransportTest extends TestCase
 
         $message->getHeaders()->add(new MetadataHeader('X-Custom-Header', 'Custom Value'));
 
-        $mockHandler = new MockHandler();
+        $mockHandler = new MockHandler;
         $mockHandler->append(new Result(['MessageId' => $messageId]));
 
         config(['services.ses.handler' => $mockHandler]);
@@ -108,7 +108,7 @@ class SesV2TemplateTransportTest extends TestCase
             'foo9' => 'bar9',
         ];
 
-        $message = (new Email())
+        $message = (new Email)
             ->from(new Address('myself@example.com', 'Giant; "Big" Box'))
             ->to(new Address('me@example.com'))
             ->cc(new Address('cc@example.com'))
@@ -123,7 +123,7 @@ class SesV2TemplateTransportTest extends TestCase
 
         $message->getHeaders()->add(new MetadataHeader('X-Custom-Header', 'Custom Value'));
 
-        $mockHandler = new MockHandler();
+        $mockHandler = new MockHandler;
         $mockHandler->append(new Result(['MessageId' => $messageId]));
 
         config(['services.ses.handler' => $mockHandler]);
@@ -167,13 +167,13 @@ class SesV2TemplateTransportTest extends TestCase
      */
     public function testFailed(): void
     {
-        $message = (new Email())
+        $message = (new Email)
             ->sender(new Address('myself@example.com', 'Joe Q. Public'))
             ->to(new Address('me@example.com'))
             ->subject('TemplateName')
             ->html((string) json_encode([], JSON_THROW_ON_ERROR));
 
-        $mockHandler = new MockHandler();
+        $mockHandler = new MockHandler;
         $mockHandler->append(static function (CommandInterface $cmd) {
             return new SesV2Exception('', $cmd, [
                 'errorType' => 'client',

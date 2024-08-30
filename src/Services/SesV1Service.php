@@ -24,7 +24,7 @@ class SesV1Service implements SesServiceInterface
 
     public function listTemplates(): Collection
     {
-        $templates = new Collection();
+        $templates = new Collection;
         $nextToken = null;
 
         do {
