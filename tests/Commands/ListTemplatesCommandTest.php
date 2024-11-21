@@ -39,7 +39,7 @@ class ListTemplatesCommandTest extends TestCase
      */
     #[DataProvider('invokeTextSuccessProvider')]
     #[DefineEnvironment('usesSesV1Transport')]
-    public function testSesV1InvokeTextSuccess(array $nums, array $options): void
+    public function test_ses_v1_invoke_text_success(array $nums, array $options): void
     {
         $templatesMetadata = [
             [
@@ -103,7 +103,7 @@ class ListTemplatesCommandTest extends TestCase
      */
     #[DataProvider('invokeTextSuccessProvider')]
     #[DefineEnvironment('usesSesV2Transport')]
-    public function testSesV2InvokeTextSuccess(array $nums, array $options): void
+    public function test_ses_v2_invoke_text_success(array $nums, array $options): void
     {
         $templatesMetadata = [
             [
@@ -174,7 +174,7 @@ class ListTemplatesCommandTest extends TestCase
      * @throws \Exception
      */
     #[DefineEnvironment('usesSesV1Transport')]
-    public function testSesV1InvokeJsonSuccess(): void
+    public function test_ses_v1_invoke_json_success(): void
     {
         $templatesMetadata = [
             [
@@ -231,7 +231,7 @@ class ListTemplatesCommandTest extends TestCase
      * @throws \Exception
      */
     #[DefineEnvironment('usesSesV2Transport')]
-    public function testSesV2InvokeJsonSuccess(): void
+    public function test_ses_v2_invoke_json_success(): void
     {
         $templatesMetadata = [
             [
@@ -284,7 +284,7 @@ class ListTemplatesCommandTest extends TestCase
             ->assertSuccessful();
     }
 
-    public function testInvokeTextFailure(): void
+    public function test_invoke_text_failure(): void
     {
         $this->setFailureMockHandler();
 
@@ -292,7 +292,7 @@ class ListTemplatesCommandTest extends TestCase
             ->assertFailed();
     }
 
-    public function testInvokeJsonFailure(): void
+    public function test_invoke_json_failure(): void
     {
         $this->setFailureMockHandler();
 

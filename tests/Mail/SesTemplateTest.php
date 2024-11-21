@@ -17,7 +17,7 @@ class SesTemplateTest extends TestCase
      * @throws \ReflectionException
      */
     #[DefineEnvironment('usesSesV1Transport')]
-    public function testSesV1Render(): void
+    public function test_ses_v1_render(): void
     {
         $mailable = new SesTemplate('TestTemplate', ['foo' => 'bar']);
         $mailable->build();
@@ -32,7 +32,7 @@ class SesTemplateTest extends TestCase
      * @throws \ReflectionException
      */
     #[DefineEnvironment('usesSesV2Transport')]
-    public function testSesV2Render(): void
+    public function test_ses_v2_render(): void
     {
         $mailable = new SesTemplate('TestTemplate', ['foo' => 'bar']);
         $mailable->build();
@@ -45,7 +45,7 @@ class SesTemplateTest extends TestCase
     /**
      * @throws \JsonException
      */
-    public function testBuildWithFrom(): void
+    public function test_build_with_from(): void
     {
         $options = new SesTemplateOptions;
         $options->from(new Address('example@example.com', 'example name'));
@@ -59,7 +59,7 @@ class SesTemplateTest extends TestCase
     /**
      * @throws \JsonException
      */
-    public function testBuildWithFromOnlyAddress(): void
+    public function test_build_with_from_only_address(): void
     {
         $options = new SesTemplateOptions;
         $options->from(new Address('example@example.com'));
@@ -73,7 +73,7 @@ class SesTemplateTest extends TestCase
     /**
      * @throws \JsonException
      */
-    public function testBuildWithReplyTo(): void
+    public function test_build_with_reply_to(): void
     {
         $options = new SesTemplateOptions;
         $options->replyTo(new Address('example@example.com', 'example name'));
@@ -87,7 +87,7 @@ class SesTemplateTest extends TestCase
     /**
      * @throws \JsonException
      */
-    public function testBuildWithReplyToOnlyAddress(): void
+    public function test_build_with_reply_to_only_address(): void
     {
         $options = new SesTemplateOptions;
         $options->replyTo(new Address('example@example.com'));
@@ -102,7 +102,7 @@ class SesTemplateTest extends TestCase
      * @throws \JsonException
      */
     #[DefineEnvironment('usesSesV2Transport')]
-    public function testBuildWithHeaders(): void
+    public function test_build_with_headers(): void
     {
         $options = new SesTemplateOptions;
         $options->header('X-Foo', 'foo')
@@ -115,7 +115,7 @@ class SesTemplateTest extends TestCase
         $mailable->assertHasMetadata('X-Bar', 'bar');
     }
 
-    public function testTemplateName(): void
+    public function test_template_name(): void
     {
         $mailable = new SesTemplate('TestTemplate', ['foo' => 'bar']);
         self::assertSame('TestTemplate', $mailable->getTemplateName());
@@ -125,7 +125,7 @@ class SesTemplateTest extends TestCase
         self::assertSame('ModifiedTemplate', $mailable->getTemplateName());
     }
 
-    public function testTemplateData(): void
+    public function test_template_data(): void
     {
         $mailable = new SesTemplate('TestTemplate', ['foo' => 'bar']);
         self::assertSame(['foo' => 'bar'], $mailable->getTemplateData());
@@ -135,7 +135,7 @@ class SesTemplateTest extends TestCase
         self::assertSame(['baz' => 'qux'], $mailable->getTemplateData());
     }
 
-    public function testOptions(): void
+    public function test_options(): void
     {
         $options = new SesTemplateOptions;
         $options->from(new Address('example@example.com', 'example name'))
