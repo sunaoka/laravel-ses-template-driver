@@ -22,7 +22,7 @@ class SesTemplateTransportTest extends TestCase
      * @throws \JsonException
      * @throws TransportExceptionInterface
      */
-    public function testSendBySender(): void
+    public function test_send_by_sender(): void
     {
         $templateData = [
             'foo1' => 'bar1',
@@ -90,7 +90,7 @@ class SesTemplateTransportTest extends TestCase
      * @throws TransportExceptionInterface
      * @throws \JsonException
      */
-    public function testSendByFrom(): void
+    public function test_send_by_from(): void
     {
         $templateData = [
             'foo1' => 'bar1',
@@ -158,7 +158,7 @@ class SesTemplateTransportTest extends TestCase
      * @throws \JsonException
      * @throws TransportExceptionInterface
      */
-    public function testFailed(): void
+    public function test_failed(): void
     {
         $message = (new Email)
             ->sender(new Address('myself@example.com', 'Joe Q. Public'))
@@ -183,14 +183,14 @@ class SesTemplateTransportTest extends TestCase
         $this->createSesTemplateTransport()->send($message);
     }
 
-    public function testToString(): void
+    public function test_to_string(): void
     {
         $transport = $this->createSesTemplateTransport();
 
         self::assertSame('sestemplate', (string) $transport);
     }
 
-    public function testSes(): void
+    public function test_ses(): void
     {
         $transport = $this->createSesTemplateTransport();
 

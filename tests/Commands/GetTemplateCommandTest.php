@@ -32,7 +32,7 @@ class GetTemplateCommandTest extends TestCase
     }
 
     #[DefineEnvironment('usesSesV1Transport')]
-    public function testSesV1InvokeTextSuccess(): void
+    public function test_ses_v1_invoke_text_success(): void
     {
         $template = [
             'Template' => [
@@ -58,7 +58,7 @@ class GetTemplateCommandTest extends TestCase
     }
 
     #[DefineEnvironment('usesSesV2Transport')]
-    public function testSesV2InvokeTextSuccess(): void
+    public function test_ses_v2_invoke_text_success(): void
     {
         $template = [
             'TemplateName' => 'MyTemplate',
@@ -87,7 +87,7 @@ class GetTemplateCommandTest extends TestCase
      * @throws \JsonException
      */
     #[DefineEnvironment('usesSesV1Transport')]
-    public function testV1InvokeJsonSuccess(): void
+    public function test_v1_invoke_json_success(): void
     {
         $template = [
             'Template' => [
@@ -109,7 +109,7 @@ class GetTemplateCommandTest extends TestCase
      * @throws \JsonException
      */
     #[DefineEnvironment('usesSesV2Transport')]
-    public function testV2InvokeJsonSuccess(): void
+    public function test_v2_invoke_json_success(): void
     {
         $template = [
             'TemplateName' => 'MyTemplate',
@@ -127,7 +127,7 @@ class GetTemplateCommandTest extends TestCase
             ->assertSuccessful();
     }
 
-    public function testInvokeTextFailure(): void
+    public function test_invoke_text_failure(): void
     {
         $this->setFailureMockHandler();
 
@@ -135,7 +135,7 @@ class GetTemplateCommandTest extends TestCase
             ->assertFailed();
     }
 
-    public function testInvokeJsonFailure(): void
+    public function test_invoke_json_failure(): void
     {
         $this->setFailureMockHandler();
 

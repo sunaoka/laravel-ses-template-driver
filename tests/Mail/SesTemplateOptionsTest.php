@@ -10,7 +10,7 @@ use Sunaoka\LaravelSesTemplateDriver\Tests\TestCase;
 
 class SesTemplateOptionsTest extends TestCase
 {
-    public function testCreate(): void
+    public function test_create(): void
     {
         $options = new SesTemplateOptions(
             from: new Address('from@example.com', 'from'),
@@ -34,7 +34,7 @@ class SesTemplateOptionsTest extends TestCase
         self::assertSame('bar', $options->headers['X-Bar']);
     }
 
-    public function testCreateWithMethodChaining(): void
+    public function test_create_with_method_chaining(): void
     {
         $options = new SesTemplateOptions;
         $options->from(new Address('from@example.com', 'from'))

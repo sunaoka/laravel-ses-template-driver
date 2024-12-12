@@ -19,10 +19,9 @@
         "illuminate/mail": "^10.0 || ^11.0"
     },
     "require-dev": {
-        "larastan/larastan": "^2.9.8",
-        "laravel/pint": "^1.17.2",
-        "orchestra/testbench": "^8.26.0 || ^9.4.0",
-        "phpstan/phpstan": "^1.12.0"
+        "larastan/larastan": "^2.9.11 || ^3.0.0",
+        "laravel/pint": "^1.18.2",
+        "orchestra/testbench": "^8.28.0 || ^v9.6.1"
     },
     "autoload": {
         "psr-4": {
