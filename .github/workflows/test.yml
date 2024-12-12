@@ -16,18 +16,20 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     env:
-      latest_php: 8.3
+      latest_php: 8.4
       latest_laravel: 11
 
     strategy:
       fail-fast: false
       matrix:
         os: [ ubuntu-latest ]
-        php: [ '8.1', '8.2', '8.3' ]
+        php: [ '8.1', '8.2', '8.3', '8.4' ]
         laravel: [ 10, 11 ]
         exclude:
           - php: 8.1
             laravel: 11
+          - php: 8.4
+            laravel: 10
 
     name: v4.x - PHP ${{ matrix.php }} - Laravel ${{ matrix.laravel }}
 
@@ -72,7 +74,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu-latest ]
-        php: [ '8.0', '8.1', '8.2', '8.3' ]
+        php: [ '8.0', '8.1', '8.2', '8.3', '8.4' ]
         laravel: [ 9, 10, 11 ]
         exclude:
           - php: 8.0
@@ -81,6 +83,10 @@ jobs:
             laravel: 11
           - php: 8.1
             laravel: 11
+          - php: 8.4
+            laravel: 9
+          - php: 8.4
+            laravel: 10
 
     name: v3.x - PHP ${{ matrix.php }} - Laravel ${{ matrix.laravel }}
 
