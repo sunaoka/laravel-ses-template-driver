@@ -14,11 +14,11 @@ A Mail Driver with support for [Using templates to send personalized emails with
 ## Support Policy
 
 | Version (*1) | Laravel (*2) | PHP (*3)  |
-| ------------ | ------------ | --------- |
+| ------------ | ------------ |-----------|
 | [1][v1.x]    | 5.7 - 6      | 7.1 - 7.4 |
 | [2][v2.x]    | 7 - 8        | 7.2 - 8.1 |
-| [3][v3.x]    | 9 - 11       | 8.0 - 8.3 |
-| 4            | 10 - 11      | 8.1 - 8.3 |
+| [3][v3.x]    | 9 - 11       | 8.0 - 8.4 |
+| 4            | 10 - 11      | 8.1 - 8.4 |
 
 (*1) Supported Amazon SES template mail driver (This Driver) version
 
