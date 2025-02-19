@@ -7,11 +7,9 @@ on:
     - cron: '30 1 * * *'
 
 env:
-  # https://aws.amazon.com/blogs/developer/announcing-the-end-of-support-for-php-runtimes-8-0-x-and-below-in-the-aws-sdk-for-php/
   AWS_SUPPRESS_PHP_DEPRECATION_WARNING: 1
 
 jobs:
-
   test_v4:
     runs-on: ${{ matrix.os }}
 
@@ -19,19 +17,30 @@ jobs:
       latest_php: 8.4
       latest_laravel: 11
 
+
+
+
     strategy:
       fail-fast: false
       matrix:
-        os: [ ubuntu-latest ]
-        php: [ '8.1', '8.2', '8.3', '8.4' ]
-        laravel: [ 10, 11 ]
+        os: [ubuntu-latest]
+        php: ['8.1', '8.2', '8.3', '8.4']
+        laravel: [10, 11, '12']
         exclude:
           - php: 8.1
             laravel: 11
           - php: 8.4
             laravel: 10
+          - laravel: '12'
+            php: '8.1'
+
+
+
 
     name: v4.x - PHP ${{ matrix.php }} - Laravel ${{ matrix.laravel }}
+
+
+
 
     steps:
       - name: Setup PHP ${{ matrix.php }}
@@ -41,8 +50,14 @@ jobs:
           ini-values: error_reporting=E_ALL
           tools: composer:v2
 
+
+
+
       - name: Checkout
         uses: actions/checkout@v4
+
+
+
 
       - name: Install dependencies
         uses: nick-fields/retry@v3
@@ -53,11 +68,20 @@ jobs:
             composer require "illuminate/mail=^${{ matrix.laravel }}" --no-update
             composer install --quiet --no-plugins --no-ansi --prefer-dist --no-progress --no-interaction
 
+
+
+
       - name: Migrate phpunit XML configuration
         run: vendor/bin/phpunit --migrate-configuration || true
 
+
+
+
       - name: Run test suite
         run: vendor/bin/phpunit --coverage-clover=coverage.xml
+
+
+
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
@@ -65,17 +89,20 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./coverage.xml
           fail_ci_if_error: false
-        if: matrix.php == env.latest_php && matrix.laravel == env.latest_laravel
-
+        if: 'matrix.php == env.latest_php && matrix.laravel == env.latest_laravel'
 
   test_v3:
     runs-on: ${{ matrix.os }}
+
+
+
+
     strategy:
       fail-fast: false
       matrix:
-        os: [ ubuntu-latest ]
-        php: [ '8.0', '8.1', '8.2', '8.3', '8.4' ]
-        laravel: [ 9, 10, 11 ]
+        os: [ubuntu-latest]
+        php: ['8.0', '8.1', '8.2', '8.3', '8.4']
+        laravel: [9, 10, 11, '12']
         exclude:
           - php: 8.0
             laravel: 10
@@ -87,8 +114,18 @@ jobs:
             laravel: 9
           - php: 8.4
             laravel: 10
+          - laravel: '12'
+            php: '8.0'
+          - laravel: '12'
+            php: '8.1'
+
+
+
 
     name: v3.x - PHP ${{ matrix.php }} - Laravel ${{ matrix.laravel }}
+
+
+
 
     steps:
       - name: Setup PHP ${{ matrix.php }}
@@ -98,10 +135,16 @@ jobs:
           ini-values: error_reporting=E_ALL
           tools: composer:v2
 
+
+
+
       - name: Checkout
         uses: actions/checkout@v4
         with:
           ref: v3.x
+
+
+
 
       - name: Install dependencies
         uses: nick-fields/retry@v3
@@ -112,21 +155,30 @@ jobs:
             composer require "illuminate/mail=^${{ matrix.laravel }}" --no-update
             composer install --quiet --no-plugins --no-ansi --prefer-dist --no-progress --no-interaction
 
+
+
+
       - name: Migrate phpunit XML configuration
         run: vendor/bin/phpunit --migrate-configuration || true
+
+
+
 
       - name: Run test suite
         run: vendor/bin/phpunit
 
-
   test_v2:
     runs-on: ${{ matrix.os }}
+
+
+
+
     strategy:
       fail-fast: false
       matrix:
-        os: [ ubuntu-latest ]
-        php: ['7.2', '7.3', '7.4', '8.0', '8.1']
-        laravel: [ 7, 8 ]
+        os: [ubuntu-latest]
+        php: ['7.2', '7.3', '7.4', '8.0', '8.1', '8.2', '8.3', '8.4']
+        laravel: [7, 8, '12']
         exclude:
           - php: 7.1
             laravel: 6
@@ -140,8 +192,24 @@ jobs:
             laravel: 6
           - php: 8.1
             laravel: 7
+          - laravel: '12'
+            php: '7.2'
+          - laravel: '12'
+            php: '7.3'
+          - laravel: '12'
+            php: '7.4'
+          - laravel: '12'
+            php: '8.0'
+          - laravel: '12'
+            php: '8.1'
+
+
+
 
     name: v2.x - PHP ${{ matrix.php }} - Laravel ${{ matrix.laravel }}
+
+
+
 
     steps:
       - name: Setup PHP ${{ matrix.php }}
@@ -150,12 +218,18 @@ jobs:
           php-version: ${{ matrix.php }}
           ini-values: error_reporting=E_ALL
           tools: composer:v2
+
+
+
 
       - name: Checkout
         uses: actions/checkout@v4
         with:
           ref: v2.x
 
+
+
+
       - name: Install dependencies
         uses: nick-fields/retry@v3
         with:
@@ -165,23 +239,43 @@ jobs:
             composer require "illuminate/mail=^${{ matrix.laravel }}" --no-update
             composer install --quiet --no-plugins --no-ansi --prefer-dist --no-progress --no-interaction
 
+
+
+
       - name: Run test suite
         run: vendor/bin/phpunit
 
-
   test_v1:
     runs-on: ${{ matrix.os }}
+
+
+
+
     strategy:
       fail-fast: false
       matrix:
-        os: [ ubuntu-latest ]
-        php: [ '7.1', '7.2', '7.3', '7.4' ]
-        laravel: [ 5.7, 5.8, 6 ]
+        os: [ubuntu-latest]
+        php: ['7.1', '7.2', '7.3', '7.4', '8.2', '8.3', '8.4']
+        laravel: [5.7, 5.8, 6, '12.0']
         exclude:
           - php: 7.1
             laravel: 6
+          - laravel: '12.0'
+            php: '7.1'
+          - laravel: '12.0'
+            php: '7.2'
+          - laravel: '12.0'
+            php: '7.3'
+          - laravel: '12.0'
+            php: '7.4'
+
+
+
 
     name: v1.x - PHP ${{ matrix.php }} - Laravel ${{ matrix.laravel }}
+
+
+
 
     steps:
       - name: Setup PHP ${{ matrix.php }}
@@ -191,10 +285,16 @@ jobs:
           ini-values: error_reporting=E_ALL
           tools: composer:v2
 
+
+
+
       - name: Checkout
         uses: actions/checkout@v4
         with:
           ref: v1.x
+
+
+
 
       - name: Install dependencies
         uses: nick-fields/retry@v3
@@ -204,6 +304,9 @@ jobs:
           command: |
             composer require "illuminate/mail=^${{ matrix.laravel }}" --no-update
             composer install --quiet --no-plugins --no-ansi --prefer-dist --no-progress --no-interaction
+
+
+
 
       - name: Run test suite
         run: vendor/bin/phpunit
