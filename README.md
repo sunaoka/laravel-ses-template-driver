@@ -3,7 +3,7 @@
 [![Latest](https://poser.pugx.org/sunaoka/laravel-ses-template-driver/v)](https://packagist.org/packages/sunaoka/laravel-ses-template-driver)
 [![License](https://poser.pugx.org/sunaoka/laravel-ses-template-driver/license)](https://packagist.org/packages/sunaoka/laravel-ses-template-driver)
 [![PHP](https://img.shields.io/packagist/php-v/sunaoka/laravel-ses-template-driver)](composer.json)
-[![Laravel](https://img.shields.io/badge/laravel-10.x%20%7C%2011.x-red)](https://laravel.com/)
+[![Laravel](https://img.shields.io/badge/laravel-10.x%20%7C%2011.x%20%7C%2012.x-red)](https://laravel.com/)
 [![Test](https://github.com/sunaoka/laravel-ses-template-driver/actions/workflows/test.yml/badge.svg?branch=develop)](https://github.com/sunaoka/laravel-ses-template-driver/actions/workflows/test.yml)
 [![codecov](https://codecov.io/gh/sunaoka/laravel-ses-template-driver/branch/develop/graph/badge.svg)](https://codecov.io/gh/sunaoka/laravel-ses-template-driver)
 
@@ -18,7 +18,7 @@ A Mail Driver with support for [Using templates to send personalized emails with
 | [1][v1.x]    | 5.7 - 6      | 7.1 - 7.4 |
 | [2][v2.x]    | 7 - 8        | 7.2 - 8.1 |
 | [3][v3.x]    | 9 - 11       | 8.0 - 8.4 |
-| 4            | 10 - 11      | 8.1 - 8.4 |
+| 4            | 10 - 12      | 8.1 - 8.4 |
 
 (*1) Supported Amazon SES template mail driver (This Driver) version
 

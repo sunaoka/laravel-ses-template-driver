@@ -17,17 +17,19 @@ jobs:
 
     env:
       latest_php: 8.4
-      latest_laravel: 11
+      latest_laravel: 12
 
     strategy:
       fail-fast: false
       matrix:
         os: [ ubuntu-latest ]
         php: [ '8.1', '8.2', '8.3', '8.4' ]
-        laravel: [ 10, 11 ]
+        laravel: [ 10, 11, 12 ]
         exclude:
           - php: 8.1
             laravel: 11
+          - php: 8.1
+            laravel: 12
           - php: 8.4
             laravel: 10
 
