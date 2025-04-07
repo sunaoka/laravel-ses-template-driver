@@ -9,6 +9,7 @@ use Aws\MockHandler;
 use Aws\Result;
 use Exception;
 use Illuminate\Support\Facades\Config;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Sunaoka\LaravelSesTemplateDriver\Tests\TestCase;
 
 class ListTemplatesCommandTest extends TestCase
@@ -71,6 +72,7 @@ class ListTemplatesCommandTest extends TestCase
      *
      * @throws Exception
      */
+    #[DataProvider('invokeTextSuccessProvider')]
     public function testInvokeTextSuccess(array $nums, array $options): void
     {
         $table = $this->setSuccessMockHandler();
