@@ -65,6 +65,7 @@ If you need to include [additional options](https://docs.aws.amazon.com/aws-sdk-
     'region'  => 'ses-region',  // e.g. us-east-1
     'options' => [
         'ConfigurationSetName' => 'MyConfigurationSet',
+        'TenantName'           => 'MyTenant',  // using Amazon SES API v2 with AWS SDK for PHP 3.352.0 or later
         'Tags' => [
             [
                 'Name'  => 'foo',
