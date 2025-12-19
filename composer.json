@@ -44,6 +44,9 @@
         }
     },
     "config": {
+        "audit": {
+            "ignore": ["aws/aws-sdk-php"]
+        },
         "optimize-autoloader": true,
         "preferred-install": "dist",
         "sort-packages": true
