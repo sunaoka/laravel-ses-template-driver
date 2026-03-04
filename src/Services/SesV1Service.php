@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Sunaoka\LaravelSesTemplateDriver\Services;
 
-use Aws\Result;
 use Aws\Ses\SesClient;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
@@ -12,6 +11,7 @@ use Illuminate\Support\Collection;
 /**
  * @phpstan-import-type Template from SesServiceInterface
  * @phpstan-import-type TemplateMetadata from SesServiceInterface
+ * @phpstan-import-type EmailTemplateMetadata from SesServiceInterface
  */
 class SesV1Service implements SesServiceInterface
 {
@@ -22,6 +22,9 @@ class SesV1Service implements SesServiceInterface
         return $this->client;
     }
 
+    /**
+     * @return Collection<int, TemplateMetadata|EmailTemplateMetadata>
+     */
     public function listTemplates(): Collection
     {
         $templates = new Collection;
@@ -30,12 +33,12 @@ class SesV1Service implements SesServiceInterface
         do {
             $start = microtime(true);
 
-            /** @var Result|array{TemplatesMetadata: TemplateMetadata[], NextToken: string|null} $result */
             $result = $this->getClient()->listTemplates([
                 'MaxItems' => 100,
                 'NextToken' => $nextToken,
             ]);
 
+            /** @var TemplateMetadata[] $template */
             $template = $result['TemplatesMetadata'];
             if (count($template) > 0) {
                 $templates = $templates->merge($template);
@@ -47,6 +50,7 @@ class SesV1Service implements SesServiceInterface
             }
         } while ($nextToken !== null);
 
+        /** @var Collection<int, TemplateMetadata|EmailTemplateMetadata> */
         return $templates;
     }
 
