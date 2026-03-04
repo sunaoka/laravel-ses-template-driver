@@ -60,7 +60,7 @@ class ListTemplatesCommand extends Command
         foreach ($templates as $index => $template) {
             $choices[] = [
                 'No' => $index,
-                'Name' => $template[$structure['TemplateName']],
+                'Name' => $template[$structure['TemplateName']],  // @phpstan-ignore offsetAccess.notFound
                 'CreatedTimestamp' => $template[$structure['CreatedTimestamp']]->setTimezone($timezone),
             ];
         }
@@ -71,6 +71,7 @@ class ListTemplatesCommand extends Command
         );
 
         $answer = $this->ask('Enter a number to display the template object');
+        // @phpstan-ignore offsetAccess.invalidOffset
         if (isset($choices[$answer])) {
             $this->call('ses-template:get-template', [
                 'TemplateName' => $choices[$answer]['Name'],
