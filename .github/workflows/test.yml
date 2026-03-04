@@ -17,7 +17,7 @@ jobs:
 
     env:
       latest_php: 8.5
-      latest_laravel: 12
+      latest_laravel: 13
 
     strategy:
       fail-fast: false
